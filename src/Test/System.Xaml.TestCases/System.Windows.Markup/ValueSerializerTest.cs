@@ -29,6 +29,8 @@ using System.Reflection;
 using NUnit.Framework;
 using MonoTests.System.Xaml;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -64,12 +66,12 @@ namespace MonoTests.System.Windows.Markup
 			{
 				if (t != XamlLanguage.String)
 				{
-					Assert.IsNull(t.ValueSerializer, "IsNull? " + t.Name);
+                    ClassicAssert.IsNull(t.ValueSerializer, "IsNull? " + t.Name);
 					continue;
 				}
 				var v = t.ValueSerializer.ConverterInstance;
 				foreach (var val in test_values)
-					Assert.IsTrue(v.CanConvertToString(val, null), t.Name + "_" + (val != null ? val.GetType() : null));
+                    ClassicAssert.IsTrue(v.CanConvertToString(val, null), t.Name + "_" + (val != null ? val.GetType() : null));
 			}
 		}
 
@@ -85,7 +87,7 @@ namespace MonoTests.System.Windows.Markup
 				var v = ValueSerializer.GetSerializerFor(t.UnderlyingType, null);
 				if (no_ser_types.Any(ti => ti == t.UnderlyingType))
 				{
-					Assert.IsNull(v, "NoSerializer_" + t.Name);
+                    ClassicAssert.IsNull(v, "NoSerializer_" + t.Name);
 					continue;
 				}
 				else if (v == null)
@@ -104,8 +106,8 @@ namespace MonoTests.System.Windows.Markup
 				int i = 0;
 				foreach (var val in test_values)
 				{
-					Assert.IsTrue(v.CanConvertToString(val, null), t.Name + "_" + (val != null ? val.GetType() : null));
-					Assert.AreEqual(test_strings[i++].Fixup(), v.ConvertToString(val, null), "value-" + t.Name + "_" + val);
+                    ClassicAssert.IsTrue(v.CanConvertToString(val, null), t.Name + "_" + (val != null ? val.GetType() : null));
+					ClassicAssert.AreEqual(test_strings[i++].Fixup(), v.ConvertToString(val, null), "value-" + t.Name + "_" + val);
 				}
 
 				// The funny thing also applies to CanConvertToString() and ConvertToString().
@@ -113,9 +115,9 @@ namespace MonoTests.System.Windows.Markup
 				i = 0;
 				foreach (var str in test_strings)
 				{
-					Assert.IsTrue(v.CanConvertFromString(str.Fixup(), null), t.Name + "_" + str);
+                    ClassicAssert.IsTrue(v.CanConvertFromString(str.Fixup(), null), t.Name + "_" + str);
 					// FIXME: add tests for this large matrix someday.
-					//Assert.AreEqual (test_values [i++], v.ConvertFromString (str, null), "value-" + t.Name + "_" + str);
+					//ClassicAssert.AreEqual (test_values [i++], v.ConvertFromString (str, null), "value-" + t.Name + "_" + str);
 				}
 			}
 		}
@@ -123,25 +125,25 @@ namespace MonoTests.System.Windows.Markup
 		[Test]
 		public void GetSerializerFor()
 		{
-			Assert.IsNull(ValueSerializer.GetSerializerFor(typeof(Array)), "#1");
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(Uri)), "#2");
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(Type)), "#3"); // has no TypeConverter (undocumented behavior)
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(string)), "#4"); // documented as special
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(DateTime)), "#5"); // documented as special
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(bool)), "#6"); // has no TypeConverter (undocumented behavior)
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(byte)), "#7"); // has no TypeConverter (undocumented behavior)
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(char)), "#8"); // has no TypeConverter (undocumented behavior)
-			Assert.IsNull(ValueSerializer.GetSerializerFor(typeof(DBNull)), "#9"); // TypeCode.DBNull
-			Assert.IsNull(ValueSerializer.GetSerializerFor(typeof(object)), "#10");
-			Assert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(TimeSpan)), "#11"); // has no TypeConverter (undocumented behavior), TypeCode.Object -> unexpectedly has non-null serializer!
+            ClassicAssert.IsNull(ValueSerializer.GetSerializerFor(typeof(Array)), "#1");
+            ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(Uri)), "#2");
+            ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(Type)), "#3"); // has no TypeConverter (undocumented behavior)
+            ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(string)), "#4"); // documented as special
+			ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(DateTime)), "#5"); // documented as special
+			ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(bool)), "#6"); // has no TypeConverter (undocumented behavior)
+			ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(byte)), "#7"); // has no TypeConverter (undocumented behavior)
+			ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(char)), "#8"); // has no TypeConverter (undocumented behavior)
+			ClassicAssert.IsNull(ValueSerializer.GetSerializerFor(typeof(DBNull)), "#9"); // TypeCode.DBNull
+			ClassicAssert.IsNull(ValueSerializer.GetSerializerFor(typeof(object)), "#10");
+			ClassicAssert.IsNotNull(ValueSerializer.GetSerializerFor(typeof(TimeSpan)), "#11"); // has no TypeConverter (undocumented behavior), TypeCode.Object -> unexpectedly has non-null serializer!
 
 			/* TODO: not sure why this isn't true in System.Xaml
-			Assert.IsNull (ValueSerializer.GetSerializerFor (typeof (DateTimeOffset)), "#12"); // has no TypeConverter (undocumented behavior), TypeCode.Object -> expected
+			ClassicAssert.IsNull (ValueSerializer.GetSerializerFor (typeof (DateTimeOffset)), "#12"); // has no TypeConverter (undocumented behavior), TypeCode.Object -> expected
 			*/
 
-			Assert.IsNull (ValueSerializer.GetSerializerFor (typeof (MyExtension)), "#13");
-			Assert.IsNotNull (ValueSerializer.GetSerializerFor (typeof (MyExtension4)), "#14"); // has TypeConverter.
-			Assert.IsNull (ValueSerializer.GetSerializerFor (typeof (XamlType)), "#15"); // While there is XamlTypeTypeConverter, it is not used on XamlType.
+			ClassicAssert.IsNull (ValueSerializer.GetSerializerFor (typeof (MyExtension)), "#13");
+			ClassicAssert.IsNotNull (ValueSerializer.GetSerializerFor (typeof (MyExtension4)), "#14"); // has TypeConverter.
+			ClassicAssert.IsNull (ValueSerializer.GetSerializerFor (typeof (XamlType)), "#15"); // While there is XamlTypeTypeConverter, it is not used on XamlType.
 		}
 
 		[Test]
@@ -150,10 +152,10 @@ namespace MonoTests.System.Windows.Markup
 			var v = new MyValueSerializer ();
 
 			foreach (var val in test_values) {
-				Assert.IsFalse (v.CanConvertToString (val, null), "CanConvertTo." + val);
+				ClassicAssert.IsFalse (v.CanConvertToString (val, null), "CanConvertTo." + val);
 				try {
 					v.ConvertToString (val, null);
-					Assert.Fail ("ConvertTo." + val);
+					ClassicAssert.Fail ("ConvertTo." + val);
 				} catch (NotSupportedException) {
 				}
 			}
@@ -161,24 +163,24 @@ namespace MonoTests.System.Windows.Markup
 			// The funny thing also applies to CanConvertToString() and ConvertToString().
 
 			foreach (var str in test_strings) {
-				Assert.IsFalse (v.CanConvertFromString (str, null), "CanConvertFrom." + str);
+				ClassicAssert.IsFalse (v.CanConvertFromString (str, null), "CanConvertFrom." + str);
 				try {
 					v.ConvertFromString (str, null);
-					Assert.Fail ("ConvertFrom." + str);
+					ClassicAssert.Fail ("ConvertFrom." + str);
 				} catch (NotSupportedException) {
 				}
 			}
 			
-			Assert.AreEqual (typeof (NotSupportedException), v.CallGetConvertFromException (null).GetType (), "#1");
-			Assert.AreEqual (typeof (NotSupportedException), v.CallGetConvertToException (null, typeof (int)).GetType (), "#2");
-			Assert.IsFalse (v.TypeReferences (null, null).GetEnumerator ().MoveNext (), "#3");
+			ClassicAssert.AreEqual (typeof (NotSupportedException), v.CallGetConvertFromException (null).GetType (), "#1");
+			ClassicAssert.AreEqual (typeof (NotSupportedException), v.CallGetConvertToException (null, typeof (int)).GetType (), "#2");
+			ClassicAssert.IsFalse (v.TypeReferences (null, null).GetEnumerator ().MoveNext (), "#3");
 		}
 
 		[Test]
 		public void StringValueSerializer ()
 		{
 			var vs = ValueSerializer.GetSerializerFor (typeof (string));
-			Assert.AreEqual (String.Empty, vs.ConvertToString (String.Empty, null), "#1"); // it does not convert String.Empty to "\"\""
+			ClassicAssert.AreEqual (String.Empty, vs.ConvertToString (String.Empty, null), "#1"); // it does not convert String.Empty to "\"\""
 		}
 
 		class MyValueSerializer : ValueSerializer

@@ -28,6 +28,8 @@ using System.Text;
 using System.Xml;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -63,9 +65,9 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			var pi = str_len;
 			var i = new XamlMemberInvoker (new XamlMember (pi, sctx));
-			Assert.AreEqual (pi.GetGetMethod (), i.UnderlyingGetter, "#1");
-			Assert.IsNull (i.UnderlyingSetter, "#2");
-			Assert.AreEqual (5, i.GetValue ("hello"), "#3");
+			ClassicAssert.AreEqual (pi.GetGetMethod (), i.UnderlyingGetter, "#1");
+			ClassicAssert.IsNull (i.UnderlyingSetter, "#2");
+			ClassicAssert.AreEqual (5, i.GetValue ("hello"), "#3");
 		}
 
 		[Test]
@@ -98,7 +100,7 @@ namespace MonoTests.System.Xaml.Schema
 			var pi = testClass5_Baz;
 			var i = new XamlMemberInvoker(new XamlMember(pi, sctx));
 			var val = i.GetValue(new TestClass5 { Baz = "hello" });
-			Assert.AreEqual("hello", val);
+			ClassicAssert.AreEqual("hello", val);
 		}
 
 		[Test]
@@ -116,7 +118,7 @@ namespace MonoTests.System.Xaml.Schema
 			var i = new XamlMemberInvoker (new XamlMember (pi, sctx));
 			var sb = new StringBuilder ();
 			i.SetValue (sb, 5);
-			Assert.AreEqual (5, sb.Length, "#1");
+			ClassicAssert.AreEqual (5, sb.Length, "#1");
 		}
 
 		[Test]
@@ -132,7 +134,7 @@ namespace MonoTests.System.Xaml.Schema
 			}
 			catch (Exception e)
 			{
-				Assert.AreEqual("TargetException", e.GetType().Name);
+				ClassicAssert.AreEqual("TargetException", e.GetType().Name);
 			}
 #else
 			Assert.Throws<TargetException> (() => i.GetValue (new StringBuilder ()));
@@ -145,7 +147,7 @@ namespace MonoTests.System.Xaml.Schema
 			var xm = XamlLanguage.Type.GetMember ("Type");
 			var i = new XamlMemberInvoker (xm);
 			var o = i.GetValue (new TypeExtension (typeof (int)));
-			Assert.AreEqual (typeof (int), o, "#1");
+			ClassicAssert.AreEqual (typeof (int), o, "#1");
 		}
 
 		[Test]
@@ -153,10 +155,10 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			var xt = sctx.GetXamlType (typeof (TestClass));
 			var xm = xt.GetMember ("ArrayMember");
-			Assert.IsNotNull (xm, "#-1");
-			Assert.AreEqual (XamlLanguage.Array, xm.Type, "#0");
+			ClassicAssert.IsNotNull (xm, "#-1");
+			ClassicAssert.AreEqual (XamlLanguage.Array, xm.Type, "#0");
 			var o = xm.Invoker.GetValue (new TestClass ());
-			Assert.AreEqual (typeof (ArrayExtension), o.GetType (), "#1");
+			ClassicAssert.AreEqual (typeof (ArrayExtension), o.GetType (), "#1");
 		}
 
 		[Test]
@@ -188,7 +190,7 @@ namespace MonoTests.System.Xaml.Schema
 			}
 			catch (Exception e)
 			{
-				Assert.AreEqual("TargetException", e.GetType().Name);
+				ClassicAssert.AreEqual("TargetException", e.GetType().Name);
 			}
 #else
 			Assert.Throws<TargetException> (() => i.SetValue ("hello", 5));
@@ -202,8 +204,8 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			var ei = eventStore_Event1;
 			var i = new XamlMemberInvoker (new XamlMember (ei, sctx));
-			Assert.IsNull (i.UnderlyingGetter, "#1");
-			Assert.AreEqual (ei.GetAddMethod (), i.UnderlyingSetter, "#2");
+			ClassicAssert.IsNull (i.UnderlyingGetter, "#1");
+			ClassicAssert.AreEqual (ei.GetAddMethod (), i.UnderlyingSetter, "#2");
 		}
 
 		[Test]
@@ -246,8 +248,8 @@ namespace MonoTests.System.Xaml.Schema
 		public void CustomTypeDefaultValues ()
 		{
 			var i = new MyXamlMemberInvoker ();
-			Assert.IsNull (i.UnderlyingGetter, "#1");
-			Assert.IsNull (i.UnderlyingSetter, "#2");
+			ClassicAssert.IsNull (i.UnderlyingGetter, "#1");
+			ClassicAssert.IsNull (i.UnderlyingSetter, "#2");
 		}
 
 		[Test]
@@ -320,8 +322,8 @@ namespace MonoTests.System.Xaml.Schema
 		[Test]
 		public void UnknownInvoker ()
 		{
-			Assert.IsNull (XamlMemberInvoker.UnknownInvoker.UnderlyingGetter, "#1");
-			Assert.IsNull (XamlMemberInvoker.UnknownInvoker.UnderlyingSetter, "#2");
+			ClassicAssert.IsNull (XamlMemberInvoker.UnknownInvoker.UnderlyingGetter, "#1");
+			ClassicAssert.IsNull (XamlMemberInvoker.UnknownInvoker.UnderlyingSetter, "#2");
 		}
 	}
 }

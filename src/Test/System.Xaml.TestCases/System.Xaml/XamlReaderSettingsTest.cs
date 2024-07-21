@@ -25,6 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -46,12 +48,12 @@ namespace MonoTests.System.Xaml
 		public void DefaultValues ()
 		{
 			var s = new XamlReaderSettings ();
-			Assert.IsFalse (s.AllowProtectedMembersOnRoot, "#1");
-			Assert.IsNull (s.BaseUri, "#2");
-			Assert.IsFalse (s.IgnoreUidsOnPropertyElements, "#3");
-			Assert.IsNull (s.LocalAssembly, "#4");
-			Assert.IsFalse (s.ProvideLineInfo, "#5");
-			Assert.IsFalse (s.ValuesMustBeString, "#6");
+			ClassicAssert.IsFalse (s.AllowProtectedMembersOnRoot, "#1");
+			ClassicAssert.IsNull (s.BaseUri, "#2");
+			ClassicAssert.IsFalse (s.IgnoreUidsOnPropertyElements, "#3");
+			ClassicAssert.IsNull (s.LocalAssembly, "#4");
+			ClassicAssert.IsFalse (s.ProvideLineInfo, "#5");
+			ClassicAssert.IsFalse (s.ValuesMustBeString, "#6");
 		}
 
 		[Test]
@@ -73,12 +75,12 @@ namespace MonoTests.System.Xaml
 
 			s = new XamlReaderSettings (s);
 
-			Assert.IsTrue (s.AllowProtectedMembersOnRoot, "#1");
-			Assert.IsTrue (s.BaseUri.Equals (new Uri ("urn:foo")), "#2");
-			Assert.IsTrue (s.IgnoreUidsOnPropertyElements, "#3");
-			Assert.AreEqual (typeof (int).GetTypeInfo().Assembly, s.LocalAssembly, "#4");
-			Assert.IsTrue (s.ProvideLineInfo, "#5");
-			Assert.IsTrue (s.ValuesMustBeString, "#6");
+			ClassicAssert.IsTrue (s.AllowProtectedMembersOnRoot, "#1");
+			ClassicAssert.IsTrue (s.BaseUri.Equals (new Uri ("urn:foo")), "#2");
+			ClassicAssert.IsTrue (s.IgnoreUidsOnPropertyElements, "#3");
+			ClassicAssert.AreEqual (typeof (int).GetTypeInfo().Assembly, s.LocalAssembly, "#4");
+			ClassicAssert.IsTrue (s.ProvideLineInfo, "#5");
+			ClassicAssert.IsTrue (s.ValuesMustBeString, "#6");
 		}
 	}
 }

@@ -25,6 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -53,8 +55,8 @@ namespace MonoTests.System.Xaml
 		public void DefaultValues ()
 		{
 			var s = new XamlSchemaContextSettings ();
-			Assert.IsFalse (s.FullyQualifyAssemblyNamesInClrNamespaces, "#1");
-			Assert.IsFalse (s.SupportMarkupExtensionsWithDuplicateArity, "#2");
+			ClassicAssert.IsFalse (s.FullyQualifyAssemblyNamesInClrNamespaces, "#1");
+			ClassicAssert.IsFalse (s.SupportMarkupExtensionsWithDuplicateArity, "#2");
 		}
 
 		[Test]
@@ -64,8 +66,8 @@ namespace MonoTests.System.Xaml
 			s.FullyQualifyAssemblyNamesInClrNamespaces = true;
 			s.SupportMarkupExtensionsWithDuplicateArity = true;
 			s = new XamlSchemaContextSettings (s);
-			Assert.IsTrue (s.FullyQualifyAssemblyNamesInClrNamespaces, "#1");
-			Assert.IsTrue (s.SupportMarkupExtensionsWithDuplicateArity, "#2");
+			ClassicAssert.IsTrue (s.FullyQualifyAssemblyNamesInClrNamespaces, "#1");
+			ClassicAssert.IsTrue (s.SupportMarkupExtensionsWithDuplicateArity, "#2");
 		}
 	}
 }

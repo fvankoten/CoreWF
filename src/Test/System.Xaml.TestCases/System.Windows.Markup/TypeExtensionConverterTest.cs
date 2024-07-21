@@ -28,6 +28,8 @@ using NUnit.Framework;
 using MonoTests.System.Xaml;
 #if NETSTANDARD
 using System.ComponentModel;
+using NUnit.Framework.Legacy;
+
 #endif
 #if PCL
 using System.Windows.Markup;
@@ -86,39 +88,39 @@ namespace MonoTests.System.Windows.Markup
 		public void CanConvertFrom ()
 		{
 			var tc = XamlLanguage.Type.TypeConverter.ConverterInstance;
-			Assert.IsFalse (tc.CanConvertFrom (null, typeof (string)), "#1");
-			Assert.IsFalse (tc.CanConvertFrom (null, typeof (Type)), "#2");
-			Assert.IsFalse (tc.CanConvertFrom (null, typeof (Type)), "#3");
+			ClassicAssert.IsFalse (tc.CanConvertFrom (null, typeof (string)), "#1");
+            ClassicAssert.IsFalse (tc.CanConvertFrom (null, typeof (Type)), "#2");
+            ClassicAssert.IsFalse (tc.CanConvertFrom (null, typeof (Type)), "#3");
 			// InstanceDescriptor is not used, so no need to test for it? 
-			//Assert.IsTrue (tc.CanConvertFrom (null, typeof (InstanceDescriptor)), "#4");
+			//ClassicAssert.IsTrue (tc.CanConvertFrom (null, typeof (InstanceDescriptor)), "#4");
 
 			var idc = new TypeDescriptorContext () {Instance = "x:Int32", Service = new XamlTypeResolver ()}; // gives no difference ...
-			Assert.IsFalse (tc.CanConvertFrom (idc, typeof (string)), "#5");
-			Assert.IsFalse (tc.CanConvertFrom (idc, typeof (Type)), "#6");
-			Assert.IsFalse (tc.CanConvertFrom (idc, typeof (TypeExtension)), "#7");
+            ClassicAssert.IsFalse (tc.CanConvertFrom (idc, typeof (string)), "#5");
+            ClassicAssert.IsFalse (tc.CanConvertFrom (idc, typeof (Type)), "#6");
+			ClassicAssert.IsFalse (tc.CanConvertFrom (idc, typeof (TypeExtension)), "#7");
 		}
 
 		[Test]
 		public void CanConvertTo ()
 		{
 			var tc = XamlLanguage.Type.TypeConverter.ConverterInstance;
-			Assert.IsTrue (tc.CanConvertTo (null, typeof (string)), "#1");
-			Assert.IsFalse (tc.CanConvertTo (null, typeof (Type)), "#2");
-			Assert.IsFalse (tc.CanConvertTo (null, typeof (TypeExtension)), "#3");
+            ClassicAssert.IsTrue (tc.CanConvertTo (null, typeof (string)), "#1");
+            ClassicAssert.IsFalse (tc.CanConvertTo (null, typeof (Type)), "#2");
+            ClassicAssert.IsFalse (tc.CanConvertTo (null, typeof (TypeExtension)), "#3");
 
 			var idc = new TypeDescriptorContext () {Instance = "x:Int32", Service = new XamlTypeResolver ()}; // gives no differences...
-			Assert.IsTrue (tc.CanConvertTo (idc, typeof (string)), "#5");
-			Assert.IsFalse (tc.CanConvertTo (idc, typeof (Type)), "#6");
-			Assert.IsFalse (tc.CanConvertTo (idc, typeof (TypeExtension)), "#7");
+            ClassicAssert.IsTrue (tc.CanConvertTo (idc, typeof (string)), "#5");
+            ClassicAssert.IsFalse (tc.CanConvertTo (idc, typeof (Type)), "#6");
+            ClassicAssert.IsFalse (tc.CanConvertTo (idc, typeof (TypeExtension)), "#7");
 		}
 
 		[Test]
 		public void ConvertTo ()
 		{
 			var tc = XamlLanguage.Type.TypeConverter.ConverterInstance;
-			Assert.AreEqual ("x:Int32", tc.ConvertTo (null, null, "x:Int32", typeof (string)), "#1");
-			Assert.AreEqual ("System.Int32", tc.ConvertTo (null, null, typeof (int), typeof (string)), "#2");
-			Assert.AreEqual ("System.Type", tc.ConvertTo (null, null, typeof (Type), typeof (string)), "#3");
+			ClassicAssert.AreEqual ("x:Int32", tc.ConvertTo (null, null, "x:Int32", typeof (string)), "#1");
+			ClassicAssert.AreEqual ("System.Int32", tc.ConvertTo (null, null, typeof (int), typeof (string)), "#2");
+			ClassicAssert.AreEqual ("System.Type", tc.ConvertTo (null, null, typeof (Type), typeof (string)), "#3");
 		}
 		
 		[Test]

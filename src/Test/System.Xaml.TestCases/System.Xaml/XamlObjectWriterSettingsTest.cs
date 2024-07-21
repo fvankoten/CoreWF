@@ -26,6 +26,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -47,19 +49,19 @@ namespace MonoTests.System.Xaml
 		public void DefaultValues ()
 		{
 			var s = new XamlObjectWriterSettings ();
-			// TODO: Assert.IsNull (s.AccessLevel, "#1");
-			Assert.IsNull (s.AfterBeginInitHandler, "#2");
-			Assert.IsNull (s.AfterEndInitHandler, "#3");
-			Assert.IsNull (s.AfterPropertiesHandler, "#4");
-			Assert.IsNull (s.BeforePropertiesHandler, "#5");
-			Assert.IsNull (s.ExternalNameScope, "#6");
-			Assert.IsFalse (s.IgnoreCanConvert, "#7");
-			Assert.IsFalse (s.PreferUnconvertedDictionaryKeys, "#8");
-			Assert.IsFalse (s.RegisterNamesOnExternalNamescope, "#9");
-			Assert.IsNull (s.RootObjectInstance, "#10");
-			Assert.IsFalse (s.SkipDuplicatePropertyCheck, "#11");
-			Assert.IsFalse (s.SkipProvideValueOnRoot, "#12");
-			Assert.IsNull (s.XamlSetValueHandler, "#13");
+			// TODO: ClassicAssert.IsNull (s.AccessLevel, "#1");
+			ClassicAssert.IsNull (s.AfterBeginInitHandler, "#2");
+			ClassicAssert.IsNull (s.AfterEndInitHandler, "#3");
+			ClassicAssert.IsNull (s.AfterPropertiesHandler, "#4");
+			ClassicAssert.IsNull (s.BeforePropertiesHandler, "#5");
+			ClassicAssert.IsNull (s.ExternalNameScope, "#6");
+			ClassicAssert.IsFalse (s.IgnoreCanConvert, "#7");
+			ClassicAssert.IsFalse (s.PreferUnconvertedDictionaryKeys, "#8");
+			ClassicAssert.IsFalse (s.RegisterNamesOnExternalNamescope, "#9");
+			ClassicAssert.IsNull (s.RootObjectInstance, "#10");
+			ClassicAssert.IsFalse (s.SkipDuplicatePropertyCheck, "#11");
+			ClassicAssert.IsFalse (s.SkipProvideValueOnRoot, "#12");
+			ClassicAssert.IsNull (s.XamlSetValueHandler, "#13");
 		}
 
 		[Test]
@@ -81,8 +83,8 @@ namespace MonoTests.System.Xaml
 				}
 			}
 			
-			Assert.AreEqual (obj, result, "#1");
-			Assert.AreEqual ("Test", obj.Property, "#2");
+			ClassicAssert.AreEqual (obj, result, "#1");
+			ClassicAssert.AreEqual ("Test", obj.Property, "#2");
 		}
 	}
 

@@ -28,6 +28,8 @@ using System.Reflection;
 using NUnit.Framework;
 using MonoTests.System.Xaml;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Xaml;
 using System.Xaml.Schema;
@@ -77,7 +79,7 @@ namespace MonoTests.System.Windows.Markup
 			var x = new StaticExtension ();
 			x.MemberType = typeof (XamlLanguage);
 			x.Member = "Array";
-			Assert.AreEqual (XamlLanguage.Array, x.ProvideValue (null), "#1");
+			ClassicAssert.AreEqual (XamlLanguage.Array, x.ProvideValue (null), "#1");
 		}
 
 		[Test]
@@ -86,7 +88,7 @@ namespace MonoTests.System.Windows.Markup
 			var x = new StaticExtension ();
 			x.MemberType = typeof (XamlLanguage);
 			x.Member = "Xaml2006Namespace";
-			Assert.AreEqual (XamlLanguage.Xaml2006Namespace, x.ProvideValue (null), "#1");
+			ClassicAssert.AreEqual (XamlLanguage.Xaml2006Namespace, x.ProvideValue (null), "#1");
 		}
 
 		[Test]
@@ -119,7 +121,7 @@ namespace MonoTests.System.Windows.Markup
 		{
 			const string xaml = "<x:Static xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' xmlns:foo='clr-namespace:MonoTests.System.Xaml;assembly=System.Xaml.TestCases' Member='foo:StaticClass1.FooBar' />";
 			var result = XamlServices.Parse(xaml.UpdateXml());
-			Assert.AreEqual("test", result);
+			ClassicAssert.AreEqual("test", result);
 		}
 
 		[Test]
@@ -127,7 +129,7 @@ namespace MonoTests.System.Windows.Markup
 		{
 			const string xaml = "<x:Static xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' xmlns:foo='clr-namespace:MonoTests.System.Xaml;assembly=System.Xaml.TestCases' Member='foo:StaticClass1+MyEnum.EnumValue2' />";
 			var result = XamlServices.Parse(xaml.UpdateXml());
-			Assert.AreEqual(StaticClass1.MyEnum.EnumValue2, result);
+			ClassicAssert.AreEqual(StaticClass1.MyEnum.EnumValue2, result);
 		}
 	}
 }

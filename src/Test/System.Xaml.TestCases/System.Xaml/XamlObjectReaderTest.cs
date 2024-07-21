@@ -29,6 +29,8 @@ using System.Reflection;
 using System.Xml;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -120,7 +122,7 @@ namespace MonoTests.System.Xaml
 		{
 			var r = new XamlObjectReader (new TestClass4 ());
 			WriteNullMemberAsObject (r, delegate {
-				Assert.IsNull (r.Instance, "#x");
+				ClassicAssert.IsNull (r.Instance, "#x");
 			}
 			);
 		}
@@ -153,7 +155,7 @@ namespace MonoTests.System.Xaml
 			while (r.NodeType != XamlNodeType.StartMember)
 				r.Read ();
 			r.Skip ();
-			Assert.AreEqual (XamlNodeType.EndObject, r.NodeType, "#1");
+			ClassicAssert.AreEqual (XamlNodeType.EndObject, r.NodeType, "#1");
 		}
 
 		[Test]
@@ -190,7 +192,7 @@ namespace MonoTests.System.Xaml
 		void Read_TypeOrTypeExtension (XamlObjectReader r)
 		{
 			Read_TypeOrTypeExtension (r, delegate {
-				Assert.IsTrue (r.Instance is TypeExtension, "#26");
+				ClassicAssert.IsTrue (r.Instance is TypeExtension, "#26");
 			}, XamlLanguage.PositionalParameters);
 		}
 
@@ -211,7 +213,7 @@ namespace MonoTests.System.Xaml
 		void Read_TypeOrTypeExtension2 (XamlObjectReader r)
 		{
 			Read_TypeOrTypeExtension2 (r, delegate {
-				Assert.IsTrue (r.Instance is TypeExtension, "#26");
+				ClassicAssert.IsTrue (r.Instance is TypeExtension, "#26");
 			}, XamlLanguage.PositionalParameters);
 		}
 
@@ -240,7 +242,7 @@ namespace MonoTests.System.Xaml
 		void Read_NullOrNullExtension (XamlObjectReader r, object instance)
 		{
 			Read_NullOrNullExtension (r, delegate {
-				Assert.AreEqual (instance, r.Instance, "#26"); // null and NullExtension are different here.
+				ClassicAssert.AreEqual (instance, r.Instance, "#26"); // null and NullExtension are different here.
 			});
 		}
 
@@ -269,7 +271,7 @@ namespace MonoTests.System.Xaml
 		{
 			var r = new XamlObjectReader (obj);
 			Read_ListInt32 (r, delegate {
-				Assert.AreEqual (obj, r.Instance, "#26");
+				ClassicAssert.AreEqual (obj, r.Instance, "#26");
 			}, obj);
 		}
 
@@ -328,7 +330,7 @@ namespace MonoTests.System.Xaml
 		void Read_ArrayOrArrayExtensionOrMyArrayExtension (XamlObjectReader r, object instance, Type extType)
 		{
 			Read_ArrayOrArrayExtensionOrMyArrayExtension (r, delegate {
-				Assert.AreEqual (instance, r.Instance, "#26"); // different between Array and ArrayExtension. Also, different from Type and TypeExtension (Type returns TypeExtension, while Array remains to return Array)
+				ClassicAssert.AreEqual (instance, r.Instance, "#26"); // different between Array and ArrayExtension. Also, different from Type and TypeExtension (Type returns TypeExtension, while Array remains to return Array)
 			}, extType);
 		}
 
@@ -345,7 +347,7 @@ namespace MonoTests.System.Xaml
 			var obj = new DateTime (2010, 4, 15);
 			var r = new XamlObjectReader (obj);
 			Read_CommonClrType (r, obj);
-			Assert.AreEqual ("2010-04-15", Read_Initialization (r, null), "#1");
+			ClassicAssert.AreEqual ("2010-04-15", Read_Initialization (r, null), "#1");
 		}
 
 		[Test]
@@ -366,10 +368,10 @@ namespace MonoTests.System.Xaml
 			var obj = Guid.NewGuid ();
 			var r = new XamlObjectReader (obj);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNotNull (r.SchemaContext.GetXamlType (typeof(Guid)).TypeConverter, "premise#1");
+			ClassicAssert.IsNotNull (r.SchemaContext.GetXamlType (typeof(Guid)).TypeConverter, "premise#1");
 #endif
 			Read_CommonClrType (r, obj);
-			Assert.AreEqual (obj.ToString (), Read_Initialization (r, null), "#1");
+			ClassicAssert.AreEqual (obj.ToString (), Read_Initialization (r, null), "#1");
 		}
 
 		[Test]
@@ -681,7 +683,7 @@ namespace MonoTests.System.Xaml
 			while (xr.Read ())
 				if (xr.NodeType == XamlNodeType.StartMember)
 					break;
-			Assert.AreEqual (xt.GetMember ("Foo"), xr.Member, "#1");
+			ClassicAssert.AreEqual (xt.GetMember ("Foo"), xr.Member, "#1");
 			while (!xr.IsEof)
 				xr.Read ();
 		}
@@ -882,8 +884,8 @@ namespace MonoTests.System.Xaml
 					ReadValue(xr, "hello", "#3");
 				});
 			});
-			Assert.IsFalse(xr.Read());
-			Assert.IsTrue(obj.ShouldSerializeCalled > 0);
+			ClassicAssert.IsFalse(xr.Read());
+			ClassicAssert.IsTrue(obj.ShouldSerializeCalled > 0);
 		}
 
 		[Test]
@@ -898,8 +900,8 @@ namespace MonoTests.System.Xaml
 			{
 				// no members
 			});
-			Assert.IsFalse(xr.Read());
-			Assert.IsTrue(obj.ShouldSerializeCalled > 0);
+			ClassicAssert.IsFalse(xr.Read());
+			ClassicAssert.IsTrue(obj.ShouldSerializeCalled > 0);
 		}
 	}
 }

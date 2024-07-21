@@ -27,6 +27,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 using System.Xaml;
@@ -76,7 +78,7 @@ namespace MonoTests.System.Windows.Markup
 		{
 			var x = new Reference ("X");
 			var r = new NameServiceProvider (true, false);
-			Assert.AreEqual ("BAR", x.ProvideValue (r), "#1");
+			ClassicAssert.AreEqual ("BAR", x.ProvideValue (r), "#1");
 		}
 
 		[Test]
@@ -84,7 +86,7 @@ namespace MonoTests.System.Windows.Markup
 		{
 			var x = new Reference ("Y");
 			var r = new NameServiceProvider (true, true);
-			Assert.AreEqual ("FOO", x.ProvideValue (r), "#1");
+			ClassicAssert.AreEqual ("FOO", x.ProvideValue (r), "#1");
 		}
 
 		class NameServiceProvider : IServiceProvider
@@ -98,7 +100,7 @@ namespace MonoTests.System.Windows.Markup
 
 			public object GetService (Type serviceType)
 			{
-				Assert.AreEqual (typeof (IXamlNameResolver), serviceType, "TypeToResolve");
+				ClassicAssert.AreEqual (typeof (IXamlNameResolver), serviceType, "TypeToResolve");
 				return resolver;
 			}
 		}
@@ -125,9 +127,9 @@ namespace MonoTests.System.Windows.Markup
 			// only X (which 'failed' to resolve) calls this
 			public object GetFixupToken (IEnumerable<string> names, bool canAssignDirectly)
 			{
-				Assert.IsTrue (canAssignDirectly, "canAssignDirectly");
-				Assert.AreEqual (1, names.Count (), "Count");
-				Assert.AreEqual ("X", names.First (), "name0");
+				ClassicAssert.IsTrue (canAssignDirectly, "canAssignDirectly");
+				ClassicAssert.AreEqual (1, names.Count (), "Count");
+				ClassicAssert.AreEqual ("X", names.First (), "name0");
 				return "BAR";
 			}
 			

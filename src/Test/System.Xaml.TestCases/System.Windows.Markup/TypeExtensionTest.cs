@@ -26,6 +26,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -66,7 +68,7 @@ namespace MonoTests.System.Windows.Markup
 		public void ProvideValueWithType ()
 		{
 			var x = new TypeExtension (typeof (int));
-			Assert.AreEqual (typeof (int), x.ProvideValue (null), "#1"); // serviceProvider is not required.
+			ClassicAssert.AreEqual (typeof (int), x.ProvideValue (null), "#1"); // serviceProvider is not required.
 		}
 
 		[Test]
@@ -109,7 +111,7 @@ namespace MonoTests.System.Windows.Markup
 
 			public object GetService (Type serviceType)
 			{
-				Assert.AreEqual (typeof (IXamlTypeResolver), serviceType, "TypeToResolve");
+				ClassicAssert.AreEqual (typeof (IXamlTypeResolver), serviceType, "TypeToResolve");
 				return works ? this : null;
 			}
 

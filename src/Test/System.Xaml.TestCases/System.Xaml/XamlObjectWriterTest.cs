@@ -43,6 +43,7 @@ using XamlParseException = System.Xaml.XamlParseException;
 
 using CategoryAttribute = NUnit.Framework.CategoryAttribute;
 using XamlReader = System.Xaml.XamlReader;
+using NUnit.Framework.Legacy;
 
 namespace MonoTests.System.Xaml
 {
@@ -105,7 +106,7 @@ namespace MonoTests.System.Xaml
 		{
 			// allowed.
 			var w = new XamlObjectWriter(sctx, null);
-			Assert.AreEqual(sctx, w.SchemaContext, "#1");
+			ClassicAssert.AreEqual(sctx, w.SchemaContext, "#1");
 		}
 
 		[Test]
@@ -144,7 +145,7 @@ namespace MonoTests.System.Xaml
 			var xw = new XamlObjectWriter(sctx, null);
 			xw.WriteNamespace(new NamespaceDeclaration("urn:foo", "x")); // ignored.
 			xw.Close();
-			Assert.IsNull(xw.Result, "#1");
+			ClassicAssert.IsNull(xw.Result, "#1");
 		}
 
 		[Test]
@@ -159,7 +160,7 @@ namespace MonoTests.System.Xaml
 			var xw = new XamlObjectWriter(sctx, null);
 			xw.WriteStartObject(new XamlType(typeof(int), sctx));
 			xw.Close();
-			Assert.AreEqual(0, xw.Result, "#1");
+			ClassicAssert.AreEqual(0, xw.Result, "#1");
 		}
 
 		[Test]
@@ -311,8 +312,8 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue(new TestClass1());
 			xw.WriteEndMember();
 			xw.Close();
-			Assert.IsNotNull(xw.Result, "#1");
-			Assert.AreEqual(typeof(TestClass1), xw.Result.GetType(), "#2");
+			ClassicAssert.IsNotNull(xw.Result, "#1");
+			ClassicAssert.AreEqual(typeof(TestClass1), xw.Result.GetType(), "#2");
 		}
 
 		[Test]
@@ -338,7 +339,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue("foo");
 			xw.WriteEndMember();
 			xw.Close();
-			Assert.AreEqual("foo", xw.Result, "#1");
+			ClassicAssert.AreEqual("foo", xw.Result, "#1");
 		}
 
 		[Test]
@@ -353,9 +354,9 @@ namespace MonoTests.System.Xaml
 			xw.WriteEndMember();
 			xw.Close();
 			var l = xw.Result as List<string>;
-			Assert.IsNotNull(l, "#1");
-			Assert.AreEqual("foo", l[0], "#2");
-			Assert.AreEqual("bar", l[1], "#3");
+			ClassicAssert.IsNotNull(l, "#1");
+			ClassicAssert.AreEqual("foo", l[0], "#2");
+			ClassicAssert.AreEqual("bar", l[1], "#3");
 		}
 
 		// I believe .NET XamlObjectWriter.Dispose() is hack and should
@@ -413,7 +414,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteEndObject();
 			xw.Close();
 			var ret = xw.Result;
-			Assert.IsTrue(ret is TestClass1, "#1");
+			ClassicAssert.IsTrue(ret is TestClass1, "#1");
 		}
 
 		[Test]
@@ -645,10 +646,10 @@ namespace MonoTests.System.Xaml
 		{
 			var xw = new XamlObjectWriter(sctx, null);
 			xw.WriteStartObject(xt3);
-			Assert.IsNull(xw.Result, "#1");
+			ClassicAssert.IsNull(xw.Result, "#1");
 			xw.WriteStartMember(xt3.GetMember("TestProp3"));
 			xw.WriteGetObject();
-			Assert.IsNull(xw.Result, "#2");
+			ClassicAssert.IsNull(xw.Result, "#2");
 		}
 
 		[Test]
@@ -736,7 +737,7 @@ namespace MonoTests.System.Xaml
 				}
 			}
 
-			Assert.AreEqual("Test", result.Property, "#1");
+			ClassicAssert.AreEqual("Test", result.Property, "#1");
 		}
 
 		[Test]
@@ -756,20 +757,20 @@ namespace MonoTests.System.Xaml
 			settings.XamlSetValueHandler = (sender, e) =>
 			{
 				invoked = true;
-				Assert.IsNotNull(sender, "#1");
-				Assert.AreEqual(typeof(TestClass3), sender.GetType(), "#2");
-				Assert.AreEqual("Nested", e.Member.Name, "#3");
-				Assert.IsTrue(sender != e.Member.Invoker.GetValue(sender), "#4");
-				Assert.IsFalse(e.Handled, "#5");
+				ClassicAssert.IsNotNull(sender, "#1");
+				ClassicAssert.AreEqual(typeof(TestClass3), sender.GetType(), "#2");
+				ClassicAssert.AreEqual("Nested", e.Member.Name, "#3");
+				ClassicAssert.IsTrue(sender != e.Member.Invoker.GetValue(sender), "#4");
+				ClassicAssert.IsFalse(e.Handled, "#5");
 				// ... and leave Handled as false, to invoke the actual setter
 			};
 			var xow = new XamlObjectWriter(new XamlSchemaContext(), settings);
 			var xxr = new XamlXmlReader(XmlReader.Create(new StringReader(xml)));
 			XamlServices.Transform(xxr, xow);
-			Assert.IsTrue(invoked, "#6");
-			Assert.IsNotNull(xow.Result, "#7");
+			ClassicAssert.IsTrue(invoked, "#6");
+			ClassicAssert.IsNotNull(xow.Result, "#7");
 			var ret = xow.Result as TestClass3;
-			Assert.IsNotNull(ret.Nested, "#8");
+			ClassicAssert.IsNotNull(ret.Nested, "#8");
 		}
 
 		[Test] // bug #3003 repro
@@ -814,9 +815,9 @@ namespace MonoTests.System.Xaml
 
 			output.WriteLine("Loaded {0}", obj);
 
-			Assert.AreEqual(XamarinBug3003.TestContext.ExpectedResult.Replace("\r\n", "\n"), output.ToString().Replace("\r\n", "\n"), "#1");
+			ClassicAssert.AreEqual(XamarinBug3003.TestContext.ExpectedResult.Replace("\r\n", "\n"), output.ToString().Replace("\r\n", "\n"), "#1");
 
-			Assert.AreEqual(2, obj.Children.Count, "#2");
+			ClassicAssert.AreEqual(2, obj.Children.Count, "#2");
 		}
 
 		// extra use case based tests.
@@ -831,7 +832,7 @@ namespace MonoTests.System.Xaml
 			ow.WriteStartMember(XamlLanguage.PositionalParameters);
 			ow.WriteValue("x:Int32");
 			ow.Close();
-			Assert.AreEqual(typeof(int), ow.Result, "#1");
+			ClassicAssert.AreEqual(typeof(int), ow.Result, "#1");
 		}
 
 		[Test]
@@ -844,7 +845,7 @@ namespace MonoTests.System.Xaml
 			ow.WriteStartMember(XamlLanguage.PositionalParameters);
 			ow.WriteValue(typeof(int));
 			ow.Close();
-			Assert.AreEqual(typeof(int), ow.Result, "#1");
+			ClassicAssert.AreEqual(typeof(int), ow.Result, "#1");
 		}
 
 		[Test]
@@ -852,9 +853,9 @@ namespace MonoTests.System.Xaml
 		{
 			var o = (XamarinBug2927.MyRootClass)XamlServices.Load(GetReader("LookupCorrectEvent.xml"));
 			o.Child.Descendant.Work();
-			Assert.IsTrue(o.Invoked, "#1");
-			Assert.IsFalse(o.Child.Invoked, "#2");
-			Assert.IsFalse(o.Child.Descendant.Invoked, "#3");
+			ClassicAssert.IsTrue(o.Invoked, "#1");
+			ClassicAssert.IsFalse(o.Child.Invoked, "#2");
+			ClassicAssert.IsFalse(o.Child.Descendant.Invoked, "#3");
 		}
 
 		[Test]
@@ -883,7 +884,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("String.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual("foo", des, "#1");
+				ClassicAssert.AreEqual("foo", des, "#1");
 			}
 		}
 
@@ -893,7 +894,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Int32.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(5, des, "#1");
+				ClassicAssert.AreEqual(5, des, "#1");
 			}
 		}
 
@@ -903,7 +904,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DateTime.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(new DateTime(2010, 4, 14), des, "#1");
+				ClassicAssert.AreEqual(new DateTime(2010, 4, 14), des, "#1");
 			}
 		}
 
@@ -913,7 +914,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("TimeSpan.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(TimeSpan.FromMinutes(7), des, "#1");
+				ClassicAssert.AreEqual(TimeSpan.FromMinutes(7), des, "#1");
 			}
 		}
 
@@ -923,7 +924,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Uri.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(new Uri("urn:foo"), des, "#1");
+				ClassicAssert.AreEqual(new Uri("urn:foo"), des, "#1");
 			}
 		}
 
@@ -933,7 +934,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NullExtension.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.IsNull(des, "#1");
+				ClassicAssert.IsNull(des, "#1");
 			}
 		}
 
@@ -943,7 +944,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Type.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(typeof(int), des, "#1");
+				ClassicAssert.AreEqual(typeof(int), des, "#1");
 			}
 		}
 
@@ -954,7 +955,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Type2.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -965,7 +966,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Guid.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -976,7 +977,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("GuidFactoryMethod.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -999,8 +1000,8 @@ namespace MonoTests.System.Xaml
 				// .NET does not return Reference.
 				// Its ProvideValue() returns MS.Internal.Xaml.Context.NameFixupToken,
 				// which is assumed (by name) to resolve to the referenced object.
-				Assert.IsNotNull(des, "#1");
-				//Assert.AreEqual (new Reference ("FooBar"), des, "#1");
+				ClassicAssert.IsNotNull(des, "#1");
+				//ClassicAssert.AreEqual (new Reference ("FooBar"), des, "#1");
 			}
 		}
 
@@ -1011,7 +1012,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Array_Int32.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -1022,7 +1023,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("List_Int32.xml"))
 			{
 				var des = (List<int>)XamlServices.Load(xr);
-				Assert.AreEqual(obj.ToArray(), des.ToArray(), "#1");
+				ClassicAssert.AreEqual(obj.ToArray(), des.ToArray(), "#1");
 			}
 		}
 
@@ -1033,7 +1034,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("List_Int32_2.xml"))
 			{
 				var des = (List<int>)XamlServices.Load(xr);
-				Assert.AreEqual(obj.ToArray(), des.ToArray(), "#1");
+				ClassicAssert.AreEqual(obj.ToArray(), des.ToArray(), "#1");
 			}
 		}
 
@@ -1044,7 +1045,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("List_Type.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -1055,7 +1056,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("List_Array.xml"))
 			{
 				var des = (List<Array>)XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -1069,7 +1070,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Dictionary_Int32_String.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(dic, des, "#1");
+				ClassicAssert.AreEqual(dic, des, "#1");
 			}
 		}
 
@@ -1086,7 +1087,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Dictionary_String_Type.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(dic, des, "#1");
+				ClassicAssert.AreEqual(dic, des, "#1");
 			}
 		}
 
@@ -1098,10 +1099,10 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("PositionalParametersWrapper.xml"))
 			{
 				var des = XamlServices.Load(xr) as PositionalParametersWrapper;
-				Assert.IsNotNull(des, "#1");
-				Assert.IsNotNull(des.Body, "#2");
-				Assert.AreEqual(obj.Body.Foo, des.Body.Foo, "#3");
-				Assert.AreEqual(obj.Body.Bar, des.Body.Bar, "#4");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.IsNotNull(des.Body, "#2");
+				ClassicAssert.AreEqual(obj.Body.Foo, des.Body.Foo, "#3");
+				ClassicAssert.AreEqual(obj.Body.Bar, des.Body.Bar, "#4");
 			}
 		}
 
@@ -1112,8 +1113,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentAttributed.xml"))
 			{
 				var des = (ArgumentAttributed)XamlServices.Load(xr);
-				Assert.AreEqual("foo", des.Arg1, "#1");
-				Assert.AreEqual("bar", des.Arg2, "#2");
+				ClassicAssert.AreEqual("foo", des.Arg1, "#1");
+				ClassicAssert.AreEqual("bar", des.Arg2, "#2");
 			}
 		}
 
@@ -1124,8 +1125,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentNonAttributed.xml"))
 			{
 				var des = (ArgumentNonAttributed)XamlServices.Load(xr);
-				Assert.AreEqual("foo", des.Arg1, "#1");
-				Assert.AreEqual("bar", des.Arg2, "#2");
+				ClassicAssert.AreEqual("foo", des.Arg1, "#1");
+				ClassicAssert.AreEqual("bar", des.Arg2, "#2");
 			}
 		}
 
@@ -1135,8 +1136,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentMultipleTypesFromString.xml"))
 			{
 				var des = (ArgumentMultipleTypes)XamlServices.Load(xr);
-				Assert.AreEqual("foo", des.StringArg, "#1");
-				Assert.AreEqual(0, des.IntArg, "#2");
+				ClassicAssert.AreEqual("foo", des.StringArg, "#1");
+				ClassicAssert.AreEqual(0, des.IntArg, "#2");
 			}
 		}
 		[Test]
@@ -1145,8 +1146,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentMultipleTypesFromInt.xml"))
 			{
 				var des = (ArgumentMultipleTypes)XamlServices.Load(xr);
-				Assert.AreEqual(null, des.StringArg, "#1");
-				Assert.AreEqual(10, des.IntArg, "#2");
+				ClassicAssert.AreEqual(null, des.StringArg, "#1");
+				ClassicAssert.AreEqual(10, des.IntArg, "#2");
 			}
 		}
 
@@ -1156,8 +1157,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentMultipleTypesFromAttribute.xml"))
 			{
 				var des = (ArgumentMultipleTypes)XamlServices.Load(xr);
-				Assert.AreEqual("foo", des.StringArg, "#1");
-				Assert.AreEqual(0, des.IntArg, "#2");
+				ClassicAssert.AreEqual("foo", des.StringArg, "#1");
+				ClassicAssert.AreEqual(0, des.IntArg, "#2");
 			}
 		}
 
@@ -1169,7 +1170,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentWithIntConstructorFromAttribute.xml"))
 			{
 				var des = (ArgumentWithIntConstructor)XamlServices.Load(xr);
-				Assert.AreEqual(10, des.IntArg, "#2");
+				ClassicAssert.AreEqual(10, des.IntArg, "#2");
 			}
 		}
 
@@ -1179,7 +1180,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentWithIntConstructorFromInt.xml"))
 			{
 				var des = (ArgumentWithIntConstructor)XamlServices.Load(xr);
-				Assert.AreEqual(11, des.IntArg, "#2");
+				ClassicAssert.AreEqual(11, des.IntArg, "#2");
 			}
 		}
 
@@ -1191,7 +1192,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArgumentWithIntConstructorFromString.xml"))
 			{
 				var des = (ArgumentWithIntConstructor)XamlServices.Load(xr);
-				Assert.AreEqual(12, des.IntArg, "#2");
+				ClassicAssert.AreEqual(12, des.IntArg, "#2");
 			}
 		}
 
@@ -1203,7 +1204,7 @@ namespace MonoTests.System.Xaml
 			{
 				var des = XamlServices.Load(xr);
 				// The resulting object is not ArrayExtension.
-				Assert.AreEqual(new int[0], des, "#1");
+				ClassicAssert.AreEqual(new int[0], des, "#1");
 			}
 		}
 
@@ -1214,7 +1215,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ArrayList.xml"))
 			{
 				var des = XamlServices.Load(xr);
-				Assert.AreEqual(obj, des, "#1");
+				ClassicAssert.AreEqual(obj, des, "#1");
 			}
 		}
 
@@ -1226,11 +1227,11 @@ namespace MonoTests.System.Xaml
 				using (var xr = GetReader("ComplexPositionalParameterWrapper.xml"))
 				{
 					var des = (ComplexPositionalParameterWrapper)XamlServices.Load(xr);
-					Assert.IsNotNull(des.Param, "#1");
-					Assert.AreEqual("foo", des.Param.Value.Foo, "#2");
+					ClassicAssert.IsNotNull(des.Param, "#1");
+					ClassicAssert.AreEqual("foo", des.Param.Value.Foo, "#2");
 				}
 			});
-			Assert.IsInstanceOf<ArgumentException>(ex.InnerException, "#3");
+			ClassicAssert.IsInstanceOf<ArgumentException>(ex.InnerException, "#3");
 		}
 
 		[Test]
@@ -1239,8 +1240,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ComplexPositionalParameterWrapper2.xml"))
 			{
 				var des = (ComplexPositionalParameterWrapper2)XamlServices.Load(xr);
-				Assert.IsNotNull(des.Param, "#1");
-				Assert.AreEqual("foo", des.Param, "#2");
+				ClassicAssert.IsNotNull(des.Param, "#1");
+				ClassicAssert.AreEqual("foo", des.Param, "#2");
 			}
 		}
 
@@ -1251,9 +1252,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ListWrapper.xml"))
 			{
 				var des = (ListWrapper)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.IsNotNull(des.Items, "#2");
-				Assert.AreEqual(obj.Items.ToArray(), des.Items.ToArray(), "#3");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.IsNotNull(des.Items, "#2");
+				ClassicAssert.AreEqual(obj.Items.ToArray(), des.Items.ToArray(), "#3");
 			}
 		}
 
@@ -1264,9 +1265,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ListWrapper2.xml"))
 			{
 				var des = (ListWrapper2)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.IsNotNull(des.Items, "#2");
-				Assert.AreEqual(obj.Items.ToArray(), des.Items.ToArray(), "#3");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.IsNotNull(des.Items, "#2");
+				ClassicAssert.AreEqual(obj.Items.ToArray(), des.Items.ToArray(), "#3");
 			}
 		}
 
@@ -1278,7 +1279,7 @@ namespace MonoTests.System.Xaml
 			{
 				var des = XamlServices.Load(xr);
 				// ProvideValue() returns an array
-				Assert.AreEqual(new int[] { 5, -3, 0 }, des, "#1");
+				ClassicAssert.AreEqual(new int[] { 5, -3, 0 }, des, "#1");
 			}
 		}
 
@@ -1290,7 +1291,7 @@ namespace MonoTests.System.Xaml
 			{
 				var des = XamlServices.Load(xr);
 				// ProvideValue() returns an array
-				Assert.AreEqual(new int[] { 5, -3, 0 }, des, "#1");
+				ClassicAssert.AreEqual(new int[] { 5, -3, 0 }, des, "#1");
 			}
 		}
 
@@ -1302,7 +1303,7 @@ namespace MonoTests.System.Xaml
 			{
 				var des = XamlServices.Load(xr);
 				// ProvideValue() returns this.
-				Assert.AreEqual("provided_value", des, "#1");
+				ClassicAssert.AreEqual("provided_value", des, "#1");
 			}
 		}
 
@@ -1325,7 +1326,7 @@ namespace MonoTests.System.Xaml
 			{
 				var des = XamlServices.Load(xr);
 				// StringConverter is used and the resulting value comes from ToString().
-				Assert.AreEqual("MonoTests.System.Xaml.MyExtension3", des, "#1");
+				ClassicAssert.AreEqual("MonoTests.System.Xaml.MyExtension3", des, "#1");
 			}
 		}
 
@@ -1348,7 +1349,7 @@ namespace MonoTests.System.Xaml
 			{
 				var des = XamlServices.Load(xr);
 				// ProvideValue() returns this.
-				Assert.AreEqual("foo", des, "#1");
+				ClassicAssert.AreEqual("foo", des, "#1");
 			}
 		}
 
@@ -1359,9 +1360,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("PropertyDefinition.xml"))
 			{
 				var des = (PropertyDefinition)XamlServices.Load(xr);
-				Assert.AreEqual("protected", des.Modifier, "#1");
-				Assert.AreEqual("foo", des.Name, "#2");
-				Assert.AreEqual(XamlLanguage.String, des.Type, "#3");
+				ClassicAssert.AreEqual("protected", des.Modifier, "#1");
+				ClassicAssert.AreEqual("foo", des.Name, "#2");
+				ClassicAssert.AreEqual(XamlLanguage.String, des.Type, "#3");
 			}
 		}
 
@@ -1375,7 +1376,7 @@ namespace MonoTests.System.Xaml
 				var outer = (AmbientResourceProvider)XamlServices.Load(xr);
 				var inner = (AmbientResourceProvider)outer.Content;
 				var wrapper = (AmbientResourceWrapper)inner.Content;
-				Assert.AreEqual(resourceValue, wrapper.Foo);
+				ClassicAssert.AreEqual(resourceValue, wrapper.Foo);
 			}
 		}
 
@@ -1417,7 +1418,7 @@ namespace MonoTests.System.Xaml
 #pragma warning restore 219
 				}
 			});
-			Assert.AreEqual(ex.InnerException.GetType(), typeof(ArgumentException));
+			ClassicAssert.AreEqual(ex.InnerException.GetType(), typeof(ArgumentException));
 
 		}
 
@@ -1427,8 +1428,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("StaticExtensionWrapper2.xml"))
 			{
 				var des = (StaticExtensionWrapper2)XamlServices.Load(xr);
-				Assert.IsNotNull(des.Param, "#1");
-				Assert.AreEqual("foo", des.Param, "#2");
+				ClassicAssert.IsNotNull(des.Param, "#1");
+				ClassicAssert.AreEqual("foo", des.Param, "#2");
 			}
 		}
 
@@ -1445,7 +1446,7 @@ namespace MonoTests.System.Xaml
 #pragma warning restore 219
 				}
 			});
-			Assert.IsInstanceOf<XamlParseException>(ex.InnerException);
+			ClassicAssert.IsInstanceOf<XamlParseException>(ex.InnerException);
 		}
 
 		[Test]
@@ -1455,8 +1456,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("TypeExtensionWrapper2.xml"))
 			{
 				var des = (TypeExtensionWrapper2)XamlServices.Load(xr);
-				Assert.IsNotNull(des.Param, "#1");
-				Assert.AreEqual(typeof(NamedItem), des.Param, "#2");
+				ClassicAssert.IsNotNull(des.Param, "#1");
+				ClassicAssert.AreEqual(typeof(NamedItem), des.Param, "#2");
 			}
 		}
 
@@ -1476,11 +1477,11 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NamedItems.xml"))
 			{
 				var des = (NamedItem)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.AreEqual(2, des.References.Count, "#2");
-				Assert.AreEqual(typeof(NamedItem), des.References[0].GetType(), "#3");
-				Assert.AreEqual(typeof(NamedItem), des.References[1].GetType(), "#4");
-				Assert.AreEqual(des, des.References[0].References[0], "#5");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.AreEqual(2, des.References.Count, "#2");
+				ClassicAssert.AreEqual(typeof(NamedItem), des.References[0].GetType(), "#3");
+				ClassicAssert.AreEqual(typeof(NamedItem), des.References[1].GetType(), "#4");
+				ClassicAssert.AreEqual(des, des.References[0].References[0], "#5");
 			}
 		}
 
@@ -1504,13 +1505,13 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NamedItems2.xml"))
 			{
 				var des = (NamedItem2)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.AreEqual(2, des.References.Count, "#2");
-				Assert.AreEqual(typeof(NamedItem2), des.References[0].GetType(), "#3");
-				Assert.AreEqual(typeof(NamedItem2), des.References[1].GetType(), "#4");
-				Assert.AreEqual(1, des.References[0].References.Count, "#5");
-				Assert.AreEqual(1, des.References[1].References.Count, "#6");
-				Assert.AreEqual(des.References[0].References[0], des.References[1].References[0], "#7");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.AreEqual(2, des.References.Count, "#2");
+				ClassicAssert.AreEqual(typeof(NamedItem2), des.References[0].GetType(), "#3");
+				ClassicAssert.AreEqual(typeof(NamedItem2), des.References[1].GetType(), "#4");
+				ClassicAssert.AreEqual(1, des.References[0].References.Count, "#5");
+				ClassicAssert.AreEqual(1, des.References[1].References.Count, "#6");
+				ClassicAssert.AreEqual(des.References[0].References[0], des.References[1].References[0], "#7");
 			}
 		}
 
@@ -1537,17 +1538,17 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NamedItems3.xml"))
 			{
 				var des = (NamedItem2)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.AreEqual("i1", des.ItemName, "#2");
-				Assert.AreEqual(2, des.References.Count, "#3");
-				Assert.AreEqual(typeof(NamedItem2), des.References[0].GetType(), "#4");
-				Assert.AreEqual(typeof(NamedItem2), des.References[1].GetType(), "#5");
-				Assert.AreEqual("i2", des.References[0].ItemName, "#6");
-				Assert.AreEqual("i4", des.References[1].ItemName, "#7");
-				Assert.AreEqual(1, des.References[0].References.Count, "#8");
-				Assert.AreEqual(1, des.References[1].References.Count, "#9");
-				Assert.AreEqual("i3", des.References[0].References[0].ItemName, "#10");
-				Assert.AreEqual(des.References[0].References[0], des.References[1].References[0], "#11");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.AreEqual("i1", des.ItemName, "#2");
+				ClassicAssert.AreEqual(2, des.References.Count, "#3");
+				ClassicAssert.AreEqual(typeof(NamedItem2), des.References[0].GetType(), "#4");
+				ClassicAssert.AreEqual(typeof(NamedItem2), des.References[1].GetType(), "#5");
+				ClassicAssert.AreEqual("i2", des.References[0].ItemName, "#6");
+				ClassicAssert.AreEqual("i4", des.References[1].ItemName, "#7");
+				ClassicAssert.AreEqual(1, des.References[0].References.Count, "#8");
+				ClassicAssert.AreEqual(1, des.References[1].References.Count, "#9");
+				ClassicAssert.AreEqual("i3", des.References[0].References[0].ItemName, "#10");
+				ClassicAssert.AreEqual(des.References[0].References[0], des.References[1].References[0], "#11");
 			}
 		}
 
@@ -1557,17 +1558,17 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NamedItems4.xml"))
 			{
 				var des = (NamedItem2)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.AreEqual("i1", des.ItemName, "#2");
-				Assert.AreEqual(2, des.References.Count, "#3");
-				Assert.AreEqual(typeof(NamedItem2), des.References[0].GetType(), "#4");
-				Assert.AreEqual(typeof(NamedItem2), des.References[1].GetType(), "#5");
-				Assert.AreEqual("i4", des.References[0].ItemName, "#6");
-				Assert.AreEqual("i2", des.References[1].ItemName, "#7");
-				Assert.AreEqual(1, des.References[0].References.Count, "#8");
-				Assert.AreEqual(1, des.References[1].References.Count, "#9");
-				Assert.AreEqual("i3", des.References[0].References[0].ItemName, "#10");
-				Assert.AreEqual(des.References[0].References[0], des.References[1].References[0], "#11");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.AreEqual("i1", des.ItemName, "#2");
+				ClassicAssert.AreEqual(2, des.References.Count, "#3");
+				ClassicAssert.AreEqual(typeof(NamedItem2), des.References[0].GetType(), "#4");
+				ClassicAssert.AreEqual(typeof(NamedItem2), des.References[1].GetType(), "#5");
+				ClassicAssert.AreEqual("i4", des.References[0].ItemName, "#6");
+				ClassicAssert.AreEqual("i2", des.References[1].ItemName, "#7");
+				ClassicAssert.AreEqual(1, des.References[0].References.Count, "#8");
+				ClassicAssert.AreEqual(1, des.References[1].References.Count, "#9");
+				ClassicAssert.AreEqual("i3", des.References[0].References[0].ItemName, "#10");
+				ClassicAssert.AreEqual(des.References[0].References[0], des.References[1].References[0], "#11");
 			}
 		}
 
@@ -1578,9 +1579,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("XmlSerializableWrapper.xml"))
 			{
 				var des = (XmlSerializableWrapper)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
-				Assert.IsNotNull(des.Value, "#2");
-				Assert.AreEqual("<root xmlns=\"" + assns + "\" />", des.Value.GetRaw(), "#3");
+				ClassicAssert.IsNotNull(des, "#1");
+				ClassicAssert.IsNotNull(des.Value, "#2");
+				ClassicAssert.AreEqual("<root xmlns=\"" + assns + "\" />", des.Value.GetRaw(), "#3");
 			}
 		}
 
@@ -1590,7 +1591,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("XmlSerializable.xml"))
 			{
 				var des = (XmlSerializable)XamlServices.Load(xr);
-				Assert.IsNotNull(des, "#1");
+				ClassicAssert.IsNotNull(des, "#1");
 			}
 		}
 
@@ -1600,7 +1601,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("List_XmlSerializable.xml"))
 			{
 				var des = (List<XmlSerializable>)XamlServices.Load(xr);
-				Assert.AreEqual(1, des.Count, "#1");
+				ClassicAssert.AreEqual(1, des.Count, "#1");
 			}
 		}
 
@@ -1613,9 +1614,9 @@ namespace MonoTests.System.Xaml
 				try
 				{
 					des = (AttachedWrapper)XamlServices.Load(xr);
-					Assert.IsNotNull(des.Value, "#1");
-					Assert.AreEqual("x", Attachable.GetFoo(des), "#2");
-					Assert.AreEqual("y", Attachable.GetFoo(des.Value), "#3");
+					ClassicAssert.IsNotNull(des.Value, "#1");
+					ClassicAssert.AreEqual("x", Attachable.GetFoo(des), "#2");
+					ClassicAssert.AreEqual("y", Attachable.GetFoo(des.Value), "#3");
 				}
 				finally
 				{
@@ -1634,8 +1635,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("EventStore.xml"))
 			{
 				var res = (EventStore)XamlServices.Load(xr);
-				Assert.AreEqual("foo", res.Examine(), "#1");
-				Assert.IsTrue(res.Method1Invoked, "#2");
+				ClassicAssert.AreEqual("foo", res.Examine(), "#1");
+				ClassicAssert.IsTrue(res.Method1Invoked, "#2");
 			}
 		}
 
@@ -1665,8 +1666,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("EventStore4.xml"))
 			{
 				var res = (EventStore2<EventArgs>)XamlServices.Load(xr);
-				Assert.AreEqual("foo", res.Examine(), "#1");
-				Assert.IsTrue(res.Method1Invoked, "#2");
+				ClassicAssert.AreEqual("foo", res.Examine(), "#1");
+				ClassicAssert.IsTrue(res.Method1Invoked, "#2");
 			}
 		}
 
@@ -1685,9 +1686,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("EventStore5.xml"))
 			{
 				var res = (EventStore)XamlServices.Load(xr);
-				Assert.IsFalse(res.Method1Invoked, "#1");
+				ClassicAssert.IsFalse(res.Method1Invoked, "#1");
 				res.Examine();
-				Assert.IsTrue(res.Method1Invoked, "#2");
+				ClassicAssert.IsTrue(res.Method1Invoked, "#2");
 			}
 		}
 
@@ -1697,9 +1698,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("AbstractContainer.xml"))
 			{
 				var res = (AbstractContainer)XamlServices.Load(xr);
-				Assert.IsNull(res.Value1, "#1");
-				Assert.IsNotNull(res.Value2, "#2");
-				Assert.AreEqual("x", res.Value2.Foo, "#3");
+				ClassicAssert.IsNull(res.Value1, "#1");
+				ClassicAssert.IsNotNull(res.Value2, "#2");
+				ClassicAssert.AreEqual("x", res.Value2.Foo, "#3");
 			}
 		}
 
@@ -1709,8 +1710,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("ReadOnlyPropertyContainer.xml"))
 			{
 				var res = (ReadOnlyPropertyContainer)XamlServices.Load(xr);
-				Assert.AreEqual("x", res.Foo, "#1");
-				Assert.AreEqual("x", res.Bar, "#2");
+				ClassicAssert.AreEqual("x", res.Foo, "#1");
+				ClassicAssert.AreEqual("x", res.Bar, "#2");
 			}
 		}
 
@@ -1720,8 +1721,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("TypeConverterOnListMember.xml"))
 			{
 				var res = (SecondTest.TypeOtherAssembly)XamlServices.Load(xr);
-				Assert.AreEqual(3, res.Values.Count, "#1");
-				Assert.AreEqual(3, res.Values[2], "#2");
+				ClassicAssert.AreEqual(3, res.Values.Count, "#1");
+				ClassicAssert.AreEqual(3, res.Values[2], "#2");
 			}
 		}
 
@@ -1731,7 +1732,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("EnumContainer.xml"))
 			{
 				var res = (EnumContainer)XamlServices.Load(xr);
-				Assert.AreEqual(EnumValueType.Two, res.EnumProperty, "#1");
+				ClassicAssert.AreEqual(EnumValueType.Two, res.EnumProperty, "#1");
 			}
 		}
 
@@ -1741,7 +1742,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("CollectionContentProperty.xml"))
 			{
 				var res = (CollectionContentProperty)XamlServices.Load(xr);
-				Assert.AreEqual(4, res.ListOfItems.Count, "#1");
+				ClassicAssert.AreEqual(4, res.ListOfItems.Count, "#1");
 			}
 		}
 
@@ -1751,7 +1752,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("CollectionContentProperty2.xml"))
 			{
 				var res = (CollectionContentProperty)XamlServices.Load(xr);
-				Assert.AreEqual(4, res.ListOfItems.Count, "#1");
+				ClassicAssert.AreEqual(4, res.ListOfItems.Count, "#1");
 			}
 		}
 
@@ -1761,13 +1762,13 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("AmbientPropertyContainer.xml"))
 			{
 				var res = (SecondTest.ResourcesDict)XamlServices.Load(xr);
-				Assert.AreEqual(2, res.Count, "#1");
-				Assert.IsTrue(res.ContainsKey("TestDictItem"), "#2");
-				Assert.IsTrue(res.ContainsKey("okay"), "#3");
+				ClassicAssert.AreEqual(2, res.Count, "#1");
+				ClassicAssert.IsTrue(res.ContainsKey("TestDictItem"), "#2");
+				ClassicAssert.IsTrue(res.ContainsKey("okay"), "#3");
 				var i1 = res["TestDictItem"] as SecondTest.TestObject;
-				Assert.IsNull(i1.TestProperty, "#4");
+				ClassicAssert.IsNull(i1.TestProperty, "#4");
 				var i2 = res["okay"] as SecondTest.TestObject;
-				Assert.AreEqual(i1, i2.TestProperty, "#5");
+				ClassicAssert.AreEqual(i1, i2.TestProperty, "#5");
 			}
 		}
 
@@ -1777,13 +1778,13 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("AmbientPropertyContainer2.xml"))
 			{
 				var res = (SecondTest.ResourcesDict)XamlServices.Load(xr);
-				Assert.AreEqual(2, res.Count, "#1");
-				Assert.IsTrue(res.ContainsKey("TestDictItem"), "#2");
-				Assert.IsTrue(res.ContainsKey("okay"), "#3");
+				ClassicAssert.AreEqual(2, res.Count, "#1");
+				ClassicAssert.IsTrue(res.ContainsKey("TestDictItem"), "#2");
+				ClassicAssert.IsTrue(res.ContainsKey("okay"), "#3");
 				var i1 = res["TestDictItem"] as SecondTest.TestObject;
-				Assert.IsNull(i1.TestProperty, "#4");
+				ClassicAssert.IsNull(i1.TestProperty, "#4");
 				var i2 = res["okay"] as SecondTest.TestObject;
-				Assert.AreEqual(i1, i2.TestProperty, "#5");
+				ClassicAssert.AreEqual(i1, i2.TestProperty, "#5");
 			}
 		}
 
@@ -1793,7 +1794,7 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NullableContainer.xml"))
 			{
 				var res = (NullableContainer)XamlServices.Load(xr);
-				Assert.AreEqual(5, res.TestProp, "#1");
+				ClassicAssert.AreEqual(5, res.TestProp, "#1");
 			}
 		}
 
@@ -1803,8 +1804,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DirectListContainer.xml"))
 			{
 				var res = (DirectListContainer)XamlServices.Load(xr);
-				Assert.AreEqual(3, res.Items.Count, "#1");
-				Assert.AreEqual("Hello3", res.Items[2].Value, "#2");
+				ClassicAssert.AreEqual(3, res.Items.Count, "#1");
+				ClassicAssert.AreEqual("Hello3", res.Items[2].Value, "#2");
 			}
 		}
 
@@ -1814,8 +1815,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DirectDictionaryContainer.xml"))
 			{
 				var res = (DirectDictionaryContainer)XamlServices.Load(xr);
-				Assert.AreEqual(3, res.Items.Count, "#1");
-				Assert.AreEqual(40, res.Items[EnumValueType.Three], "#2");
+				ClassicAssert.AreEqual(3, res.Items.Count, "#1");
+				ClassicAssert.AreEqual(40, res.Items[EnumValueType.Three], "#2");
 			}
 		}
 
@@ -1825,9 +1826,9 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DirectDictionaryContainer2.xml"))
 			{
 				var res = (SecondTest.ResourcesDict2)XamlServices.Load(xr);
-				Assert.AreEqual(2, res.Count, "#1");
-				Assert.AreEqual("1", ((SecondTest.TestObject2)res["1"]).TestProperty, "#2");
-				Assert.AreEqual("two", ((SecondTest.TestObject2)res["two"]).TestProperty, "#3");
+				ClassicAssert.AreEqual(2, res.Count, "#1");
+				ClassicAssert.AreEqual("1", ((SecondTest.TestObject2)res["1"]).TestProperty, "#2");
+				ClassicAssert.AreEqual("two", ((SecondTest.TestObject2)res["two"]).TestProperty, "#3");
 			}
 		}
 
@@ -1837,8 +1838,8 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("NullableWithConverter.xml"))
 			{
 				var res = (NullableWithTypeConverterContainer)XamlServices.Load(xr);
-				Assert.IsNotNull(res.TestProp, "#1");
-				Assert.AreEqual("SomeText", res.TestProp.Value.Text, "#2");
+				ClassicAssert.IsNotNull(res.TestProp, "#1");
+				ClassicAssert.AreEqual("SomeText", res.TestProp.Value.Text, "#2");
 			}
 		}
 
@@ -1848,16 +1849,16 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DeferredLoadingContainerMember.xml"))
 			{
 				var res = (DeferredLoadingContainerMember)XamlServices.Load(xr);
-				Assert.IsNotNull(res, "#1");
-				Assert.IsNotNull(res.Child, "#2");
-				Assert.IsNull(res.Child.Foo, "#3");
-				Assert.IsNotNull(res.Child.List, "#4");
-				Assert.AreEqual(5, res.Child.List.Count, "#5");
+				ClassicAssert.IsNotNull(res, "#1");
+				ClassicAssert.IsNotNull(res.Child, "#2");
+				ClassicAssert.IsNull(res.Child.Foo, "#3");
+				ClassicAssert.IsNotNull(res.Child.List, "#4");
+				ClassicAssert.AreEqual(5, res.Child.List.Count, "#5");
 
 				var obj = XamlServices.Load(res.Child.List.GetReader());
-				Assert.IsNotNull(obj, "#6");
-				Assert.IsInstanceOf<DeferredLoadingChild>(obj, "#7");
-				Assert.AreEqual("Blah", ((DeferredLoadingChild)obj).Foo, "#8");
+				ClassicAssert.IsNotNull(obj, "#6");
+				ClassicAssert.IsInstanceOf<DeferredLoadingChild>(obj, "#7");
+				ClassicAssert.AreEqual("Blah", ((DeferredLoadingChild)obj).Foo, "#8");
 			}
 		}		
 		
@@ -1869,7 +1870,7 @@ namespace MonoTests.System.Xaml
 				var res = (DeferredLoadingContainerMember2)XamlServices.Load(xr);
 				var obj = res.Child();
 
-				Assert.AreEqual("Blah", obj.Foo);
+				ClassicAssert.AreEqual("Blah", obj.Foo);
 			}
 		}
 
@@ -1879,16 +1880,16 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DeferredLoadingContainerType.xml"))
 			{
 				var res = (DeferredLoadingContainerType)XamlServices.Load(xr);
-				Assert.IsNotNull(res, "#1");
-				Assert.IsNotNull(res.Child, "#2");
-				Assert.IsNull(res.Child.Foo, "#3");
-				Assert.IsNotNull(res.Child.List, "#4");
-				Assert.AreEqual(5, res.Child.List.Count, "#5");
+				ClassicAssert.IsNotNull(res, "#1");
+				ClassicAssert.IsNotNull(res.Child, "#2");
+				ClassicAssert.IsNull(res.Child.Foo, "#3");
+				ClassicAssert.IsNotNull(res.Child.List, "#4");
+				ClassicAssert.AreEqual(5, res.Child.List.Count, "#5");
 
 				var obj = XamlServices.Load(res.Child.List.GetReader());
-				Assert.IsNotNull(obj, "#6");
-				Assert.IsInstanceOf<DeferredLoadingChild2>(obj, "#7");
-				Assert.AreEqual("Blah", ((DeferredLoadingChild2)obj).Foo, "#8");
+				ClassicAssert.IsNotNull(obj, "#6");
+				ClassicAssert.IsInstanceOf<DeferredLoadingChild2>(obj, "#7");
+				ClassicAssert.AreEqual("Blah", ((DeferredLoadingChild2)obj).Foo, "#8");
 			}
 		}
 
@@ -1907,16 +1908,16 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DeferredLoadingContainerMemberStringType.xml"))
 			{
 				var res = (DeferredLoadingContainerMemberStringType)XamlServices.Load(xr);
-				Assert.IsNotNull(res, "#1");
-				Assert.IsNotNull(res.Child, "#2");
-				Assert.IsNull(res.Child.Foo, "#3");
-				Assert.IsNotNull(res.Child.List, "#4");
-				Assert.AreEqual(5, res.Child.List.Count, "#5");
+				ClassicAssert.IsNotNull(res, "#1");
+				ClassicAssert.IsNotNull(res.Child, "#2");
+				ClassicAssert.IsNull(res.Child.Foo, "#3");
+				ClassicAssert.IsNotNull(res.Child.List, "#4");
+				ClassicAssert.AreEqual(5, res.Child.List.Count, "#5");
 
 				var obj = XamlServices.Load(res.Child.List.GetReader());
-				Assert.IsNotNull(obj, "#6");
-				Assert.IsInstanceOf<DeferredLoadingChild>(obj, "#7");
-				Assert.AreEqual("Blah", ((DeferredLoadingChild)obj).Foo, "#8");
+				ClassicAssert.IsNotNull(obj, "#6");
+				ClassicAssert.IsInstanceOf<DeferredLoadingChild>(obj, "#7");
+				ClassicAssert.AreEqual("Blah", ((DeferredLoadingChild)obj).Foo, "#8");
 			}
 		}
 
@@ -1926,15 +1927,15 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("DeferredLoadingCollectionContainer.xml"))
 			{
 				var res = (DeferredLoadingContainerType)XamlServices.Load(xr);
-				Assert.IsNotNull(res, "#1");
-				Assert.IsNotNull(res.Child, "#2");
-				Assert.IsNull(res.Child.Foo, "#3");
-				Assert.IsNotNull(res.Child.List, "#4");
+				ClassicAssert.IsNotNull(res, "#1");
+				ClassicAssert.IsNotNull(res.Child, "#2");
+				ClassicAssert.IsNull(res.Child.Foo, "#3");
+				ClassicAssert.IsNotNull(res.Child.List, "#4");
 
 				var obj = XamlServices.Load(res.Child.List.GetReader()) as DeferredLoadingChild2;
-				Assert.IsNotNull(obj, "#6");
-				Assert.IsNotNull(obj.Item, "#6");
-				Assert.AreEqual(2, obj.Item.Items.Count, "#6");
+				ClassicAssert.IsNotNull(obj, "#6");
+				ClassicAssert.IsNotNull(obj.Item, "#6");
+				ClassicAssert.AreEqual(2, obj.Item.Items.Count, "#6");
 			}
 		}
 
@@ -1949,14 +1950,14 @@ namespace MonoTests.System.Xaml
 			{
 				var res = (NamedItem3)XamlServices.Load(xr);
 
-				Assert.IsNotNull(res);
-				Assert.AreEqual(2, res.ImmutableReferences.Length);
-				Assert.AreEqual("i4", res.ImmutableReferences[0].ItemName);
-				Assert.AreEqual(3, res.ImmutableReferences[0].ImmutableReferences.Length);
-				Assert.AreEqual("i3", res.ImmutableReferences[0].ImmutableReferences[0].ItemName);
-				Assert.AreEqual("i5", res.ImmutableReferences[0].ImmutableReferences[1].ItemName);
-				Assert.AreEqual("i1", res.ImmutableReferences[0].ImmutableReferences[2].ItemName);
-				Assert.AreEqual("i1", res.ImmutableReferences[0].Other.ItemName);
+				ClassicAssert.IsNotNull(res);
+				ClassicAssert.AreEqual(2, res.ImmutableReferences.Length);
+				ClassicAssert.AreEqual("i4", res.ImmutableReferences[0].ItemName);
+				ClassicAssert.AreEqual(3, res.ImmutableReferences[0].ImmutableReferences.Length);
+				ClassicAssert.AreEqual("i3", res.ImmutableReferences[0].ImmutableReferences[0].ItemName);
+				ClassicAssert.AreEqual("i5", res.ImmutableReferences[0].ImmutableReferences[1].ItemName);
+				ClassicAssert.AreEqual("i1", res.ImmutableReferences[0].ImmutableReferences[2].ItemName);
+				ClassicAssert.AreEqual("i1", res.ImmutableReferences[0].Other.ItemName);
 
 			}
 		}
@@ -1970,8 +1971,8 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeSingleArgument.xml")) {
 				var res = (ImmutableTypeSingleArgument)XamlServices.Load(xr);
-				Assert.NotNull(res, "#1");
-				Assert.AreEqual("hello", res.Name, "#2");
+                ClassicAssert.NotNull(res, "#1");
+				ClassicAssert.AreEqual("hello", res.Name, "#2");
 			}
 		}
 
@@ -1983,10 +1984,10 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeMultipleArguments.xml")) {
 				var res = (ImmutableTypeMultipleArguments)XamlServices.Load(xr);
-				Assert.NotNull(res, "#1");
-				Assert.AreEqual("hello", res.Name, "#2");
-				Assert.IsTrue(res.Flag, "#3");
-				Assert.AreEqual(100, res.Num, "#4");
+                ClassicAssert.NotNull(res, "#1");
+				ClassicAssert.AreEqual("hello", res.Name, "#2");
+				ClassicAssert.IsTrue(res.Flag, "#3");
+				ClassicAssert.AreEqual(100, res.Num, "#4");
 			}
 		}
 
@@ -1998,8 +1999,8 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeMultipleConstructors1.xml")) {
 				var res = (ImmutableTypeMultipleConstructors)XamlServices.Load(xr);
-				Assert.NotNull(res, "#1");
-				Assert.AreEqual("hello", res.Name, "#2");
+                ClassicAssert.NotNull(res, "#1");
+				ClassicAssert.AreEqual("hello", res.Name, "#2");
 			}
 		}
 
@@ -2011,10 +2012,10 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeMultipleConstructors2.xml")) {
 				var res = (ImmutableTypeMultipleConstructors)XamlServices.Load(xr);
-				Assert.NotNull(res, "#1");
-				Assert.AreEqual("hello", res.Name, "#2");
-				Assert.IsTrue(res.Flag, "#3");
-				Assert.AreEqual(100, res.Num, "#4");
+                ClassicAssert.NotNull(res, "#1");
+				ClassicAssert.AreEqual("hello", res.Name, "#2");
+				ClassicAssert.IsTrue(res.Flag, "#3");
+				ClassicAssert.AreEqual(100, res.Num, "#4");
 			}
 		}
 
@@ -2050,9 +2051,9 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeOptionalParameters1.xml")) {
 				var res = (ImmutableTypeOptionalParameters)XamlServices.Load(xr);
-				Assert.AreEqual("hello", res.Name, "#1");
-				Assert.AreEqual(true, res.Flag, "#2");
-				Assert.AreEqual(100, res.Num, "#3");
+				ClassicAssert.AreEqual("hello", res.Name, "#1");
+				ClassicAssert.AreEqual(true, res.Flag, "#2");
+				ClassicAssert.AreEqual(100, res.Num, "#3");
 			}
 		}
 
@@ -2064,9 +2065,9 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeOptionalParameters2.xml")) {
 				var res = (ImmutableTypeOptionalParameters)XamlServices.Load(xr);
-				Assert.AreEqual("hello", res.Name, "#1");
-				Assert.AreEqual(true, res.Flag, "#2");
-				Assert.AreEqual(200, res.Num, "#3");
+				ClassicAssert.AreEqual("hello", res.Name, "#1");
+				ClassicAssert.AreEqual(true, res.Flag, "#2");
+				ClassicAssert.AreEqual(200, res.Num, "#3");
 			}
 		}
 
@@ -2078,12 +2079,12 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeWithCollectionProperty.xml")) {
 				var res = (ImmutableTypeWithCollectionProperty)XamlServices.Load(xr);
-				Assert.AreEqual("hello", res.Name, "#1");
-				Assert.AreEqual(true, res.Flag, "#2");
-				Assert.AreEqual(200, res.Num, "#3");
-				Assert.AreEqual(2, res.Collection.Count, "#4");
-				Assert.AreEqual("Hello", res.Collection[0].Foo, "#5");
-				Assert.AreEqual("There", res.Collection[1].Foo, "#6");
+				ClassicAssert.AreEqual("hello", res.Name, "#1");
+				ClassicAssert.AreEqual(true, res.Flag, "#2");
+				ClassicAssert.AreEqual(200, res.Num, "#3");
+				ClassicAssert.AreEqual(2, res.Collection.Count, "#4");
+				ClassicAssert.AreEqual("Hello", res.Collection[0].Foo, "#5");
+				ClassicAssert.AreEqual("There", res.Collection[1].Foo, "#6");
 			}
 		}
 
@@ -2095,10 +2096,10 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableTypeWithWritableProperty.xml")) {
 				var res = (ImmutableTypeWithWritableProperty)XamlServices.Load(xr);
-				Assert.AreEqual("hello", res.Name, "#1");
-				Assert.AreEqual(true, res.Flag, "#2");
-				Assert.AreEqual(200, res.Num, "#3");
-				Assert.AreEqual("There", res.Foo, "#4");
+				ClassicAssert.AreEqual("hello", res.Name, "#1");
+				ClassicAssert.AreEqual(true, res.Flag, "#2");
+				ClassicAssert.AreEqual(200, res.Num, "#3");
+				ClassicAssert.AreEqual("There", res.Foo, "#4");
 			}
 		}
 
@@ -2110,26 +2111,26 @@ namespace MonoTests.System.Xaml
 				Assert.Ignore("Not supported in System.Xaml");
 			using (var xr = GetReader ("ImmutableCollectionContainer.xml")) {
 				var res = (ImmutableCollectionContainer)XamlServices.Load(xr);
-				Assert.IsNotNull(res, "#1");
+				ClassicAssert.IsNotNull(res, "#1");
 
 				var expected = new [] { "Item1", "Item2", "Item3" };
-				Assert.IsFalse(res.ImmutableArray.IsDefaultOrEmpty, "#2-1");
+				ClassicAssert.IsFalse(res.ImmutableArray.IsDefaultOrEmpty, "#2-1");
 				CollectionAssert.AreEqual(expected, res.ImmutableArray.Select(r => r.Foo), "#2-2");
 
-				Assert.IsFalse(res.ImmutableList.IsEmpty, "#3-1");
-				CollectionAssert.AreEqual(expected, res.ImmutableList.Select(r => r.Foo), "#3-2");
+				ClassicAssert.IsFalse(res.ImmutableList.IsEmpty, "#3-1");
+                CollectionAssert.AreEqual(expected, res.ImmutableList.Select(r => r.Foo), "#3-2");
 
-				Assert.IsFalse(res.ImmutableQueue.IsEmpty, "#4-1");
-				CollectionAssert.AreEqual(expected, res.ImmutableQueue.Select(r => r.Foo), "#4-2");
+				ClassicAssert.IsFalse(res.ImmutableQueue.IsEmpty, "#4-1");
+                CollectionAssert.AreEqual(expected, res.ImmutableQueue.Select(r => r.Foo), "#4-2");
 
-				Assert.IsFalse(res.ImmutableHashSet.IsEmpty, "#5-1");
+				ClassicAssert.IsFalse(res.ImmutableHashSet.IsEmpty, "#5-1");
 				CollectionAssert.AreEquivalent(expected, res.ImmutableHashSet.Select(r => r.Foo), "#5-2");
 
-				Assert.IsFalse(res.ImmutableStack.IsEmpty, "#6-1");
-				CollectionAssert.AreEqual(expected.Reverse(), res.ImmutableStack.Select(r => r.Foo), "#6-2");
+				ClassicAssert.IsFalse(res.ImmutableStack.IsEmpty, "#6-1");
+                CollectionAssert.AreEqual(expected.Reverse(), res.ImmutableStack.Select(r => r.Foo), "#6-2");
 
-				Assert.IsFalse(res.ImmutableSortedSet.IsEmpty, "#7-1");
-				CollectionAssert.AreEqual(expected, res.ImmutableSortedSet.Select(r => r.Foo), "#7-2");
+				ClassicAssert.IsFalse(res.ImmutableSortedSet.IsEmpty, "#7-1");
+                CollectionAssert.AreEqual(expected, res.ImmutableSortedSet.Select(r => r.Foo), "#7-2");
 			}
 		}
 #endif
@@ -2139,11 +2140,11 @@ namespace MonoTests.System.Xaml
 		{
 			using (var xr = GetReader ("GenericTypeWithClrNamespace.xml")) {
 				var des = (CustomGenericType<TestStruct>)XamlServices.Load (xr);
-				Assert.AreEqual (4, des.Contents.Count, "#1");
-				Assert.AreEqual ("1", des.Contents[0].Text, "#2");
-				Assert.AreEqual ("2", des.Contents[1].Text, "#3");
-				Assert.AreEqual ("3", des.Contents[2].Text, "#4");
-				Assert.AreEqual ("4", des.Contents[3].Text, "#5");
+				ClassicAssert.AreEqual (4, des.Contents.Count, "#1");
+				ClassicAssert.AreEqual ("1", des.Contents[0].Text, "#2");
+				ClassicAssert.AreEqual ("2", des.Contents[1].Text, "#3");
+				ClassicAssert.AreEqual ("3", des.Contents[2].Text, "#4");
+				ClassicAssert.AreEqual ("4", des.Contents[3].Text, "#5");
 			}
 		}
 
@@ -2152,11 +2153,11 @@ namespace MonoTests.System.Xaml
 		{
 			using (var xr = GetReader ("GenericTypeWithXamlNamespace.xml")) {
 				var des = (NamespaceTest.CustomGenericType<NamespaceTest.NamespaceTestClass>)XamlServices.Load (xr);
-				Assert.AreEqual (4, des.Contents.Count, "#1");
-				Assert.AreEqual ("1", des.Contents [0].Foo, "#2");
-				Assert.AreEqual ("2", des.Contents [1].Foo, "#3");
-				Assert.AreEqual ("3", des.Contents [2].Foo, "#4");
-				Assert.AreEqual ("4", des.Contents [3].Foo, "#5");
+				ClassicAssert.AreEqual (4, des.Contents.Count, "#1");
+				ClassicAssert.AreEqual ("1", des.Contents [0].Foo, "#2");
+				ClassicAssert.AreEqual ("2", des.Contents [1].Foo, "#3");
+				ClassicAssert.AreEqual ("3", des.Contents [2].Foo, "#4");
+				ClassicAssert.AreEqual ("4", des.Contents [3].Foo, "#5");
 			}
 		}
 
@@ -2185,8 +2186,8 @@ namespace MonoTests.System.Xaml
 				}
 			}
 
-			Assert.AreEqual(1, result.Property.Count, "#1");
-			Assert.AreEqual("SomeValue", result.Property[0].Foo, "#2");
+			ClassicAssert.AreEqual(1, result.Property.Count, "#1");
+			ClassicAssert.AreEqual("SomeValue", result.Property[0].Foo, "#2");
 
 		}
 
@@ -2196,14 +2197,14 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("Whitespace.xml"))
 			{
 				var des = (Whitespace)XamlServices.Load(xr);
-				Assert.AreEqual("hello world", des.TabConvertedToSpaces);
-				Assert.AreEqual("hello world", des.NewlineConvertedToSpaces);
-				Assert.AreEqual("hello world", des.ConsecutiveSpaces);
-				Assert.AreEqual("hello world", des.SpacesAroundTags);
-				Assert.AreEqual("hello world", des.Child.Content);
+				ClassicAssert.AreEqual("hello world", des.TabConvertedToSpaces);
+				ClassicAssert.AreEqual("hello world", des.NewlineConvertedToSpaces);
+				ClassicAssert.AreEqual("hello world", des.ConsecutiveSpaces);
+				ClassicAssert.AreEqual("hello world", des.SpacesAroundTags);
+				ClassicAssert.AreEqual("hello world", des.Child.Content);
 
 				// TODO: xml:space="preserve" not yet implemented
-				// Assert.AreEqual("  hello world\t", des.Preserve);
+				// ClassicAssert.AreEqual("  hello world\t", des.Preserve);
 			}
 		}
 
@@ -2213,10 +2214,10 @@ namespace MonoTests.System.Xaml
 			using (var xr = GetReader("CommandContainer.xml"))
 			{
 				var commandContainer = (CommandContainer)XamlServices.Load(xr);
-				Assert.IsNotNull(commandContainer);
-				Assert.IsNotNull(commandContainer.Command1);
-				Assert.IsInstanceOf<MyCommand>(commandContainer.Command1);
-				Assert.IsNull(commandContainer.Command2);
+				ClassicAssert.IsNotNull(commandContainer);
+				ClassicAssert.IsNotNull(commandContainer.Command1);
+				ClassicAssert.IsInstanceOf<MyCommand>(commandContainer.Command1);
+				ClassicAssert.IsNull(commandContainer.Command2);
 			}
 		}
 
@@ -2242,7 +2243,7 @@ namespace MonoTests.System.Xaml
 			CultureInfo.CurrentUICulture = new CultureInfo("en-us");
 
 			var ex = Assert.Throws<XamlObjectWriterException>(() => xw.WriteStartObject(new XamlType("unk", "unknown", null, sctx)));
-			Assert.AreEqual("Cannot create unknown type '{unk}unknown'.", ex.Message);
+			ClassicAssert.AreEqual("Cannot create unknown type '{unk}unknown'.", ex.Message);
 		}
 
 		[Test]
@@ -2273,8 +2274,8 @@ namespace MonoTests.System.Xaml
 			xw.WriteEndObject();
 
 			var result = (DictionaryContainer)xw.Result;
-			Assert.IsTrue(result.Items.TryGetValue(key, out DictionaryItem item));
-			Assert.AreEqual(key, item.Key);
+			ClassicAssert.IsTrue(result.Items.TryGetValue(key, out DictionaryItem item));
+			ClassicAssert.AreEqual(key, item.Key);
 		}
 
 		[Test]
@@ -2301,7 +2302,7 @@ $@"<TestClass7
 
 			var testClass = (TestClass7)ow.Result;
 
-			Assert.AreEqual(0, testClass.State);
+			ClassicAssert.AreEqual(0, testClass.State);
 		}
 		
 		[Test]
@@ -2321,7 +2322,7 @@ $@"<TestClass7
 			var parentXamlType = new XamlType(typeof(TestClass8), context);
 			var childXamlType = new XamlType(typeof(TestClass9), context);
 			
-			Assert.IsTrue(childXamlType.IsUsableDuringInitialization);
+			ClassicAssert.IsTrue(childXamlType.IsUsableDuringInitialization);
 			
 			var xamlMemberFoo = childXamlType.GetMember(nameof(TestClass9.Foo));
 			var xamlMemberBaz = childXamlType.GetMember(nameof(TestClass9.Baz));
@@ -2344,9 +2345,9 @@ $@"<TestClass7
 			ow.WriteEndObject();
 
 			var result = (TestClass8)ow.Result;
-			Assert.IsTrue(result.Bar.IsInitialized);
-			Assert.IsNotNull(result.Bar.Foo);
-			Assert.AreEqual(result.Bar.Baz, "Test");
+			ClassicAssert.IsTrue(result.Bar.IsInitialized);
+			ClassicAssert.IsNotNull(result.Bar.Foo);
+			ClassicAssert.AreEqual(result.Bar.Baz, "Test");
 		}
 
 		[Test]
@@ -2363,16 +2364,16 @@ $@"<TestClass7
 			// Note: The most important assert is invoked inside the TestClass10 (CollectionChanged).
 			var result = (TestClass10)XamlServices.Parse(xml);
 
-			Assert.AreEqual(4, result.Items.Count);
+			ClassicAssert.AreEqual(4, result.Items.Count);
 
-			Assert.AreEqual("Test1", result.Items[0].Baz);
-			Assert.AreEqual(42, result.Items[0].Bar);
+			ClassicAssert.AreEqual("Test1", result.Items[0].Baz);
+			ClassicAssert.AreEqual(42, result.Items[0].Bar);
 
-			Assert.AreEqual("Test2", result.Items[1].Baz);
-			Assert.Zero(result.Items[1].Bar);
+			ClassicAssert.AreEqual("Test2", result.Items[1].Baz);
+			ClassicAssert.Zero(result.Items[1].Bar);
 
-			Assert.IsNull(result.Items[2].Baz);
-			Assert.Zero(result.Items[2].Bar);
+			ClassicAssert.IsNull(result.Items[2].Baz);
+			ClassicAssert.Zero(result.Items[2].Bar);
 		}
 		
 		[Test]
@@ -2384,8 +2385,8 @@ $@"<TestClass7
 </CollectionAssignnmentTest>".UpdateXml();
 			var result = (CollectionAssignnmentTest)XamlServices.Parse(xml);
 
-			Assert.False(result.Assigned);
-			Assert.AreEqual(1, result.Items.Count);
+            ClassicAssert.False(result.Assigned);
+			ClassicAssert.AreEqual(1, result.Items.Count);
 		}
 
 		[Test]
@@ -2398,8 +2399,8 @@ $@"<TestClass7
 </CollectionAssignnmentTest>".UpdateXml();
 			var result = (CollectionAssignnmentTest)XamlServices.Parse(xml);
 
-			Assert.False(result.Assigned);
-			Assert.AreEqual(2, result.Items.Count);
+            ClassicAssert.False(result.Assigned);
+			ClassicAssert.AreEqual(2, result.Items.Count);
 		}
 
 		[Test]
@@ -2416,8 +2417,8 @@ $@"<TestClass7
 </CollectionAssignnmentTest>".UpdateXml();
 			var result = (CollectionAssignnmentTest)XamlServices.Parse(xml);
 
-			Assert.True(result.Assigned);
-			Assert.AreEqual(2, result.Items.Count);
+            ClassicAssert.True(result.Assigned);
+			ClassicAssert.AreEqual(2, result.Items.Count);
 		}
 
 		[Test]
@@ -2427,8 +2428,8 @@ $@"<TestClass7
     <NotFound/>
 </TestClass10>".UpdateXml();
 			var ex = Assert.Throws<XamlObjectWriterException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(2, ex.LineNumber);
-			Assert.AreEqual(6, ex.LinePosition);
+			ClassicAssert.AreEqual(2, ex.LineNumber);
+			ClassicAssert.AreEqual(6, ex.LinePosition);
 		}
 
 		[Test]
@@ -2438,8 +2439,8 @@ $@"<TestClass7
     Baz='baz'
     NotFound='foo'/>".UpdateXml();
 			var ex = Assert.Throws<XamlObjectWriterException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(3, ex.LineNumber);
-			Assert.AreEqual(5, ex.LinePosition);
+			ClassicAssert.AreEqual(3, ex.LineNumber);
+			ClassicAssert.AreEqual(5, ex.LinePosition);
 		}
 
 		[Test]
@@ -2449,8 +2450,8 @@ $@"<TestClass7
     Baz='baz'
     Bar='foo'/>".UpdateXml();
 			var ex = Assert.Throws<XamlObjectWriterException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(3, ex.LineNumber);
-			Assert.AreEqual(5, ex.LinePosition);
+			ClassicAssert.AreEqual(3, ex.LineNumber);
+			ClassicAssert.AreEqual(5, ex.LinePosition);
 		}
 
 		[Test]
@@ -2459,10 +2460,10 @@ $@"<TestClass7
 			string xml = @"<SetterThatThrows xmlns='clr-namespace:MonoTests.System.Xaml;assembly=System.Xaml.TestCases'
     Throw='foo'/>".UpdateXml();
 			var ex = Assert.Throws<XamlObjectWriterException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(2, ex.LineNumber);
-			Assert.AreEqual(5, ex.LinePosition);
-			Assert.IsInstanceOf<NotSupportedException>(ex.InnerException);
-			Assert.AreEqual("Whoops!", ex.InnerException.Message);
+			ClassicAssert.AreEqual(2, ex.LineNumber);
+			ClassicAssert.AreEqual(5, ex.LinePosition);
+			ClassicAssert.IsInstanceOf<NotSupportedException>(ex.InnerException);
+			ClassicAssert.AreEqual("Whoops!", ex.InnerException.Message);
 		}
 
 		[Test]
@@ -2472,9 +2473,9 @@ $@"<TestClass7
     Baz='foo'
     Baz='bar'/>".UpdateXml();
 			var ex = Assert.Throws<XmlException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(3, ex.LineNumber);
-			Assert.AreEqual(5, ex.LinePosition);
-			Assert.AreEqual("'Baz' is a duplicate attribute name. Line 3, position 5.", ex.Message);
+			ClassicAssert.AreEqual(3, ex.LineNumber);
+			ClassicAssert.AreEqual(5, ex.LinePosition);
+			ClassicAssert.AreEqual("'Baz' is a duplicate attribute name. Line 3, position 5.", ex.Message);
 		}
 
 		[Test]
@@ -2486,11 +2487,11 @@ $@"<TestClass7
 	<x:String>Bar</x:String>
 </ContentIncludedClass>".UpdateXml();
 			var ex = Assert.Throws<XamlDuplicateMemberException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(4, ex.LineNumber);
-			Assert.AreEqual(3, ex.LinePosition);
-			Assert.AreEqual(typeof(ContentIncludedClass), ex.ParentType.UnderlyingType);
-			Assert.AreEqual("Content", ex.DuplicateMember.Name);
-			Assert.AreEqual("''Content' property has already been set on 'ContentIncludedClass'.' Line number '4' and line position '3'.", ex.Message);
+			ClassicAssert.AreEqual(4, ex.LineNumber);
+			ClassicAssert.AreEqual(3, ex.LinePosition);
+			ClassicAssert.AreEqual(typeof(ContentIncludedClass), ex.ParentType.UnderlyingType);
+			ClassicAssert.AreEqual("Content", ex.DuplicateMember.Name);
+			ClassicAssert.AreEqual("''Content' property has already been set on 'ContentIncludedClass'.' Line number '4' and line position '3'.", ex.Message);
 		}
 
 		[Test]
@@ -2501,12 +2502,12 @@ $@"<TestClass7
   <TestClass9.Baz>bar</TestClass9.Baz>
 </TestClass9>".UpdateXml();
 			var ex = Assert.Throws<XamlDuplicateMemberException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(3, ex.LineNumber);
+			ClassicAssert.AreEqual(3, ex.LineNumber);
 
 			// System.Xaml reports column 4 here but we report column 19. 19 actually makes more sense here so don't test this.
 			//
-			//Assert.AreEqual(4, ex.LinePosition);
-			//Assert.AreEqual("''Baz' property has already been set on 'TestClass9'.' Line number '3' and line position '4'.", ex.Message);
+			//ClassicAssert.AreEqual(4, ex.LinePosition);
+			//ClassicAssert.AreEqual("''Baz' property has already been set on 'TestClass9'.' Line number '3' and line position '4'.", ex.Message);
 		}
 
 		[Test]
@@ -2516,12 +2517,12 @@ $@"<TestClass7
   <TestClass9.Baz>foo</TestClass9.Baz>
 </TestClass9>".UpdateXml();
 			var ex = Assert.Throws<XamlDuplicateMemberException>(() => ParseWithLineInfo(xml));
-			Assert.AreEqual(2, ex.LineNumber);
+			ClassicAssert.AreEqual(2, ex.LineNumber);
 
 			// System.Xaml reports column 4 here but we report column 19. 19 actually makes more sense here so don't test this.
 			//
-			// Assert.AreEqual(4, ex.LinePosition);
-			// Assert.AreEqual("''Baz' property has already been set on 'TestClass9'.' Line number '2' and line position '4'.", ex.Message);
+			// ClassicAssert.AreEqual(4, ex.LinePosition);
+			// ClassicAssert.AreEqual("''Baz' property has already been set on 'TestClass9'.' Line number '2' and line position '4'.", ex.Message);
 		}
 
 		object ParseWithLineInfo(string xaml)

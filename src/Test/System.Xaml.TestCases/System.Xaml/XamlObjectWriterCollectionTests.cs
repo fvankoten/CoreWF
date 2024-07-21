@@ -9,6 +9,8 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Collections;
 using n = NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 using System.Xaml;
@@ -35,12 +37,12 @@ namespace MonoTests.System.Xaml
 			var xaml = @"<CollectionParentCustomAddOverride xmlns='clr-namespace:MonoTests.System.Xaml;assembly=System.Xaml.TestCases'><OtherItem/></CollectionParentCustomAddOverride>".UpdateXml ();
 			var parent = (CollectionParentCustomAddOverride)XamlServices.Load (new StringReader (xaml));
 
-			Assert.IsNotNull (parent, "#1");
-			Assert.IsInstanceOf<CollectionParentCustomAddOverride> (parent, "#2");
-			Assert.AreEqual (1, parent.Items.Count, "#3");
+			ClassicAssert.IsNotNull (parent, "#1");
+			ClassicAssert.IsInstanceOf<CollectionParentCustomAddOverride> (parent, "#2");
+			ClassicAssert.AreEqual (1, parent.Items.Count, "#3");
 			var item = parent.Items.FirstOrDefault ();
-			Assert.IsNotNull (item, "#4");
-			Assert.AreEqual ("FromOther", item.Name, "#5");
+			ClassicAssert.IsNotNull (item, "#4");
+			ClassicAssert.AreEqual ("FromOther", item.Name, "#5");
 		}
 
 		/// <summary>
@@ -55,12 +57,12 @@ namespace MonoTests.System.Xaml
 			var xaml = @"<CollectionParentGenericList xmlns='clr-namespace:MonoTests.System.Xaml;assembly=System.Xaml.TestCases'><OtherItem/></CollectionParentGenericList>".UpdateXml ();
 			var parent = (CollectionParentGenericList)XamlServices.Load (new StringReader (xaml));
 
-			Assert.IsNotNull (parent, "#1");
-			Assert.IsInstanceOf<CollectionParentGenericList> (parent, "#2");
-			Assert.AreEqual (1, parent.Items.Count, "#3");
+			ClassicAssert.IsNotNull (parent, "#1");
+			ClassicAssert.IsInstanceOf<CollectionParentGenericList> (parent, "#2");
+			ClassicAssert.AreEqual (1, parent.Items.Count, "#3");
 			var item = parent.Items.FirstOrDefault ();
-			Assert.IsNotNull (item, "#4");
-			Assert.AreEqual ("FromOther", item.Name, "#5");
+			ClassicAssert.IsNotNull (item, "#4");
+			ClassicAssert.AreEqual ("FromOther", item.Name, "#5");
 		}
 
 		/// <summary>
@@ -75,12 +77,12 @@ namespace MonoTests.System.Xaml
 			var xaml = @"<CollectionParentCustomNoOverride xmlns='clr-namespace:MonoTests.System.Xaml;assembly=System.Xaml.TestCases'><OtherItem/></CollectionParentCustomNoOverride>".UpdateXml ();
 			var parent = (CollectionParentCustomNoOverride)XamlServices.Load (new StringReader (xaml));
 
-			Assert.IsNotNull (parent, "#1");
-			Assert.IsInstanceOf<CollectionParentCustomNoOverride> (parent, "#2");
-			Assert.AreEqual (1, parent.Items.Count, "#3");
+			ClassicAssert.IsNotNull (parent, "#1");
+			ClassicAssert.IsInstanceOf<CollectionParentCustomNoOverride> (parent, "#2");
+			ClassicAssert.AreEqual (1, parent.Items.Count, "#3");
 			var item = parent.Items.FirstOrDefault ();
-			Assert.IsNotNull (item, "#4");
-			Assert.AreEqual ("FromOther", item.Name, "#5");
+			ClassicAssert.IsNotNull (item, "#4");
+			ClassicAssert.AreEqual ("FromOther", item.Name, "#5");
 		}
 	}
 }

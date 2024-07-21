@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if !NET_4_5
 using System.Xaml;
 using System.Xaml.Schema;
@@ -20,7 +22,7 @@ namespace MonoTests.System.Xaml
 
 	    void XmlEquals(XElement first, XElement second)
 	    {
-		    Assert.AreEqual(first.ToString(), second.ToString());
+		    ClassicAssert.AreEqual(first.ToString(), second.ToString());
 	    }
 
 
@@ -100,7 +102,7 @@ namespace MonoTests.System.Xaml
     <Element compat:ShouldMap='1' ignoredCompat:ShouldMap='1' ignoredCompat2:ShouldMapAndPreserve='1' />
 </Root>";
 			Func<string, string> filter = s => expected.Replace(" ", "").Replace('\'', '"').Replace("\n", "").Replace("\r", "");
-			Assert.AreEqual(filter(expected), filter(actual));
+			ClassicAssert.AreEqual(filter(expected), filter(actual));
 
 		}
 #endif
@@ -180,9 +182,9 @@ d:DataContext='value'>
 					}
 
 					if (designMode)
-						Assert.AreEqual("value", res.DataContext);
+						ClassicAssert.AreEqual("value", res.DataContext);
 					else
-						Assert.IsNull(res.DataContext);
+						ClassicAssert.IsNull(res.DataContext);
 				}
 			}
 	    }

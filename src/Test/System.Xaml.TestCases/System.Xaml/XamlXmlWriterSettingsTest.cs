@@ -25,6 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -46,8 +48,8 @@ namespace MonoTests.System.Xaml
 		public void DefaultValues ()
 		{
 			var s = new XamlXmlWriterSettings ();
-			Assert.IsFalse (s.AssumeValidInput, "#1");
-			Assert.IsFalse (s.CloseOutput, "#2");
+			ClassicAssert.IsFalse (s.AssumeValidInput, "#1");
+			ClassicAssert.IsFalse (s.CloseOutput, "#2");
 		}
 	}
 }

@@ -28,6 +28,8 @@ using System.Reflection;
 using System.Xml;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -49,75 +51,75 @@ namespace MonoTests.System.Xaml
 		public void XamlNamepaces ()
 		{
 			var l = XamlLanguage.XamlNamespaces;
-			Assert.AreEqual (1, l.Count, "#1");
-			Assert.AreEqual (XamlLanguage.Xaml2006Namespace, l [0], "#2");
+			ClassicAssert.AreEqual (1, l.Count, "#1");
+			ClassicAssert.AreEqual (XamlLanguage.Xaml2006Namespace, l [0], "#2");
 		}
 
 		[Test]
 		public void XmlNamepaces ()
 		{
 			var l = XamlLanguage.XmlNamespaces;
-			Assert.AreEqual (1, l.Count, "#1");
-			Assert.AreEqual (XamlLanguage.Xml1998Namespace, l [0], "#2");
+			ClassicAssert.AreEqual (1, l.Count, "#1");
+			ClassicAssert.AreEqual (XamlLanguage.Xml1998Namespace, l [0], "#2");
 		}
 
 		[Test]
 		public void AllDirectives ()
 		{
 			var l = XamlLanguage.AllDirectives;
-			Assert.AreEqual (24, l.Count, "count");
-			Assert.IsTrue (l.Contains (XamlLanguage.Arguments), "#0");
-			Assert.IsTrue (l.Contains (XamlLanguage.AsyncRecords), "#1");
-			Assert.IsTrue (l.Contains (XamlLanguage.Base), "#2");
-			Assert.IsTrue (l.Contains (XamlLanguage.Class), "#3");
-			Assert.IsTrue (l.Contains (XamlLanguage.ClassAttributes), "#4");
-			Assert.IsTrue (l.Contains (XamlLanguage.ClassModifier), "#5");
-			Assert.IsTrue (l.Contains (XamlLanguage.Code), "#6");
-			Assert.IsTrue (l.Contains (XamlLanguage.ConnectionId), "#7");
-			Assert.IsTrue (l.Contains (XamlLanguage.FactoryMethod), "#8");
-			Assert.IsTrue (l.Contains (XamlLanguage.FieldModifier), "#9");
-			Assert.IsTrue (l.Contains (XamlLanguage.Initialization), "#10");
-			Assert.IsTrue (l.Contains (XamlLanguage.Items), "#11");
-			Assert.IsTrue (l.Contains (XamlLanguage.Key), "#12");
-			Assert.IsTrue (l.Contains (XamlLanguage.Lang), "#13");
-			Assert.IsTrue (l.Contains (XamlLanguage.Members), "#14");
-			Assert.IsTrue (l.Contains (XamlLanguage.Name), "#15");
-			Assert.IsTrue (l.Contains (XamlLanguage.PositionalParameters), "#16");
-			Assert.IsTrue (l.Contains (XamlLanguage.Space), "#17");
-			Assert.IsTrue (l.Contains (XamlLanguage.Subclass), "#18");
-			Assert.IsTrue (l.Contains (XamlLanguage.SynchronousMode), "#19");
-			Assert.IsTrue (l.Contains (XamlLanguage.Shared), "#20");
-			Assert.IsTrue (l.Contains (XamlLanguage.TypeArguments), "#21");
-			Assert.IsTrue (l.Contains (XamlLanguage.Uid), "#22");
-			Assert.IsTrue (l.Contains (XamlLanguage.UnknownContent), "#23");
+			ClassicAssert.AreEqual (24, l.Count, "count");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Arguments), "#0");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.AsyncRecords), "#1");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Base), "#2");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Class), "#3");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.ClassAttributes), "#4");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.ClassModifier), "#5");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Code), "#6");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.ConnectionId), "#7");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.FactoryMethod), "#8");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.FieldModifier), "#9");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Initialization), "#10");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Items), "#11");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Key), "#12");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Lang), "#13");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Members), "#14");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Name), "#15");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.PositionalParameters), "#16");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Space), "#17");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Subclass), "#18");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.SynchronousMode), "#19");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Shared), "#20");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.TypeArguments), "#21");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Uid), "#22");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.UnknownContent), "#23");
 		}
 
 		[Test]
 		public void AllTypes ()
 		{
 			var l = XamlLanguage.AllTypes;
-			Assert.AreEqual (21, l.Count, "count");
-			Assert.IsTrue (l.Contains (XamlLanguage.Array), "#0");
-			Assert.IsTrue (l.Contains (XamlLanguage.Boolean), "#1");
-			Assert.IsTrue (l.Contains (XamlLanguage.Byte), "#2");
-			Assert.IsTrue (l.Contains (XamlLanguage.Char), "#3");
-			Assert.IsTrue (l.Contains (XamlLanguage.Decimal), "#4");
-			Assert.IsTrue (l.Contains (XamlLanguage.Double), "#5");
-			Assert.IsTrue (l.Contains (XamlLanguage.Int16), "#6");
-			Assert.IsTrue (l.Contains (XamlLanguage.Int32), "#7");
-			Assert.IsTrue (l.Contains (XamlLanguage.Int64), "#8");
-			Assert.IsTrue (l.Contains (XamlLanguage.Member), "#9");
-			Assert.IsTrue (l.Contains (XamlLanguage.Null), "#10");
-			Assert.IsTrue (l.Contains (XamlLanguage.Object), "#11");
-			Assert.IsTrue (l.Contains (XamlLanguage.Property), "#12");
-			Assert.IsTrue (l.Contains (XamlLanguage.Reference), "#13");
-			Assert.IsTrue (l.Contains (XamlLanguage.Single), "#14");
-			Assert.IsTrue (l.Contains (XamlLanguage.Static), "#15");
-			Assert.IsTrue (l.Contains (XamlLanguage.String), "#16");
-			Assert.IsTrue (l.Contains (XamlLanguage.TimeSpan), "#17");
-			Assert.IsTrue (l.Contains (XamlLanguage.Type), "#18");
-			Assert.IsTrue (l.Contains (XamlLanguage.Uri), "#19");
-			Assert.IsTrue (l.Contains (XamlLanguage.XData), "#20");
+			ClassicAssert.AreEqual (21, l.Count, "count");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Array), "#0");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Boolean), "#1");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Byte), "#2");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Char), "#3");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Decimal), "#4");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Double), "#5");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Int16), "#6");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Int32), "#7");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Int64), "#8");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Member), "#9");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Null), "#10");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Object), "#11");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Property), "#12");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Reference), "#13");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Single), "#14");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Static), "#15");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.String), "#16");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.TimeSpan), "#17");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Type), "#18");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.Uri), "#19");
+			ClassicAssert.IsTrue (l.Contains (XamlLanguage.XData), "#20");
 		}
 
 		// directive property details
@@ -313,44 +315,44 @@ namespace MonoTests.System.Xaml
 
 		void TestXamlDirectiveCommon (XamlDirective d, string name, string ns, AllowedMemberLocations allowedLocation, Type type, bool isUnknown)
 		{
-			Assert.AreEqual (allowedLocation, d.AllowedLocation, "#1");
-			Assert.IsNull (d.DeclaringType, "#2");
-			Assert.IsNotNull (d.Invoker, "#3");
-			Assert.IsNull (d.Invoker.UnderlyingGetter, "#3-2");
-			Assert.IsNull (d.Invoker.UnderlyingSetter, "#3-3");
-			Assert.AreEqual (isUnknown, d.IsUnknown, "#4");
-			Assert.IsTrue (d.IsReadPublic, "#5");
-			Assert.IsTrue (d.IsWritePublic, "#6");
-			Assert.AreEqual (name, d.Name, "#7");
-			Assert.IsTrue (d.IsNameValid, "#8");
-			Assert.AreEqual (ns, d.PreferredXamlNamespace, "#9");
-			Assert.IsNull (d.TargetType, "#10");
-			Assert.IsNotNull (d.Type, "#11");
-			Assert.AreEqual (type, d.Type.UnderlyingType, "#11-2");
+			ClassicAssert.AreEqual (allowedLocation, d.AllowedLocation, "#1");
+			ClassicAssert.IsNull (d.DeclaringType, "#2");
+			ClassicAssert.IsNotNull (d.Invoker, "#3");
+			ClassicAssert.IsNull (d.Invoker.UnderlyingGetter, "#3-2");
+			ClassicAssert.IsNull (d.Invoker.UnderlyingSetter, "#3-3");
+			ClassicAssert.AreEqual (isUnknown, d.IsUnknown, "#4");
+			ClassicAssert.IsTrue (d.IsReadPublic, "#5");
+			ClassicAssert.IsTrue (d.IsWritePublic, "#6");
+			ClassicAssert.AreEqual (name, d.Name, "#7");
+			ClassicAssert.IsTrue (d.IsNameValid, "#8");
+			ClassicAssert.AreEqual (ns, d.PreferredXamlNamespace, "#9");
+			ClassicAssert.IsNull (d.TargetType, "#10");
+			ClassicAssert.IsNotNull (d.Type, "#11");
+			ClassicAssert.AreEqual (type, d.Type.UnderlyingType, "#11-2");
 
 #if HAS_TYPE_CONVERTER
 			// .NET returns StringConverter, but it should not premise that key must be string (it is object)
 			if (name == "Key")
 			{
-				//Assert.IsNull (d.TypeConverter, "#12")
+				//ClassicAssert.IsNull (d.TypeConverter, "#12")
 			}
 			else if (type.GetTypeInfo().IsGenericType || name == "_Initialization" || name == "_UnknownContent")
-				Assert.IsNull (d.TypeConverter, "#12");
+				ClassicAssert.IsNull (d.TypeConverter, "#12");
 			else
-				Assert.IsNotNull (d.TypeConverter, "#12");
+				ClassicAssert.IsNotNull (d.TypeConverter, "#12");
 #endif
-			Assert.IsNull (d.ValueSerializer, "#13");
-			Assert.IsNull (d.DeferringLoader, "#14");
-			Assert.IsNull (d.UnderlyingMember, "#15");
-			Assert.IsFalse (d.IsReadOnly, "#16");
-			Assert.IsFalse (d.IsWriteOnly, "#17");
-			Assert.IsFalse (d.IsAttachable, "#18");
-			Assert.IsFalse (d.IsEvent, "#19");
-			Assert.IsTrue (d.IsDirective, "#20");
-			Assert.IsNotNull (d.DependsOn, "#21");
-			Assert.AreEqual (0, d.DependsOn.Count, "#21-2");
-			Assert.IsFalse (d.IsAmbient, "#22");
-			// TODO: Assert.AreEqual (DesignerSerializationVisibility.Visible, d.SerializationVisibility, "#23");
+			ClassicAssert.IsNull (d.ValueSerializer, "#13");
+			ClassicAssert.IsNull (d.DeferringLoader, "#14");
+			ClassicAssert.IsNull (d.UnderlyingMember, "#15");
+			ClassicAssert.IsFalse (d.IsReadOnly, "#16");
+			ClassicAssert.IsFalse (d.IsWriteOnly, "#17");
+			ClassicAssert.IsFalse (d.IsAttachable, "#18");
+			ClassicAssert.IsFalse (d.IsEvent, "#19");
+			ClassicAssert.IsTrue (d.IsDirective, "#20");
+			ClassicAssert.IsNotNull (d.DependsOn, "#21");
+			ClassicAssert.AreEqual (0, d.DependsOn.Count, "#21-2");
+			ClassicAssert.IsFalse (d.IsAmbient, "#22");
+			// TODO: ClassicAssert.AreEqual (DesignerSerializationVisibility.Visible, d.SerializationVisibility, "#23");
 		}
 
 		// type property details
@@ -361,17 +363,17 @@ namespace MonoTests.System.Xaml
 		{
 			var t = XamlLanguage.Array;
 			TestXamlTypeExtension (t, "ArrayExtension", typeof (ArrayExtension), typeof (Array), true);
-			Assert.IsNotNull (t.ContentProperty, "#27");
-			Assert.AreEqual ("Items", t.ContentProperty.Name, "#27-2");
+			ClassicAssert.IsNotNull (t.ContentProperty, "#27");
+			ClassicAssert.AreEqual ("Items", t.ContentProperty.Name, "#27-2");
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (2, l.Length, "#31");
+			ClassicAssert.AreEqual (2, l.Length, "#31");
 			var items = l.First (m => m.Name == "Items");
-			Assert.IsFalse (items == XamlLanguage.Items, "#31-2");
+			ClassicAssert.IsFalse (items == XamlLanguage.Items, "#31-2");
 			l.First (m => m.Name == "Type");
 
 			l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 		}
 
 		[Test]
@@ -393,13 +395,13 @@ namespace MonoTests.System.Xaml
 		{
 			var t = XamlLanguage.Null;
 			TestXamlTypeExtension (t, "NullExtension", typeof (NullExtension), typeof (object), true);
-			Assert.IsNull (t.ContentProperty, "#27");
+			ClassicAssert.IsNull (t.ContentProperty, "#27");
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#31");
+			ClassicAssert.AreEqual (0, l.Length, "#31");
 
 			l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 		}
 
 		[Test]
@@ -409,19 +411,19 @@ namespace MonoTests.System.Xaml
 			TestXamlTypeExtension (t, "StaticExtension", typeof (StaticExtension), typeof (object), false);
 #if HAS_TYPE_CONVERTER
 			var tc = t.TypeConverter.ConverterInstance;
-			Assert.IsNotNull (tc, "#25-2");
-			Assert.IsFalse (tc.CanConvertFrom (typeof (string)), "#25-3");
-			Assert.IsTrue (tc.CanConvertTo (typeof (string)), "#25-4");
+			ClassicAssert.IsNotNull (tc, "#25-2");
+			ClassicAssert.IsFalse (tc.CanConvertFrom (typeof (string)), "#25-3");
+			ClassicAssert.IsTrue (tc.CanConvertTo (typeof (string)), "#25-4");
 #endif
-			Assert.IsNull (t.ContentProperty, "#27");
+			ClassicAssert.IsNull (t.ContentProperty, "#27");
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (2, l.Length, "#31");
+			ClassicAssert.AreEqual (2, l.Length, "#31");
 			l.First (m => m.Name == "Member");
 			l.First (m => m.Name == "MemberType");
 
 			l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 		}
 
 		[Test]
@@ -444,17 +446,17 @@ namespace MonoTests.System.Xaml
 			var t = XamlLanguage.Type;
 			TestXamlTypeExtension (t, "TypeExtension", typeof (TypeExtension), typeof (Type), false);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNotNull (t.TypeConverter.ConverterInstance, "#25-2");
+			ClassicAssert.IsNotNull (t.TypeConverter.ConverterInstance, "#25-2");
 #endif
-			Assert.IsNull (t.ContentProperty, "#27");
+			ClassicAssert.IsNull (t.ContentProperty, "#27");
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (2, l.Length, "#31");
+			ClassicAssert.AreEqual (2, l.Length, "#31");
 			l.First (m => m.Name == "TypeName");
 			l.First (m => m.Name == "Type");
 
 			l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 		}
 
 		[Test]
@@ -469,7 +471,7 @@ namespace MonoTests.System.Xaml
 		{
 			var m = XamlLanguage.Type.GetMember ("Type");
 			TestMemberCommon (m, "Type", typeof (Type), typeof (TypeExtension), true);
-			Assert.AreNotEqual (XamlLanguage.Type, m.Type, "#1");
+			ClassicAssert.AreNotEqual (XamlLanguage.Type, m.Type, "#1");
 		}
 
 		// primitive types
@@ -482,7 +484,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			*/
 		}
 
@@ -494,7 +496,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (3, l.Length, "#32");
+			ClassicAssert.AreEqual (3, l.Length, "#32");
 			l.First (m => m.Name == "UnicodeCategory");
 			l.First (m => m.Name == "NumericValue");
 			l.First (m => m.Name == "HashCodeOfPtr");
@@ -509,7 +511,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (2, l.Length, "#32");
+			ClassicAssert.AreEqual (2, l.Length, "#32");
 			l.First (m => m.Name == "Bits");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
@@ -523,7 +525,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
 		}
@@ -536,7 +538,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
 		}
@@ -555,7 +557,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
 		}
@@ -568,7 +570,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
 		}
@@ -578,11 +580,11 @@ namespace MonoTests.System.Xaml
 		{
 			var t = XamlLanguage.Object;
 			TestXamlTypePrimitive (t, "Object", typeof (object), true, false);
-			Assert.IsNull (t.BaseType, "#x1");
+			ClassicAssert.IsNull (t.BaseType, "#x1");
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 			*/
 		}
 
@@ -594,7 +596,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
 		}
@@ -604,8 +606,8 @@ namespace MonoTests.System.Xaml
 		{
 			var t = XamlLanguage.String;
 			TestXamlTypePrimitive (t, "String", typeof (string), true, true);
-			Assert.IsNotNull (XamlLanguage.AllTypes.First (tt => tt.Name == "String").ValueSerializer, "#x");
-			Assert.IsNotNull (XamlLanguage.String.ValueSerializer, "#y");
+			ClassicAssert.IsNotNull (XamlLanguage.AllTypes.First (tt => tt.Name == "String").ValueSerializer, "#x");
+			ClassicAssert.IsNotNull (XamlLanguage.String.ValueSerializer, "#y");
 
 			try {
 				t.Invoker.CreateInstance (new object [] {"foo"});
@@ -615,7 +617,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 			*/
 		}
 
@@ -627,7 +629,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#32");
+			ClassicAssert.AreEqual (1, l.Length, "#32");
 			l.First (m => m.Name == "HashCodeOfPtr");
 			*/
 		}
@@ -640,7 +642,7 @@ namespace MonoTests.System.Xaml
 
 			/* Those properties are pointless regarding practical use. Those "members" does not participate in serialization.
 			var l = t.GetAllAttachableMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#32");
+			ClassicAssert.AreEqual (0, l.Length, "#32");
 			*/
 		}
 
@@ -652,12 +654,12 @@ namespace MonoTests.System.Xaml
 			var t = XamlLanguage.Member;
 			TestXamlTypeCommon (t, "Member", typeof (MemberDefinition), true, true, false);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNull (t.TypeConverter, "#25");
+			ClassicAssert.IsNull (t.TypeConverter, "#25");
 #endif
 			// FIXME: test remaining members
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#31");
+			ClassicAssert.AreEqual (1, l.Length, "#31");
 			l.First (m => m.Name == "Name");
 		}
 
@@ -674,12 +676,12 @@ namespace MonoTests.System.Xaml
 			var t = XamlLanguage.Property;
 			TestXamlTypeCommon (t, "Property", typeof (PropertyDefinition), true);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNull (t.TypeConverter, "#25");
+			ClassicAssert.IsNull (t.TypeConverter, "#25");
 #endif
 			// FIXME: test remaining members
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (4, l.Length, "#31");
+			ClassicAssert.AreEqual (4, l.Length, "#31");
 			l.First (m => m.Name == "Name");
 			l.First (m => m.Name == "Type");
 			l.First (m => m.Name == "Modifier");
@@ -699,9 +701,9 @@ namespace MonoTests.System.Xaml
 			var m = XamlLanguage.Property.GetMember ("Type");
 			TestMemberCommon (m, "Type", typeof (XamlType), typeof (PropertyDefinition), true);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNotNull (m.TypeConverter, "#1");
+			ClassicAssert.IsNotNull (m.TypeConverter, "#1");
 #endif
-			Assert.IsNull (m.ValueSerializer, "#2");
+			ClassicAssert.IsNull (m.ValueSerializer, "#2");
 		}
 
 		[Test]
@@ -724,14 +726,14 @@ namespace MonoTests.System.Xaml
 			var t = XamlLanguage.Reference;
 			TestXamlTypeCommon (t, "Reference", typeof (Reference), true);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNull (t.TypeConverter, "#25");
+			ClassicAssert.IsNull (t.TypeConverter, "#25");
 #endif
 			// FIXME: test remaining members
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (1, l.Length, "#31");
+			ClassicAssert.AreEqual (1, l.Length, "#31");
 			l.First (m => m.Name == "Name");
-			Assert.AreEqual (l [0], t.ContentProperty, "#32");
+			ClassicAssert.AreEqual (l [0], t.ContentProperty, "#32");
 		}
 
 		[Test]
@@ -747,12 +749,12 @@ namespace MonoTests.System.Xaml
 			var t = XamlLanguage.XData;
 			TestXamlTypeCommon (t, "XData", typeof (XData), true);
 #if HAS_TYPE_CONVERTER
-			Assert.IsNull (t.TypeConverter, "#25");
+			ClassicAssert.IsNull (t.TypeConverter, "#25");
 #endif
 			// FIXME: test remaining members
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (2, l.Length, "#31");
+			ClassicAssert.AreEqual (2, l.Length, "#31");
 			l.First (m => m.Name == "Text");
 			l.First (m => m.Name == "XmlReader");
 		}
@@ -786,109 +788,109 @@ namespace MonoTests.System.Xaml
 
 		void TestXamlTypeCommon (XamlType t, string name, Type underlyingType, bool nullable, bool constructionRequiresArguments, bool isConstructible)
 		{
-			Assert.IsNotNull (t.Invoker, "#1");
-			Assert.IsTrue (t.IsNameValid, "#2");
-			Assert.IsFalse (t.IsUnknown, "#3");
+			ClassicAssert.IsNotNull (t.Invoker, "#1");
+			ClassicAssert.IsTrue (t.IsNameValid, "#2");
+			ClassicAssert.IsFalse (t.IsUnknown, "#3");
 			// FIXME: test names (some extension types have wrong name.
-			//Assert.AreEqual (name, t.Name, "#4");
-			Assert.AreEqual (XamlLanguage.Xaml2006Namespace, t.PreferredXamlNamespace, "#5");
-			Assert.IsNull (t.TypeArguments, "#6");
-			Assert.AreEqual (underlyingType, t.UnderlyingType, "#7");
-			Assert.AreEqual (constructionRequiresArguments, t.ConstructionRequiresArguments, "#8");
-			Assert.IsFalse (t.IsArray, "#9");
-			Assert.IsFalse (t.IsCollection, "#10");
+			//ClassicAssert.AreEqual (name, t.Name, "#4");
+			ClassicAssert.AreEqual (XamlLanguage.Xaml2006Namespace, t.PreferredXamlNamespace, "#5");
+			ClassicAssert.IsNull (t.TypeArguments, "#6");
+			ClassicAssert.AreEqual (underlyingType, t.UnderlyingType, "#7");
+			ClassicAssert.AreEqual (constructionRequiresArguments, t.ConstructionRequiresArguments, "#8");
+			ClassicAssert.IsFalse (t.IsArray, "#9");
+			ClassicAssert.IsFalse (t.IsCollection, "#10");
 			// FIXME: test here (very inconsistent with the spec)
-			Assert.AreEqual (isConstructible, t.IsConstructible, "#11");
-			Assert.IsFalse (t.IsDictionary, "#12");
-			Assert.IsFalse (t.IsGeneric, "#13");
-			Assert.IsFalse (t.IsNameScope, "#15");
-			Assert.AreEqual (nullable, t.IsNullable, "#16");
-			Assert.IsTrue (t.IsPublic, "#17");
-			Assert.IsFalse (t.IsUsableDuringInitialization, "#18");
-			Assert.IsFalse (t.IsWhitespaceSignificantCollection, "#19");
-			Assert.IsFalse (t.IsXData, "#20");
-			Assert.IsFalse (t.TrimSurroundingWhitespace, "#21");
-			Assert.IsFalse (t.IsAmbient, "#22");
-			Assert.IsNull (t.AllowedContentTypes, "#23");
-			Assert.IsNull (t.ContentWrappers, "#24");
+			ClassicAssert.AreEqual (isConstructible, t.IsConstructible, "#11");
+			ClassicAssert.IsFalse (t.IsDictionary, "#12");
+			ClassicAssert.IsFalse (t.IsGeneric, "#13");
+			ClassicAssert.IsFalse (t.IsNameScope, "#15");
+			ClassicAssert.AreEqual (nullable, t.IsNullable, "#16");
+			ClassicAssert.IsTrue (t.IsPublic, "#17");
+			ClassicAssert.IsFalse (t.IsUsableDuringInitialization, "#18");
+			ClassicAssert.IsFalse (t.IsWhitespaceSignificantCollection, "#19");
+			ClassicAssert.IsFalse (t.IsXData, "#20");
+			ClassicAssert.IsFalse (t.TrimSurroundingWhitespace, "#21");
+			ClassicAssert.IsFalse (t.IsAmbient, "#22");
+			ClassicAssert.IsNull (t.AllowedContentTypes, "#23");
+			ClassicAssert.IsNull (t.ContentWrappers, "#24");
 			// string is a special case.
 			if (t == XamlLanguage.String)
-				Assert.IsNotNull (t.ValueSerializer, "#26");
+				ClassicAssert.IsNotNull (t.ValueSerializer, "#26");
 			else
-				Assert.IsNull (t.ValueSerializer, "#26");
-			//Assert.IsNull (t.DeferringLoader, "#28");
+				ClassicAssert.IsNull (t.ValueSerializer, "#26");
+			//ClassicAssert.IsNull (t.DeferringLoader, "#28");
 		}
 
 		void TestXamlTypePrimitive (XamlType t, string name, Type underlyingType, bool nullable, bool constructorRequiresArguments)
 		{
 			TestXamlTypeCommon (t, name, underlyingType, nullable, constructorRequiresArguments);
-			Assert.IsFalse (t.IsMarkupExtension, "#14");
+			ClassicAssert.IsFalse (t.IsMarkupExtension, "#14");
 #if HAS_TYPE_CONVERTER
-			Assert.IsNotNull (t.TypeConverter, "#25");
+			ClassicAssert.IsNotNull (t.TypeConverter, "#25");
 #endif
-			Assert.IsNull (t.ContentProperty, "#27");
-			Assert.IsNull (t.MarkupExtensionReturnType, "#29");
+			ClassicAssert.IsNull (t.ContentProperty, "#27");
+			ClassicAssert.IsNull (t.MarkupExtensionReturnType, "#29");
 
 			var l = t.GetAllMembers ().ToArray ();
-			Assert.AreEqual (0, l.Length, "#31");
+			ClassicAssert.AreEqual (0, l.Length, "#31");
 		}
 
 		void TestXamlTypeExtension (XamlType t, string name, Type underlyingType, Type extReturnType, bool noTypeConverter)
 		{
 			TestXamlTypeCommon (t, name, underlyingType, true, false);
-			Assert.IsTrue (t.IsMarkupExtension, "#14");
+			ClassicAssert.IsTrue (t.IsMarkupExtension, "#14");
 #if HAS_TYPE_CONVERTER
 			if (noTypeConverter)
-				Assert.IsNull (t.TypeConverter, "#25");
+				ClassicAssert.IsNull (t.TypeConverter, "#25");
 			else
-				Assert.IsNotNull (t.TypeConverter, "#25");
+				ClassicAssert.IsNotNull (t.TypeConverter, "#25");
 #endif
-			Assert.IsNotNull (t.MarkupExtensionReturnType, "#29");
-			Assert.AreEqual (extReturnType, t.MarkupExtensionReturnType.UnderlyingType, "#29-2");
-			Assert.IsNull (t.Invoker.SetMarkupExtensionHandler, "#31"); // orly?
+			ClassicAssert.IsNotNull (t.MarkupExtensionReturnType, "#29");
+			ClassicAssert.AreEqual (extReturnType, t.MarkupExtensionReturnType.UnderlyingType, "#29-2");
+			ClassicAssert.IsNull (t.Invoker.SetMarkupExtensionHandler, "#31"); // orly?
 		}
 
 		void TestMemberCommon (XamlMember m, string name, Type type, Type declType, bool hasSetter)
 		{
-			Assert.IsNotNull (m, "#1");
-			Assert.IsNotNull (m.DeclaringType, "#2");
-			Assert.AreEqual (declType, m.DeclaringType.UnderlyingType, "#2-2");
-			Assert.IsNotNull (m.Invoker, "#3");
-			Assert.IsNotNull (m.Invoker.UnderlyingGetter, "#3-2");
+			ClassicAssert.IsNotNull (m, "#1");
+			ClassicAssert.IsNotNull (m.DeclaringType, "#2");
+			ClassicAssert.AreEqual (declType, m.DeclaringType.UnderlyingType, "#2-2");
+			ClassicAssert.IsNotNull (m.Invoker, "#3");
+			ClassicAssert.IsNotNull (m.Invoker.UnderlyingGetter, "#3-2");
 			if (hasSetter)
-				Assert.IsNotNull (m.Invoker.UnderlyingSetter, "#3-3");
+				ClassicAssert.IsNotNull (m.Invoker.UnderlyingSetter, "#3-3");
 			else
-				Assert.IsNull (m.Invoker.UnderlyingSetter, "#3-3");
-			Assert.IsFalse (m.IsUnknown, "#4");
-			Assert.IsTrue (m.IsReadPublic, "#5");
-			Assert.AreEqual (hasSetter, m.IsWritePublic, "#6");
-			Assert.AreEqual (name, m.Name, "#7");
-			Assert.IsTrue (m.IsNameValid, "#8");
-			Assert.AreEqual (XamlLanguage.Xaml2006Namespace, m.PreferredXamlNamespace, "#9");
+				ClassicAssert.IsNull (m.Invoker.UnderlyingSetter, "#3-3");
+			ClassicAssert.IsFalse (m.IsUnknown, "#4");
+			ClassicAssert.IsTrue (m.IsReadPublic, "#5");
+			ClassicAssert.AreEqual (hasSetter, m.IsWritePublic, "#6");
+			ClassicAssert.AreEqual (name, m.Name, "#7");
+			ClassicAssert.IsTrue (m.IsNameValid, "#8");
+			ClassicAssert.AreEqual (XamlLanguage.Xaml2006Namespace, m.PreferredXamlNamespace, "#9");
 			// use declType here (mostly identical to targetType)
-			Assert.AreEqual (new XamlType (declType, m.TargetType.SchemaContext), m.TargetType, "#10");
-			Assert.IsNotNull (m.Type, "#11");
-			Assert.AreEqual (type, m.Type.UnderlyingType, "#11-2");
+			ClassicAssert.AreEqual (new XamlType (declType, m.TargetType.SchemaContext), m.TargetType, "#10");
+			ClassicAssert.IsNotNull (m.Type, "#11");
+			ClassicAssert.AreEqual (type, m.Type.UnderlyingType, "#11-2");
 			// Property.Type is a special case here.
 #if HAS_TYPE_CONVERTER
 			if (name == "Type" && m.DeclaringType != XamlLanguage.Property)
-				Assert.AreEqual (m.Type.TypeConverter, m.TypeConverter, "#12");
+				ClassicAssert.AreEqual (m.Type.TypeConverter, m.TypeConverter, "#12");
 #endif
 			// String type is a special case here.
 			if (type == typeof (string))
-				Assert.AreEqual (m.Type.ValueSerializer, m.ValueSerializer, "#13a");
+				ClassicAssert.AreEqual (m.Type.ValueSerializer, m.ValueSerializer, "#13a");
 			else
-				Assert.IsNull (m.ValueSerializer, "#13b");
-			Assert.IsNull (m.DeferringLoader, "#14");
-			Assert.IsNotNull (m.UnderlyingMember, "#15");
-			Assert.AreEqual (!hasSetter, m.IsReadOnly, "#16");
-			Assert.IsFalse (m.IsWriteOnly, "#17");
-			Assert.IsFalse (m.IsAttachable, "#18");
-			Assert.IsFalse (m.IsEvent, "#19");
-			Assert.IsFalse (m.IsDirective, "#20");
-			Assert.IsNotNull (m.DependsOn, "#21");
-			Assert.AreEqual (0, m.DependsOn.Count, "#21-2");
-			Assert.IsFalse (m.IsAmbient, "#22");
+				ClassicAssert.IsNull (m.ValueSerializer, "#13b");
+			ClassicAssert.IsNull (m.DeferringLoader, "#14");
+			ClassicAssert.IsNotNull (m.UnderlyingMember, "#15");
+			ClassicAssert.AreEqual (!hasSetter, m.IsReadOnly, "#16");
+			ClassicAssert.IsFalse (m.IsWriteOnly, "#17");
+			ClassicAssert.IsFalse (m.IsAttachable, "#18");
+			ClassicAssert.IsFalse (m.IsEvent, "#19");
+			ClassicAssert.IsFalse (m.IsDirective, "#20");
+			ClassicAssert.IsNotNull (m.DependsOn, "#21");
+			ClassicAssert.AreEqual (0, m.DependsOn.Count, "#21-2");
+			ClassicAssert.IsFalse (m.IsAmbient, "#22");
 		}
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -42,23 +44,23 @@ namespace MonoTests.System.Xaml
 			var listReader = list.GetReader();
 			XamlServices.Transform(listReader, writer);
 
-			Assert.IsNotNull(writer.Result, "#1");
-			Assert.IsInstanceOf<TestClass4>(writer.Result, "#2");
+			ClassicAssert.IsNotNull(writer.Result, "#1");
+            ClassicAssert.IsInstanceOf<TestClass4>(writer.Result, "#2");
 
-			Assert.AreEqual("foo", ((TestClass4)writer.Result).Foo, "#3");
-			Assert.AreEqual("bar", ((TestClass4)writer.Result).Bar, "#4");
+			ClassicAssert.AreEqual("foo", ((TestClass4)writer.Result).Foo, "#3");
+			ClassicAssert.AreEqual("bar", ((TestClass4)writer.Result).Bar, "#4");
 
 			// try reading a 2nd time, we should not get the same reader
 			writer = new XamlObjectWriter(sc);
 			var listReader2 = list.GetReader();
-			Assert.AreNotSame(listReader, listReader2, "#5");
+            ClassicAssert.AreNotSame(listReader, listReader2, "#5");
 			XamlServices.Transform(listReader2, writer);
 
-			Assert.IsNotNull(writer.Result, "#6");
-			Assert.IsInstanceOf<TestClass4>(writer.Result, "#7");
+			ClassicAssert.IsNotNull(writer.Result, "#6");
+            ClassicAssert.IsInstanceOf<TestClass4>(writer.Result, "#7");
 
-			Assert.AreEqual("foo", ((TestClass4)writer.Result).Foo, "#8");
-			Assert.AreEqual("bar", ((TestClass4)writer.Result).Bar, "#9");
+			ClassicAssert.AreEqual("foo", ((TestClass4)writer.Result).Foo, "#8");
+			ClassicAssert.AreEqual("bar", ((TestClass4)writer.Result).Bar, "#9");
 		}
 
 		[Test]

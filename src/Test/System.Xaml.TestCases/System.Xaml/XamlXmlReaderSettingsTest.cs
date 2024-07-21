@@ -25,6 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -46,10 +48,10 @@ namespace MonoTests.System.Xaml
 		public void DefaultValues()
 		{
 			var s = new XamlXmlReaderSettings();
-			Assert.IsFalse(s.CloseInput, "#1");
-			Assert.IsFalse(s.SkipXmlCompatibilityProcessing, "#2");
-			Assert.IsNull(s.XmlLang, "#3");
-			Assert.IsFalse(s.XmlSpacePreserve, "#4");
+			ClassicAssert.IsFalse(s.CloseInput, "#1");
+			ClassicAssert.IsFalse(s.SkipXmlCompatibilityProcessing, "#2");
+			ClassicAssert.IsNull(s.XmlLang, "#3");
+			ClassicAssert.IsFalse(s.XmlSpacePreserve, "#4");
 		}
 
 		[Test]
@@ -70,10 +72,10 @@ namespace MonoTests.System.Xaml
 			s = new XamlXmlReaderSettings(s);
 
 			// .NET fails to copy this value.
-			//Assert.IsTrue (s.CloseInput, "#1");
-			Assert.IsTrue(s.SkipXmlCompatibilityProcessing, "#2");
-			Assert.AreEqual("ja-JP", s.XmlLang, "#3");
-			Assert.IsTrue(s.XmlSpacePreserve, "#4");
+			//ClassicAssert.IsTrue (s.CloseInput, "#1");
+			ClassicAssert.IsTrue(s.SkipXmlCompatibilityProcessing, "#2");
+			ClassicAssert.AreEqual("ja-JP", s.XmlLang, "#3");
+			ClassicAssert.IsTrue(s.XmlSpacePreserve, "#4");
 		}
 
 		[Test]

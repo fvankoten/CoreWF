@@ -29,6 +29,8 @@ using System.Text;
 using System.Xml;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -50,7 +52,7 @@ namespace MonoTests.System.Windows.Markup
 		public void GetXmlReaderWithNullText ()
 		{
 			var x = new XData ();
-			Assert.IsNull (x.Text, "#1");
+            ClassicAssert.IsNull (x.Text, "#1");
 			Assert.Throws<ArgumentNullException> (() => { var xr = x.XmlReader; }, "#2");
 		}
 
@@ -59,10 +61,10 @@ namespace MonoTests.System.Windows.Markup
 		{
 			var x = new XData ();
 			x.Text = "foobar";
-			Assert.IsNotNull (x.Text, "#3");
+			ClassicAssert.IsNotNull (x.Text, "#3");
 			var r = x.XmlReader as XmlReader;
-			Assert.IsNotNull (r, "#4");
-			Assert.AreEqual (XmlNodeType.None, r.NodeType, "#5");
+			ClassicAssert.IsNotNull (r, "#4");
+			ClassicAssert.AreEqual (XmlNodeType.None, r.NodeType, "#5");
 			try {
 				r.Read (); // invalid xml
 				Assert.Fail ("#6");
@@ -95,8 +97,8 @@ namespace MonoTests.System.Windows.Markup
 		{
 			var x = new XData ();
 			x.XmlReader = XmlReader.Create (new StringReader ("<root/>"));
-			Assert.IsNull (x.Text, "#1");
-			Assert.IsNotNull (x.XmlReader, "#2");
+			ClassicAssert.IsNull (x.Text, "#1");
+			ClassicAssert.IsNotNull (x.XmlReader, "#2");
 			x.XmlReader = null;
 		}
 	}

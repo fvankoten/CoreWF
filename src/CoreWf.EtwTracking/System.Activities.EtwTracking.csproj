@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Title>Core WF ETW Tracking Provider</Title>
     <Description>Unofficial port of the Windows Workflow Foundation (WF) ETW tracking provider to .NET Core/Standard</Description>
     <Authors>Lucian Bargaoanu,Dustin Metzgar</Authors>
@@ -15,7 +15,7 @@
     <AssemblyOriginatorKeyFile>..\..\CoreWF.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <ProjectReference Include="..\UiPath.Workflow.Runtime\UiPath.Workflow.Runtime.csproj" />
   </ItemGroup>
 </Project>

@@ -25,6 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -51,7 +53,7 @@ namespace MonoTests.System.Xaml
 		{
 			// wow, it is allowed.
 			var d = new XamlDirective (String.Empty, null);
-			Assert.IsNull (d.Name, "#1");
+			ClassicAssert.IsNull (d.Name, "#1");
 		}
 
 		[Test]
@@ -95,35 +97,35 @@ namespace MonoTests.System.Xaml
 		public void DefaultValuesWithName ()
 		{
 			var d = new XamlDirective ("urn:foo", "Foo");
-			Assert.AreEqual (AllowedMemberLocations.Any, d.AllowedLocation, "#1");
-			Assert.IsNull (d.DeclaringType, "#2");
-			Assert.IsNotNull (d.Invoker, "#3");
-			Assert.IsNull (d.Invoker.UnderlyingGetter, "#3-2");
-			Assert.IsNull (d.Invoker.UnderlyingSetter, "#3-3");
-			Assert.IsTrue (d.IsUnknown, "#4");
-			Assert.IsTrue (d.IsReadPublic, "#5");
-			Assert.IsTrue (d.IsWritePublic, "#6");
-			Assert.AreEqual ("Foo", d.Name, "#7");
-			Assert.IsTrue (d.IsNameValid, "#8");
-			Assert.AreEqual ("urn:foo", d.PreferredXamlNamespace, "#9");
-			Assert.IsNull (d.TargetType, "#10");
-			Assert.IsNotNull (d.Type, "#11");
-			Assert.AreEqual (typeof (object), d.Type.UnderlyingType, "#11-2");
+			ClassicAssert.AreEqual (AllowedMemberLocations.Any, d.AllowedLocation, "#1");
+			ClassicAssert.IsNull (d.DeclaringType, "#2");
+			ClassicAssert.IsNotNull (d.Invoker, "#3");
+			ClassicAssert.IsNull (d.Invoker.UnderlyingGetter, "#3-2");
+			ClassicAssert.IsNull (d.Invoker.UnderlyingSetter, "#3-3");
+			ClassicAssert.IsTrue (d.IsUnknown, "#4");
+			ClassicAssert.IsTrue (d.IsReadPublic, "#5");
+			ClassicAssert.IsTrue (d.IsWritePublic, "#6");
+			ClassicAssert.AreEqual ("Foo", d.Name, "#7");
+			ClassicAssert.IsTrue (d.IsNameValid, "#8");
+			ClassicAssert.AreEqual ("urn:foo", d.PreferredXamlNamespace, "#9");
+			ClassicAssert.IsNull (d.TargetType, "#10");
+			ClassicAssert.IsNotNull (d.Type, "#11");
+			ClassicAssert.AreEqual (typeof (object), d.Type.UnderlyingType, "#11-2");
 #if HAS_TYPE_CONVERTER
-			Assert.IsNull (d.TypeConverter, "#12");
+			ClassicAssert.IsNull (d.TypeConverter, "#12");
 #endif
-			Assert.IsNull (d.ValueSerializer, "#13");
-			Assert.IsNull (d.DeferringLoader, "#14");
-			Assert.IsNull (d.UnderlyingMember, "#15");
-			Assert.IsFalse (d.IsReadOnly, "#16");
-			Assert.IsFalse (d.IsWriteOnly, "#17");
-			Assert.IsFalse (d.IsAttachable, "#18");
-			Assert.IsFalse (d.IsEvent, "#19");
-			Assert.IsTrue (d.IsDirective, "#20");
-			Assert.IsNotNull (d.DependsOn, "#21");
-			Assert.AreEqual (0, d.DependsOn.Count, "#21-2");
-			Assert.IsFalse (d.IsAmbient, "#22");
-			// TODO: Assert.AreEqual (DesignerSerializationVisibility.Visible, d.SerializationVisibility, "#23");
+			ClassicAssert.IsNull (d.ValueSerializer, "#13");
+			ClassicAssert.IsNull (d.DeferringLoader, "#14");
+			ClassicAssert.IsNull (d.UnderlyingMember, "#15");
+			ClassicAssert.IsFalse (d.IsReadOnly, "#16");
+			ClassicAssert.IsFalse (d.IsWriteOnly, "#17");
+			ClassicAssert.IsFalse (d.IsAttachable, "#18");
+			ClassicAssert.IsFalse (d.IsEvent, "#19");
+			ClassicAssert.IsTrue (d.IsDirective, "#20");
+			ClassicAssert.IsNotNull (d.DependsOn, "#21");
+			ClassicAssert.AreEqual (0, d.DependsOn.Count, "#21-2");
+			ClassicAssert.IsFalse (d.IsAmbient, "#22");
+			// TODO: ClassicAssert.AreEqual (DesignerSerializationVisibility.Visible, d.SerializationVisibility, "#23");
 		}
 
 #if HAS_TYPE_CONVERTER
@@ -131,33 +133,33 @@ namespace MonoTests.System.Xaml
 		public void DefaultValuesWithComplexParams ()
 		{
 			var d = new XamlDirective (new string [0], "Foo", new XamlType (typeof (object), sctx), null, AllowedMemberLocations.Any);
-			Assert.AreEqual (AllowedMemberLocations.Any, d.AllowedLocation, "#1");
-			Assert.IsNull (d.DeclaringType, "#2");
-			Assert.IsNotNull (d.Invoker, "#3");
-			Assert.IsNull (d.Invoker.UnderlyingGetter, "#3-2");
-			Assert.IsNull (d.Invoker.UnderlyingSetter, "#3-3");
-			Assert.IsFalse (d.IsUnknown, "#4"); // different from another test
-			Assert.IsTrue (d.IsReadPublic, "#5");
-			Assert.IsTrue (d.IsWritePublic, "#6");
-			Assert.AreEqual ("Foo", d.Name, "#7");
-			Assert.IsTrue (d.IsNameValid, "#8");
-			Assert.AreEqual (null, d.PreferredXamlNamespace, "#9"); // different from another test (as we specified empty array above)
-			Assert.IsNull (d.TargetType, "#10");
-			Assert.IsNotNull (d.Type, "#11");
-			Assert.AreEqual (typeof (object), d.Type.UnderlyingType, "#11-2");
-			Assert.IsNull (d.TypeConverter, "#12");
-			Assert.IsNull (d.ValueSerializer, "#13");
-			Assert.IsNull (d.DeferringLoader, "#14");
-			Assert.IsNull (d.UnderlyingMember, "#15");
-			Assert.IsFalse (d.IsReadOnly, "#16");
-			Assert.IsFalse (d.IsWriteOnly, "#17");
-			Assert.IsFalse (d.IsAttachable, "#18");
-			Assert.IsFalse (d.IsEvent, "#19");
-			Assert.IsTrue (d.IsDirective, "#20");
-			Assert.IsNotNull (d.DependsOn, "#21");
-			Assert.AreEqual (0, d.DependsOn.Count, "#21-2");
-			Assert.IsFalse (d.IsAmbient, "#22");
-			//TODO: Assert.AreEqual (DesignerSerializationVisibility.Visible, d.SerializationVisibility, "#23");
+			ClassicAssert.AreEqual (AllowedMemberLocations.Any, d.AllowedLocation, "#1");
+			ClassicAssert.IsNull (d.DeclaringType, "#2");
+			ClassicAssert.IsNotNull (d.Invoker, "#3");
+			ClassicAssert.IsNull (d.Invoker.UnderlyingGetter, "#3-2");
+			ClassicAssert.IsNull (d.Invoker.UnderlyingSetter, "#3-3");
+			ClassicAssert.IsFalse (d.IsUnknown, "#4"); // different from another test
+			ClassicAssert.IsTrue (d.IsReadPublic, "#5");
+			ClassicAssert.IsTrue (d.IsWritePublic, "#6");
+			ClassicAssert.AreEqual ("Foo", d.Name, "#7");
+			ClassicAssert.IsTrue (d.IsNameValid, "#8");
+			ClassicAssert.AreEqual (null, d.PreferredXamlNamespace, "#9"); // different from another test (as we specified empty array above)
+			ClassicAssert.IsNull (d.TargetType, "#10");
+			ClassicAssert.IsNotNull (d.Type, "#11");
+			ClassicAssert.AreEqual (typeof (object), d.Type.UnderlyingType, "#11-2");
+			ClassicAssert.IsNull (d.TypeConverter, "#12");
+			ClassicAssert.IsNull (d.ValueSerializer, "#13");
+			ClassicAssert.IsNull (d.DeferringLoader, "#14");
+			ClassicAssert.IsNull (d.UnderlyingMember, "#15");
+			ClassicAssert.IsFalse (d.IsReadOnly, "#16");
+			ClassicAssert.IsFalse (d.IsWriteOnly, "#17");
+			ClassicAssert.IsFalse (d.IsAttachable, "#18");
+			ClassicAssert.IsFalse (d.IsEvent, "#19");
+			ClassicAssert.IsTrue (d.IsDirective, "#20");
+			ClassicAssert.IsNotNull (d.DependsOn, "#21");
+			ClassicAssert.AreEqual (0, d.DependsOn.Count, "#21-2");
+			ClassicAssert.IsFalse (d.IsAmbient, "#22");
+			//TODO: ClassicAssert.AreEqual (DesignerSerializationVisibility.Visible, d.SerializationVisibility, "#23");
 		}
 #endif
 	}

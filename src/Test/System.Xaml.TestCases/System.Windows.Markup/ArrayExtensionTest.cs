@@ -27,6 +27,8 @@ using System.ComponentModel;
 using System.Reflection;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Xaml;
 using System.Xaml.Schema;
@@ -45,13 +47,13 @@ namespace MonoTests.System.Windows.Markup
 		[Test]
 		public void ConstructorNullType ()
 		{
-			Assert.Throws<ArgumentNullException>(() => new ArrayExtension ((Type) null));
+			ClassicAssert.Throws<ArgumentNullException>(() => new ArrayExtension ((Type) null));
 		}
 
 		[Test]
 		public void ConstructorNullElement ()
 		{
-			Assert.Throws<ArgumentNullException> (() => new ArrayExtension ((object []) null));
+			ClassicAssert.Throws<ArgumentNullException> (() => new ArrayExtension ((object []) null));
 		}
 
 		[Test]
@@ -76,10 +78,10 @@ namespace MonoTests.System.Windows.Markup
 		public void AddInconsistent ()
 		{
 			var x = new ArrayExtension (typeof (int));
-			Assert.AreEqual (typeof (int), x.Type, "#1");
+			ClassicAssert.AreEqual (typeof (int), x.Type, "#1");
 			// adding inconsistent items is not rejected, while calling ProvideValue() results in an error.
 			x.AddChild (new object ());
-			Assert.AreEqual (typeof (int), x.Type, "#2");
+            ClassicAssert.AreEqual (typeof (int), x.Type, "#2");
 		}
 
 		[Test]
@@ -94,16 +96,16 @@ namespace MonoTests.System.Windows.Markup
 		public void AddInconsistent2 ()
 		{
 			var x = new ArrayExtension (new int [] {1, 3});
-			Assert.AreEqual (typeof (int), x.Type, "#1");
+            ClassicAssert.AreEqual (typeof (int), x.Type, "#1");
 			x.AddChild (new object ());
-			Assert.AreEqual (typeof (int), x.Type, "#2");
+            ClassicAssert.AreEqual (typeof (int), x.Type, "#2");
 		}
 
 		[Test]
 		public void ProvideValueWithoutType ()
 		{
 			var x = new ArrayExtension ();
-			Assert.Throws<InvalidOperationException> (() => x.ProvideValue (null)); // Type must be set first.
+			ClassicAssert.Throws<InvalidOperationException> (() => x.ProvideValue (null)); // Type must be set first.
 		}
 
 		[Test]
@@ -119,8 +121,8 @@ namespace MonoTests.System.Windows.Markup
 			var x = new ArrayExtension (new int [] {1, 3});
 			x.AddChild (new object ());
 			x.AddChild (null); // allowed
-			Assert.AreEqual (4, x.Items.Count);
-			Assert.Throws<InvalidOperationException> (() => x.ProvideValue (null));
+			ClassicAssert.AreEqual (4, x.Items.Count);
+			ClassicAssert.Throws<InvalidOperationException> (() => x.ProvideValue (null));
 		}
 
 		[Test]
@@ -128,24 +130,24 @@ namespace MonoTests.System.Windows.Markup
 		{
 			var x = new ArrayExtension (new int [] {1, 3});
 			x.AddChild (5);
-			Assert.AreEqual (3, x.Items.Count);
+			ClassicAssert.AreEqual (3, x.Items.Count);
 			var ret = x.ProvideValue (null);
-			Assert.IsNotNull (ret, "#1");
+			ClassicAssert.IsNotNull (ret, "#1");
 			var arr = ret as int [];
-			Assert.IsNotNull (arr, "#2");
-			Assert.AreEqual (3, arr.Length, "#3");
-			Assert.AreEqual (5, arr [2], "#4");
+			ClassicAssert.IsNotNull (arr, "#2");
+			ClassicAssert.AreEqual (3, arr.Length, "#3");
+			ClassicAssert.AreEqual (5, arr [2], "#4");
 		}
 
 		[Test]
 		public void AddTextInconsistent ()
 		{
 			var x = new ArrayExtension (new int [] {1, 3});
-			Assert.AreEqual (typeof (int), x.Type, "#1");
+			ClassicAssert.AreEqual (typeof (int), x.Type, "#1");
 			x.AddText ("test");
 			x.AddText (null); // allowed
-			Assert.AreEqual (4, x.Items.Count);
-			Assert.AreEqual (typeof (int), x.Type, "#2");
+			ClassicAssert.AreEqual (4, x.Items.Count);
+			ClassicAssert.AreEqual (typeof (int), x.Type, "#2");
 		}
 
 		[Test]
@@ -153,7 +155,7 @@ namespace MonoTests.System.Windows.Markup
 		{
 			var x = new ArrayExtension (new int [] {1, 3});
 			x.AddText ("test");
-			Assert.Throws<InvalidOperationException> (() => x.ProvideValue (null));
+			ClassicAssert.Throws<InvalidOperationException> (() => x.ProvideValue (null));
 		}
 	}
 }

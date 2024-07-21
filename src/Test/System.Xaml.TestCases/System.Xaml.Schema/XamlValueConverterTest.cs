@@ -27,6 +27,8 @@ using System.Text;
 using System.Xml;
 using NUnit.Framework;
 using System.ComponentModel;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 using System.Xaml;
@@ -68,7 +70,7 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			// ok
 			var c = new XamlValueConverter<TypeConverter> (null, XamlLanguage.Int32);
-			Assert.IsNull (c.ConverterInstance, "#1");
+			ClassicAssert.IsNull (c.ConverterInstance, "#1");
 		}
 
 		[Test]
@@ -76,7 +78,7 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			// ok
 			var c = new XamlValueConverter<TypeConverter> (typeof (Int32Converter), null);
-			Assert.IsTrue (c.ConverterInstance is Int32Converter, "#1");
+			ClassicAssert.IsTrue (c.ConverterInstance is Int32Converter, "#1");
 		}
 
 		[Test]
@@ -91,7 +93,7 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			// ok
 			var c = new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.String, null);
-			Assert.IsTrue (c.ConverterInstance is Int32Converter, "#1");
+			ClassicAssert.IsTrue (c.ConverterInstance is Int32Converter, "#1");
 		}
 
 		[Test]
@@ -106,9 +108,9 @@ namespace MonoTests.System.Xaml.Schema
 		{
 			// This test asserts that XamlLanguage.Object.TypeConverter.ConverterType is null for different reason.
 			var c = new XamlValueConverter<TypeConverter> (typeof (TypeConverter), XamlLanguage.Object, null);
-			Assert.IsNotNull (c.ConverterInstance, "#1");
+			ClassicAssert.IsNotNull (c.ConverterInstance, "#1");
 			#if HAS_TYPE_CONVERTER
-			Assert.IsNull (XamlLanguage.Object.TypeConverter.ConverterInstance, "#2");
+			ClassicAssert.IsNull (XamlLanguage.Object.TypeConverter.ConverterInstance, "#2");
 			#endif
 		}
 
@@ -121,19 +123,19 @@ namespace MonoTests.System.Xaml.Schema
 			var c3 = new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32);
 			var c4 = new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32, null);
 			var c5 = new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32, "Foo");
-			Assert.IsTrue (c1 == c2, "#1");
-			Assert.IsFalse (c1 == c3, "#2");
-			Assert.IsTrue (c3 == c4, "#3");
-			Assert.IsFalse (c4 == c5, "#4");
+			ClassicAssert.IsTrue (c1 == c2, "#1");
+			ClassicAssert.IsFalse (c1 == c3, "#2");
+			ClassicAssert.IsTrue (c3 == c4, "#3");
+			ClassicAssert.IsFalse (c4 == c5, "#4");
 		}
 		
 		[Test]
 		public void TestToString ()
 		{
-			Assert.AreEqual ("Int32Converter(Int32)", new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32).ToString (), "#1");
-			Assert.AreEqual ("Foo", new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32, "Foo").ToString (), "#2");
-			Assert.AreEqual ("Int32Converter", new XamlValueConverter<TypeConverter> (typeof (Int32Converter), null).ToString (), "#1");
-			Assert.AreEqual ("Int32", new XamlValueConverter<TypeConverter> (null, XamlLanguage.Int32).ToString (), "#3"); // huh, really? no difference from ConverterType?
+			ClassicAssert.AreEqual ("Int32Converter(Int32)", new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32).ToString (), "#1");
+			ClassicAssert.AreEqual ("Foo", new XamlValueConverter<TypeConverter> (typeof (Int32Converter), XamlLanguage.Int32, "Foo").ToString (), "#2");
+			ClassicAssert.AreEqual ("Int32Converter", new XamlValueConverter<TypeConverter> (typeof (Int32Converter), null).ToString (), "#1");
+			ClassicAssert.AreEqual ("Int32", new XamlValueConverter<TypeConverter> (null, XamlLanguage.Int32).ToString (), "#3"); // huh, really? no difference from ConverterType?
 		}
 	}
 }

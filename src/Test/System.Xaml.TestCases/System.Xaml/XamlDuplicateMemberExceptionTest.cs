@@ -25,6 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -47,8 +49,8 @@ namespace MonoTests.System.Xaml
 		{
 			// allowed.
 			var ex = new XamlDuplicateMemberException ((XamlMember) null, (XamlType) null);
-			Assert.IsNull (ex.DuplicateMember, "#1");
-			Assert.IsNull (ex.ParentType, "#2");
+			ClassicAssert.IsNull (ex.DuplicateMember, "#1");
+			ClassicAssert.IsNull (ex.ParentType, "#2");
 		}
 	}
 }

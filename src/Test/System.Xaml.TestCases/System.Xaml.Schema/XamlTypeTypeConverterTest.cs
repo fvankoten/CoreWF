@@ -27,6 +27,8 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -52,21 +54,21 @@ namespace MonoTests.System.Xaml.Schema
 		[Test]
 		public void CanConvertFrom ()
 		{
-			Assert.IsFalse (c.CanConvertFrom (null, typeof (XamlType)), "#1");
-			Assert.IsTrue (c.CanConvertFrom (null, typeof (string)), "#2");
-			Assert.IsFalse (c.CanConvertFrom (null, typeof (int)), "#3");
-			Assert.IsFalse (c.CanConvertFrom (null, typeof (object)), "#4");
-			Assert.IsFalse (c.CanConvertFrom (new DummyValueSerializerContext (), typeof (XamlType)), "#5");
+			ClassicAssert.IsFalse (c.CanConvertFrom (null, typeof (XamlType)), "#1");
+			ClassicAssert.IsTrue (c.CanConvertFrom (null, typeof (string)), "#2");
+			ClassicAssert.IsFalse (c.CanConvertFrom (null, typeof (int)), "#3");
+			ClassicAssert.IsFalse (c.CanConvertFrom (null, typeof (object)), "#4");
+			ClassicAssert.IsFalse (c.CanConvertFrom (new DummyValueSerializerContext (), typeof (XamlType)), "#5");
 		}
 
 		[Test]
 		public void CanConvertTo ()
 		{
-			Assert.IsFalse (c.CanConvertTo (null, typeof (XamlType)), "#1");
-			Assert.IsTrue (c.CanConvertTo (null, typeof (string)), "#2");
-			Assert.IsFalse (c.CanConvertTo (null, typeof (int)), "#3");
-			Assert.IsFalse (c.CanConvertTo (null, typeof (object)), "#4");
-			Assert.IsFalse (c.CanConvertTo (new DummyValueSerializerContext (), typeof (XamlType)), "#5");
+			ClassicAssert.IsFalse (c.CanConvertTo (null, typeof (XamlType)), "#1");
+			ClassicAssert.IsTrue (c.CanConvertTo (null, typeof (string)), "#2");
+			ClassicAssert.IsFalse (c.CanConvertTo (null, typeof (int)), "#3");
+			ClassicAssert.IsFalse (c.CanConvertTo (null, typeof (object)), "#4");
+			ClassicAssert.IsFalse (c.CanConvertTo (new DummyValueSerializerContext (), typeof (XamlType)), "#5");
 		}
 
 		// ConvertFrom() is not supported in either way.
@@ -105,21 +107,21 @@ namespace MonoTests.System.Xaml.Schema
 		public void ConvertXamlTypeToString ()
 		{
 			// ... so, it does not seem to just call XamlType.ToString(), but rather first try to use UnderlyingType if possible.
-			Assert.AreEqual ("System.String", c.ConvertTo (null, null, XamlLanguage.String, typeof (string)), "#1"); // huh?
-			Assert.AreEqual ("System.Windows.Markup.TypeExtension".Fixup(), c.ConvertTo (null, null, XamlLanguage.Type, typeof (string)), "#1"); // huh?
-			Assert.AreEqual ("{urn:foo}Foo", c.ConvertTo (null, null, new XamlType ("urn:foo", "Foo", null, sctx), typeof (string)), "#2");
+			ClassicAssert.AreEqual ("System.String", c.ConvertTo (null, null, XamlLanguage.String, typeof (string)), "#1"); // huh?
+			ClassicAssert.AreEqual ("System.Windows.Markup.TypeExtension".Fixup(), c.ConvertTo (null, null, XamlLanguage.Type, typeof (string)), "#1"); // huh?
+			ClassicAssert.AreEqual ("{urn:foo}Foo", c.ConvertTo (null, null, new XamlType ("urn:foo", "Foo", null, sctx), typeof (string)), "#2");
 		}
 
 		[Test]
 		public void ConvertStringToString ()
 		{
-			Assert.AreEqual ("foo", c.ConvertTo (null, CultureInfo.InvariantCulture, "foo", typeof (string)), "#1");
+			ClassicAssert.AreEqual ("foo", c.ConvertTo (null, CultureInfo.InvariantCulture, "foo", typeof (string)), "#1");
 		}
 
 		[Test]
 		public void ConvertIntToString ()
 		{
-			Assert.AreEqual ("5", c.ConvertTo (null, null, 5, typeof (string)), "#1");
+			ClassicAssert.AreEqual ("5", c.ConvertTo (null, null, 5, typeof (string)), "#1");
 		}
 
 		[Test]

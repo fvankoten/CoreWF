@@ -24,6 +24,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -62,8 +64,8 @@ namespace MonoTests.System.Xaml
 			var a = new object ();
 			AttachablePropertyServices.SetProperty (a, Attachable.FooIdentifier, "x");
 			string v;
-			Assert.IsTrue (AttachablePropertyServices.TryGetProperty<string> (a, Attachable.FooIdentifier, out v), "#1");
-			Assert.AreEqual ("x", v, "#2");
+			ClassicAssert.IsTrue (AttachablePropertyServices.TryGetProperty<string> (a, Attachable.FooIdentifier, out v), "#1");
+			ClassicAssert.AreEqual ("x", v, "#2");
 		}
 
 		[Test]
@@ -72,10 +74,10 @@ namespace MonoTests.System.Xaml
 			var a = new AttachedWrapper2 ();
 			AttachedWrapper2.SetFoo (a, "x");
 			string v;
-			Assert.IsFalse (AttachablePropertyServices.TryGetProperty<string> (a, AttachedWrapper2.FooIdentifier, out v), "#1");
-			Assert.AreEqual ("x", AttachedWrapper2.GetFoo (a), "#2");
+			ClassicAssert.IsFalse (AttachablePropertyServices.TryGetProperty<string> (a, AttachedWrapper2.FooIdentifier, out v), "#1");
+			ClassicAssert.AreEqual ("x", AttachedWrapper2.GetFoo (a), "#2");
 
-			Assert.AreEqual (1, AttachedWrapper2.PropertyCount, "#3");
+			ClassicAssert.AreEqual (1, AttachedWrapper2.PropertyCount, "#3");
 		}
 	}
 }

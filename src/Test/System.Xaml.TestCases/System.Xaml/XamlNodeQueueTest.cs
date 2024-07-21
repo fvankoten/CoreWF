@@ -24,6 +24,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -51,18 +53,18 @@ namespace MonoTests.System.Xaml
 		public void Read ()
 		{
 			var q = new XamlNodeQueue (new XamlSchemaContext ());
-			Assert.IsFalse (q.Reader.Read (), "#1");
-			Assert.IsTrue (q.Reader.IsEof, "#1-2");
+			ClassicAssert.IsFalse (q.Reader.Read (), "#1");
+			ClassicAssert.IsTrue (q.Reader.IsEof, "#1-2");
 
 			q.Writer.WriteStartObject (XamlLanguage.String);
-			Assert.IsTrue (q.Reader.Read (), "#2");
-			Assert.IsFalse (q.Reader.IsEof, "#2-2");
-			Assert.AreEqual (XamlLanguage.String, q.Reader.Type, "#2-3");
-			Assert.IsNull (q.Reader.Member, "#2-4");
-			Assert.IsNull (q.Reader.Value, "#2-5");
+			ClassicAssert.IsTrue (q.Reader.Read (), "#2");
+			ClassicAssert.IsFalse (q.Reader.IsEof, "#2-2");
+			ClassicAssert.AreEqual (XamlLanguage.String, q.Reader.Type, "#2-3");
+			ClassicAssert.IsNull (q.Reader.Member, "#2-4");
+			ClassicAssert.IsNull (q.Reader.Value, "#2-5");
 
-			Assert.IsFalse (q.Reader.Read (), "#3");
-			Assert.IsTrue (q.Reader.IsEof, "#3-2");
+			ClassicAssert.IsFalse (q.Reader.Read (), "#3");
+			ClassicAssert.IsTrue (q.Reader.IsEof, "#3-2");
 		}
 	}
 }

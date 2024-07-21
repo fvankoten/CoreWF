@@ -41,6 +41,7 @@ using System.Xaml.Schema;
 
 using CategoryAttribute = NUnit.Framework.CategoryAttribute;
 using XamlReader = System.Xaml.XamlReader;
+using NUnit.Framework.Legacy;
 
 namespace MonoTests.System.Xaml
 {
@@ -59,13 +60,13 @@ namespace MonoTests.System.Xaml
 		{
 			var xr = new XamlObjectReader (5);
 			var sr = xr.ReadSubtree ();
-			Assert.AreEqual (XamlNodeType.None, sr.NodeType, "#1-2");
-			Assert.AreEqual (XamlNodeType.None, xr.NodeType, "#1-3");
-			Assert.IsTrue (sr.Read (), "#2");
-			Assert.AreEqual (XamlNodeType.None, sr.NodeType, "#2-2");
-			Assert.AreEqual (XamlNodeType.None, xr.NodeType, "#2-3");
-			Assert.IsFalse (sr.Read (), "#3");
-			Assert.AreEqual (XamlNodeType.NamespaceDeclaration, xr.NodeType, "#3-2");
+			ClassicAssert.AreEqual (XamlNodeType.None, sr.NodeType, "#1-2");
+			ClassicAssert.AreEqual (XamlNodeType.None, xr.NodeType, "#1-3");
+			ClassicAssert.IsTrue (sr.Read (), "#2");
+			ClassicAssert.AreEqual (XamlNodeType.None, sr.NodeType, "#2-2");
+			ClassicAssert.AreEqual (XamlNodeType.None, xr.NodeType, "#2-3");
+			ClassicAssert.IsFalse (sr.Read (), "#3");
+			ClassicAssert.AreEqual (XamlNodeType.NamespaceDeclaration, xr.NodeType, "#3-2");
 		}
 
 		[Test]
@@ -74,13 +75,13 @@ namespace MonoTests.System.Xaml
 			var xr = new XamlObjectReader (5);
 			xr.Read ();
 			var sr = xr.ReadSubtree ();
-			Assert.AreEqual (XamlNodeType.None, sr.NodeType, "#1-2");
-			Assert.AreEqual (XamlNodeType.NamespaceDeclaration, xr.NodeType, "#1-3");
-			Assert.IsTrue (sr.Read (), "#2");
-			Assert.AreEqual (XamlNodeType.NamespaceDeclaration, sr.NodeType, "#2-2");
-			Assert.AreEqual (XamlNodeType.NamespaceDeclaration, xr.NodeType, "#2-3");
-			Assert.IsFalse (sr.Read (), "#3");
-			Assert.AreEqual (XamlNodeType.StartObject, xr.NodeType, "#3-2");
+			ClassicAssert.AreEqual (XamlNodeType.None, sr.NodeType, "#1-2");
+			ClassicAssert.AreEqual (XamlNodeType.NamespaceDeclaration, xr.NodeType, "#1-3");
+			ClassicAssert.IsTrue (sr.Read (), "#2");
+			ClassicAssert.AreEqual (XamlNodeType.NamespaceDeclaration, sr.NodeType, "#2-2");
+			ClassicAssert.AreEqual (XamlNodeType.NamespaceDeclaration, xr.NodeType, "#2-3");
+			ClassicAssert.IsFalse (sr.Read (), "#3");
+			ClassicAssert.AreEqual (XamlNodeType.StartObject, xr.NodeType, "#3-2");
 		}
 
 		[Test]
@@ -90,25 +91,25 @@ namespace MonoTests.System.Xaml
 			xr.Read ();
 			xr.Read ();
 			var sr = xr.ReadSubtree ();
-			Assert.AreEqual (XamlNodeType.None, sr.NodeType, "#1-2");
-			Assert.AreEqual (XamlNodeType.StartObject, xr.NodeType, "#1-3");
-			Assert.IsTrue (sr.Read (), "#2");
-			Assert.AreEqual (XamlNodeType.StartObject, sr.NodeType, "#2-2");
-			Assert.AreEqual (XamlNodeType.StartObject, xr.NodeType, "#2-3");
-			Assert.IsTrue (sr.Read (), "#3");
-			Assert.AreEqual (XamlNodeType.StartMember, sr.NodeType, "#3-2");
-			Assert.AreEqual (XamlNodeType.StartMember, xr.NodeType, "#3-3");
-			Assert.IsTrue (sr.Read (), "#4");
-			Assert.AreEqual (XamlNodeType.Value, sr.NodeType, "#4-2");
-			Assert.AreEqual (XamlNodeType.Value, xr.NodeType, "#4-3");
-			Assert.IsTrue (sr.Read (), "#5");
-			Assert.AreEqual (XamlNodeType.EndMember, sr.NodeType, "#5-2");
-			Assert.AreEqual (XamlNodeType.EndMember, xr.NodeType, "#5-3");
-			Assert.IsTrue (sr.Read (), "#6");
-			Assert.AreEqual (XamlNodeType.EndObject, sr.NodeType, "#6-2");
-			Assert.AreEqual (XamlNodeType.EndObject, xr.NodeType, "#6-3");
-			Assert.IsFalse (sr.Read (), "#7");
-			Assert.AreEqual (XamlNodeType.None, xr.NodeType, "#7-2");
+			ClassicAssert.AreEqual (XamlNodeType.None, sr.NodeType, "#1-2");
+			ClassicAssert.AreEqual (XamlNodeType.StartObject, xr.NodeType, "#1-3");
+			ClassicAssert.IsTrue (sr.Read (), "#2");
+			ClassicAssert.AreEqual (XamlNodeType.StartObject, sr.NodeType, "#2-2");
+			ClassicAssert.AreEqual (XamlNodeType.StartObject, xr.NodeType, "#2-3");
+			ClassicAssert.IsTrue (sr.Read (), "#3");
+			ClassicAssert.AreEqual (XamlNodeType.StartMember, sr.NodeType, "#3-2");
+			ClassicAssert.AreEqual (XamlNodeType.StartMember, xr.NodeType, "#3-3");
+			ClassicAssert.IsTrue (sr.Read (), "#4");
+			ClassicAssert.AreEqual (XamlNodeType.Value, sr.NodeType, "#4-2");
+			ClassicAssert.AreEqual (XamlNodeType.Value, xr.NodeType, "#4-3");
+			ClassicAssert.IsTrue (sr.Read (), "#5");
+			ClassicAssert.AreEqual (XamlNodeType.EndMember, sr.NodeType, "#5-2");
+			ClassicAssert.AreEqual (XamlNodeType.EndMember, xr.NodeType, "#5-3");
+			ClassicAssert.IsTrue (sr.Read (), "#6");
+			ClassicAssert.AreEqual (XamlNodeType.EndObject, sr.NodeType, "#6-2");
+			ClassicAssert.AreEqual (XamlNodeType.EndObject, xr.NodeType, "#6-3");
+			ClassicAssert.IsFalse (sr.Read (), "#7");
+			ClassicAssert.AreEqual (XamlNodeType.None, xr.NodeType, "#7-2");
 		}
 		
 		[Test]
@@ -123,8 +124,8 @@ namespace MonoTests.System.Xaml
 					{
 						if (reader.Member.Name == "Baz")
 						{
-							Assert.AreEqual(1, lineInfo.LineNumber, "Wrong LineNumber");
-							Assert.AreEqual(13, lineInfo.LinePosition, "Wrong LinePosition");
+							ClassicAssert.AreEqual(1, lineInfo.LineNumber, "Wrong LineNumber");
+							ClassicAssert.AreEqual(13, lineInfo.LinePosition, "Wrong LinePosition");
 						}
 					}
 				}

@@ -24,6 +24,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Windows.Markup;
 
@@ -45,21 +47,21 @@ namespace MonoTests.System.Xaml
 		public void NullTypeName ()
 		{
 			// It is not rejected. No dot.
-			Assert.AreEqual ("Foo", new AttachableMemberIdentifier (null, "Foo").ToString (), "#1");
+			ClassicAssert.AreEqual ("Foo", new AttachableMemberIdentifier (null, "Foo").ToString (), "#1");
 		}
 		
 		[Test]
 		public void EmptyMemberName ()
 		{
 			// It is not rejected. Trailing dot.
-			Assert.AreEqual ("System.String.", new AttachableMemberIdentifier (typeof (string), "").ToString (), "#1");
+			ClassicAssert.AreEqual ("System.String.", new AttachableMemberIdentifier (typeof (string), "").ToString (), "#1");
 		}
 
 		[Test]
 		public void ToStringTest ()
 		{
-			Assert.AreEqual ("System.String.Foo", new AttachableMemberIdentifier (typeof (string), "Foo").ToString (), "#1");
-			Assert.AreEqual ("System.Int32.Foo", new AttachableMemberIdentifier (typeof (int), "Foo").ToString (), "#2");
+			ClassicAssert.AreEqual ("System.String.Foo", new AttachableMemberIdentifier (typeof (string), "Foo").ToString (), "#1");
+			ClassicAssert.AreEqual ("System.Int32.Foo", new AttachableMemberIdentifier (typeof (int), "Foo").ToString (), "#2");
 		}
 
 		[Test]
@@ -71,24 +73,24 @@ namespace MonoTests.System.Xaml
 			var a4 = new AttachableMemberIdentifier (null, "Foo");
 			var a5 = new AttachableMemberIdentifier (typeof (string), null);
 			var a6 = new AttachableMemberIdentifier (typeof (string), null);
-			Assert.IsTrue (a1 == a2, "#1");
-			Assert.IsFalse (a1 == a3, "#2");
-			Assert.IsFalse (a1 == a5, "#3");
-			Assert.IsTrue (a3 == a4, "#4");
-			Assert.IsFalse (a3 == a1, "#5");
-			Assert.IsFalse (a3 == a5, "#6");
-			Assert.IsTrue (a5 == a6, "#7");
-			Assert.IsFalse (a5 == a1, "#8");
-			Assert.IsFalse (a5 == a3, "#9");
-			Assert.IsTrue (a1.Equals (a2),"#11");
-			Assert.IsFalse (a1.Equals (a3),"#12");
-			Assert.IsFalse (a1.Equals (a5),"#13");
-			Assert.IsTrue (a3.Equals (a4),"#14");
-			Assert.IsFalse (a3.Equals (a1),"#15");
-			Assert.IsFalse (a3.Equals (a5),"#16");
-			Assert.IsTrue (a5.Equals (a6),"#17");
-			Assert.IsFalse (a5.Equals (a1),"#18");
-			Assert.IsFalse (a5.Equals (a3),"#19");
+			ClassicAssert.IsTrue (a1 == a2, "#1");
+			ClassicAssert.IsFalse (a1 == a3, "#2");
+			ClassicAssert.IsFalse (a1 == a5, "#3");
+			ClassicAssert.IsTrue (a3 == a4, "#4");
+			ClassicAssert.IsFalse (a3 == a1, "#5");
+			ClassicAssert.IsFalse (a3 == a5, "#6");
+			ClassicAssert.IsTrue (a5 == a6, "#7");
+			ClassicAssert.IsFalse (a5 == a1, "#8");
+			ClassicAssert.IsFalse (a5 == a3, "#9");
+			ClassicAssert.IsTrue (a1.Equals (a2),"#11");
+			ClassicAssert.IsFalse (a1.Equals (a3),"#12");
+			ClassicAssert.IsFalse (a1.Equals (a5),"#13");
+			ClassicAssert.IsTrue (a3.Equals (a4),"#14");
+			ClassicAssert.IsFalse (a3.Equals (a1),"#15");
+			ClassicAssert.IsFalse (a3.Equals (a5),"#16");
+			ClassicAssert.IsTrue (a5.Equals (a6),"#17");
+			ClassicAssert.IsFalse (a5.Equals (a1),"#18");
+			ClassicAssert.IsFalse (a5.Equals (a3),"#19");
 		}
 	}
 }

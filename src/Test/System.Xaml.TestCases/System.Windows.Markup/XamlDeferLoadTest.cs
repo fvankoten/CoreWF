@@ -29,6 +29,8 @@ using System.Reflection;
 using NUnit.Framework;
 using System.Windows.Markup;
 using MonoTests.System.Xaml;
+using NUnit.Framework.Legacy;
+
 #if PCL
 using System.Xaml;
 using System.Xaml.Schema;
@@ -66,16 +68,16 @@ namespace MonoTests.System.Windows.Markup
 		public void TypeShouldReturnName()
 		{
 			var attr = new XamlDeferLoadAttribute(typeof(TestDeferredLoader), typeof(DeferredLoadingChild));
-			Assert.AreEqual(typeof(TestDeferredLoader).AssemblyQualifiedName, attr.LoaderTypeName, "#1");
-			Assert.AreEqual(typeof(DeferredLoadingChild).AssemblyQualifiedName, attr.ContentTypeName, "#2");
+			ClassicAssert.AreEqual(typeof(TestDeferredLoader).AssemblyQualifiedName, attr.LoaderTypeName, "#1");
+			ClassicAssert.AreEqual(typeof(DeferredLoadingChild).AssemblyQualifiedName, attr.ContentTypeName, "#2");
 		}
 
 		[Test]
 		public void TypeNameShouldNotSetType()
 		{
 			var attr = new XamlDeferLoadAttribute(typeof(TestDeferredLoader).AssemblyQualifiedName, typeof(DeferredLoadingChild).AssemblyQualifiedName);
-			Assert.IsNull(attr.LoaderType, "#1");
-			Assert.IsNull(attr.ContentType, "#2");
+            ClassicAssert.IsNull(attr.LoaderType, "#1");
+            ClassicAssert.IsNull(attr.ContentType, "#2");
 		}
 	}
 }

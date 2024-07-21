@@ -29,6 +29,8 @@ using System.Reflection;
 using NUnit.Framework;
 using MonoTests.System.Xaml;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -53,16 +55,16 @@ namespace MonoTests.System.Windows.Markup
         public void ConstructedWithType()
         {
             var vsa = new ValueSerializerAttribute(typeof(TestType));
-            Assert.AreEqual(typeof(TestType), vsa.ValueSerializerType, "#1");
-            Assert.AreEqual(typeof(TestType).AssemblyQualifiedName, vsa.ValueSerializerTypeName, "#2");
+            ClassicAssert.AreEqual(typeof(TestType), vsa.ValueSerializerType, "#1");
+            ClassicAssert.AreEqual(typeof(TestType).AssemblyQualifiedName, vsa.ValueSerializerTypeName, "#2");
         }
 
         [Test]
         public void ConstructedWithTypeName()
         {
             var vsa = new ValueSerializerAttribute(TestTypeTypeName);
-            Assert.AreEqual(typeof(TestType).AssemblyQualifiedName, vsa.ValueSerializerTypeName, "#1");
-            Assert.AreEqual(typeof(TestType), vsa.ValueSerializerType, "#1");
+            ClassicAssert.AreEqual(typeof(TestType).AssemblyQualifiedName, vsa.ValueSerializerTypeName, "#1");
+            ClassicAssert.AreEqual(typeof(TestType), vsa.ValueSerializerType, "#1");
         }
     }
 }

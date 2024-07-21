@@ -28,6 +28,8 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -73,8 +75,8 @@ namespace MonoTests.System.Xaml
 		{
 			// allowed.
 			var w = new XamlXmlWriter (new MemoryStream (), sctx, null);
-			Assert.AreEqual (sctx, w.SchemaContext, "#1");
-			Assert.IsNotNull (w.Settings, "#2");
+			ClassicAssert.AreEqual (sctx, w.SchemaContext, "#1");
+			ClassicAssert.IsNotNull (w.Settings, "#2");
 		}
 
 		[Test]
@@ -119,7 +121,7 @@ namespace MonoTests.System.Xaml
 			var xw = new XamlXmlWriter (sw, sctx, null);
 			xw.WriteNamespace (new NamespaceDeclaration ("urn:foo", "x")); // ignored.
 			xw.Close ();
-			Assert.AreEqual ("", sw.ToString (), "#1");
+			ClassicAssert.AreEqual ("", sw.ToString (), "#1");
 		}
 
 		[Test]
@@ -137,7 +139,7 @@ namespace MonoTests.System.Xaml
 			var xw = new XamlXmlWriter (sw, sctx, null);
 			xw.WriteStartObject (new XamlType (typeof(int), sctx));
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -190,7 +192,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue ("foo");
 			xw.WriteEndMember ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -225,7 +227,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteEndObject ();
 			xw.WriteEndMember ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -242,7 +244,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue ("foo");
 			xw.WriteEndMember ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -260,7 +262,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue ("foo");
 			xw.WriteEndMember ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -279,7 +281,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue ("foo");
 			xw.WriteEndMember ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -343,7 +345,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteStartObject (xt);
 			xw.WriteEndObject ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -377,7 +379,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteStartObject (xt); // <String />
 			xw.WriteEndObject ();
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		// This doesn't result in XamlXmlWriterException. Instead,
@@ -418,7 +420,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteValue ("foo");
 			xw.WriteStartObject (xt); // looks like it is ignored. It is weird input anyways.
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -459,7 +461,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteStartMember (xm);
 			xw.WriteValue ("foo");
 			xw.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -505,7 +507,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteGetObject ();
 			xw.Close ();
 			// FIXME: enable it once we got generic type output fixed.
-			//Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			//ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -553,7 +555,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteStartMember (xm); // <List.Length /> . Note that the corresponding member is String.Length(!)
 			xw.Close ();
 			// FIXME: enable it once we got generic type output fixed.
-			//Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			//ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -577,7 +579,7 @@ namespace MonoTests.System.Xaml
 			while (r.Read ())
 				w.WriteNode (r);
 			w.Close ();
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -588,19 +590,19 @@ namespace MonoTests.System.Xaml
 			while (r.Read ())
 				w.WriteNode (r);
 			w.Close ();
-			Assert.AreEqual ("foo", w.Result, "#1");
+			ClassicAssert.AreEqual ("foo", w.Result, "#1");
 		}
 
 		[Test]
 		public void ConstructorArguments ()
 		{
 			string xml = String.Format (@"<?xml version='1.0' encoding='utf-16'?><ArgumentAttributed xmlns='clr-namespace:MonoTests.System.Xaml;assembly={0}' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><x:Arguments><x:String>xxx</x:String><x:String>yyy</x:String></x:Arguments></ArgumentAttributed>", GetType ().GetTypeInfo().Assembly.GetName ().Name);
-			Assert.IsFalse (sctx.FullyQualifyAssemblyNamesInClrNamespaces, "premise0");
+			ClassicAssert.IsFalse (sctx.FullyQualifyAssemblyNamesInClrNamespaces, "premise0");
 			var r = new XamlObjectReader (new ArgumentAttributed ("xxx", "yyy"), sctx);
 			var sw = new StringWriter ();
 			var w = new XamlXmlWriter (sw, sctx, null);
 			XamlServices.Transform (r, w);
-			Assert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
+			ClassicAssert.AreEqual (xml, sw.ToString ().Replace ('"', '\''), "#1");
 		}
 
 		[Test]
@@ -624,19 +626,19 @@ namespace MonoTests.System.Xaml
 		[Test]
 		public void Write_String ()
 		{
-			Assert.AreEqual (ReadXml ("String.xml"), XamlServices.Save ("foo"), "#1");
+			ClassicAssert.AreEqual (ReadXml ("String.xml"), XamlServices.Save ("foo"), "#1");
 		}
 
 		[Test]
 		public void Write_Int32 ()
 		{
-			Assert.AreEqual (ReadXml ("Int32.xml"), XamlServices.Save (5), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Int32.xml"), XamlServices.Save (5), "#1");
 		}
 
 		[Test]
 		public void Write_DateTime ()
 		{
-			Assert.AreEqual (ReadXml ("DateTime.xml"), XamlServices.Save (new DateTime (2010, 4, 14)), "#1");
+			ClassicAssert.AreEqual (ReadXml ("DateTime.xml"), XamlServices.Save (new DateTime (2010, 4, 14)), "#1");
 		}
 
 		[Test]
@@ -644,7 +646,7 @@ namespace MonoTests.System.Xaml
 		{
 			var testData = new TestClass6 {TheDateAndTime = new DateTime(2015, 12, 30, 23, 50, 51, DateTimeKind.Utc)};
 			var result = XamlServices.Save(testData);
-			Assert.AreEqual(ReadXml("DateTime2.xml"), result, "#2");
+			ClassicAssert.AreEqual(ReadXml("DateTime2.xml"), result, "#2");
 		}
 
 		[Test]
@@ -653,7 +655,7 @@ namespace MonoTests.System.Xaml
 			var testData = new TestClass6 { TheDateAndTime = new DateTime(2015, 12, 30, 23, 50, 51, DateTimeKind.Utc) };
 			testData.TheDateAndTime = testData.TheDateAndTime.AddMilliseconds(11);
 			var result = XamlServices.Save(testData);
-			Assert.AreEqual(ReadXml("DateTime3.xml"), result, "#3");
+			ClassicAssert.AreEqual(ReadXml("DateTime3.xml"), result, "#3");
 		}
 
 		[Test]
@@ -663,7 +665,7 @@ namespace MonoTests.System.Xaml
 			var testData = new TestClass6 { TheDateAndTime = localisedDateTime.DateTime };
 			testData.TheDateAndTime = testData.TheDateAndTime.AddMilliseconds(11);
 			var result = XamlServices.Save(testData);
-			Assert.AreEqual(ReadXml("DateTime4.xml"), result, "#4");
+			ClassicAssert.AreEqual(ReadXml("DateTime4.xml"), result, "#4");
 		}
 
 		[Test]
@@ -671,7 +673,7 @@ namespace MonoTests.System.Xaml
 		{
 			var testData = new TestClass6 { TheDateAndTime = new DateTime(2015, 12, 30) };
 			var result = XamlServices.Save(testData);
-			Assert.AreEqual(ReadXml("DateTime5.xml"), result, "#5");
+			ClassicAssert.AreEqual(ReadXml("DateTime5.xml"), result, "#5");
 		}
 
 		[Test]
@@ -679,100 +681,100 @@ namespace MonoTests.System.Xaml
 		{
 			var testData = new NullableContainer2 { NullableDate = new DateTime(2015, 12, 30, 23, 50, 51, DateTimeKind.Utc) };
 			var result = XamlServices.Save(testData);
-			Assert.AreEqual(ReadXml("DateTime6.xml"), result, "#6");
+			ClassicAssert.AreEqual(ReadXml("DateTime6.xml"), result, "#6");
 		}
 
 		[Test]
 		public void Write_TimeSpan ()
 		{
-			Assert.AreEqual (ReadXml ("TimeSpan.xml"), XamlServices.Save (TimeSpan.FromMinutes (7)), "#1");
+			ClassicAssert.AreEqual (ReadXml ("TimeSpan.xml"), XamlServices.Save (TimeSpan.FromMinutes (7)), "#1");
 		}
 
 		[Test]
 		public void Write_Uri ()
 		{
-			Assert.AreEqual (ReadXml ("Uri.xml"), XamlServices.Save (new Uri ("urn:foo")), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Uri.xml"), XamlServices.Save (new Uri ("urn:foo")), "#1");
 		}
 
 		[Test]
 		public void Write_Null ()
 		{
-			Assert.AreEqual (ReadXml ("NullExtension.xml"), XamlServices.Save (null), "#1");
+			ClassicAssert.AreEqual (ReadXml ("NullExtension.xml"), XamlServices.Save (null), "#1");
 		}
 
 		[Test]
 		public void Write_NullExtension ()
 		{
-			Assert.AreEqual (ReadXml ("NullExtension.xml"), XamlServices.Save (new NullExtension ()), "#1");
+			ClassicAssert.AreEqual (ReadXml ("NullExtension.xml"), XamlServices.Save (new NullExtension ()), "#1");
 		}
 
 		[Test]
 		public void Write_Type ()
 		{
-			Assert.AreEqual (ReadXml ("Type.xml").Trim (), XamlServices.Save (typeof(int)), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Type.xml").Trim (), XamlServices.Save (typeof(int)), "#1");
 		}
 
 		[Test]
 		public void Write_Type2 ()
 		{
-			Assert.AreEqual (ReadXml ("Type2.xml").Trim (), XamlServices.Save (typeof(TestClass1)), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Type2.xml").Trim (), XamlServices.Save (typeof(TestClass1)), "#1");
 		}
 
 		[Test]
 		public void Write_Guid ()
 		{
-			Assert.AreEqual (ReadXml ("Guid.xml").Trim (), XamlServices.Save (Guid.Parse ("9c3345ec-8922-4662-8e8d-a4e41f47cf09")), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Guid.xml").Trim (), XamlServices.Save (Guid.Parse ("9c3345ec-8922-4662-8e8d-a4e41f47cf09")), "#1");
 		}
 
 		[Test]
 		public void Write_StaticExtension ()
 		{
-			Assert.AreEqual (ReadXml ("StaticExtension.xml").Trim (), XamlServices.Save (new StaticExtension ("FooBar")), "#1");
+			ClassicAssert.AreEqual (ReadXml ("StaticExtension.xml").Trim (), XamlServices.Save (new StaticExtension ("FooBar")), "#1");
 		}
 
 		[Test]
 		public void Write_StaticExtension2 ()
 		{
-			Assert.AreEqual (ReadXml ("StaticExtension.xml").Trim (), XamlServices.Save (new StaticExtension () { Member = "FooBar" }), "#1");
+			ClassicAssert.AreEqual (ReadXml ("StaticExtension.xml").Trim (), XamlServices.Save (new StaticExtension () { Member = "FooBar" }), "#1");
 		}
 
 		[Test]
 		public void Write_Reference ()
 		{
-			Assert.AreEqual (ReadXml ("Reference.xml").Trim (), XamlServices.Save (new Reference ("FooBar")), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Reference.xml").Trim (), XamlServices.Save (new Reference ("FooBar")), "#1");
 		}
 
 		[Test]
 		public void Write_ArrayInt32 ()
 		{
-			Assert.AreEqual (ReadXml ("Array_Int32.xml").Trim (), XamlServices.Save (new int [] { 4, -5, 0, 255, int.MaxValue }), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Array_Int32.xml").Trim (), XamlServices.Save (new int [] { 4, -5, 0, 255, int.MaxValue }), "#1");
 		}
 
 		[Test]
 		public void Write_ListInt32 ()
 		{
-			Assert.AreEqual (ReadXml ("List_Int32.xml").Trim (), XamlServices.Save (new int [] { 5, -3, int.MaxValue, 0 }.ToList ()), "#1");
+			ClassicAssert.AreEqual (ReadXml ("List_Int32.xml").Trim (), XamlServices.Save (new int [] { 5, -3, int.MaxValue, 0 }.ToList ()), "#1");
 		}
 
 		[Test]
 		public void Write_ListInt32_2 ()
 		{
 			var obj = new List<int> (new int [0]) { Capacity = 0 }; // set explicit capacity for trivial implementation difference
-			Assert.AreEqual (ReadXml ("List_Int32_2.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("List_Int32_2.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ListType ()
 		{
 			var obj = new List<Type> (new Type [] { typeof(int), typeof(Dictionary<Type, XamlType>) }) { Capacity = 2 };
-			Assert.AreEqual (ReadXml ($"List_Type.{Compat.Prefix}.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ($"List_Type.{Compat.Prefix}.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ListArray ()
 		{
 			var obj = new List<Array> (new Array [] { new int [] { 1, 2, 3 }, new string [] { "foo", "bar", "baz" } }) { Capacity = 2 };
-			Assert.AreEqual (ReadXml ("List_Array.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("List_Array.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -782,7 +784,7 @@ namespace MonoTests.System.Xaml
 			dic.Add (0, "foo");
 			dic.Add (5, "bar");
 			dic.Add (-2, "baz");
-			Assert.AreEqual (ReadXml ("Dictionary_Int32_String.xml").Trim (), XamlServices.Save (dic), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Dictionary_Int32_String.xml").Trim (), XamlServices.Save (dic), "#1");
 		}
 
 		[Test]
@@ -795,7 +797,7 @@ namespace MonoTests.System.Xaml
 			dic.Add ("t4", typeof(List<int>));
 			dic.Add ("t5", typeof(Dictionary<int,DateTime>));
 			dic.Add ("t6", typeof(List<KeyValuePair<int,DateTime>>));
-			Assert.AreEqual (ReadXml ("Dictionary_String_Type.xml").Trim (), XamlServices.Save (dic), "#1");
+			ClassicAssert.AreEqual (ReadXml ("Dictionary_String_Type.xml").Trim (), XamlServices.Save (dic), "#1");
 		}
 
 		[Test]
@@ -818,28 +820,28 @@ namespace MonoTests.System.Xaml
 		{
 			// Unlike the above case, this has the wrapper object and hence PositionalParametersClass1 can be written as an attribute (markup extension)
 			var obj = new PositionalParametersWrapper ("foo", 5);
-			Assert.AreEqual (ReadXml ("PositionalParametersWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("PositionalParametersWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ArgumentAttributed ()
 		{
 			var obj = new ArgumentAttributed ("foo", "bar");
-			Assert.AreEqual (ReadXml ("ArgumentAttributed.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ArgumentAttributed.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ArrayExtension2 ()
 		{
 			var obj = new ArrayExtension (typeof(int));
-			Assert.AreEqual (ReadXml ("ArrayExtension2.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ArrayExtension2.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 #if NETCOREAPP2_1
 		[Test]
 		public void Write_ArrayList ()
 		{
 			var obj = new ArrayList (new int [] { 5, -3, 0 });
-			Assert.AreEqual (ReadXml ("ArrayList.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ArrayList.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 #endif
 
@@ -847,91 +849,91 @@ namespace MonoTests.System.Xaml
 		public void ComplexPositionalParameterWrapper ()
 		{
 			var obj = new ComplexPositionalParameterWrapper () { Param = new ComplexPositionalParameterClass (new ComplexPositionalParameterValue () { Foo = "foo" }) };
-			Assert.AreEqual (ReadXml ("ComplexPositionalParameterWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ComplexPositionalParameterWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ListWrapper ()
 		{
 			var obj = new ListWrapper (new List<int> (new int [] { 5, -3, 0 }) { Capacity = 3 }); // set explicit capacity for trivial implementation difference
-			Assert.AreEqual (ReadXml ("ListWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ListWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ListWrapper2 ()
 		{
 			var obj = new ListWrapper2 (new List<int> (new int [] { 5, -3, 0 }) { Capacity = 3 }); // set explicit capacity for trivial implementation difference
-			Assert.AreEqual (ReadXml ("ListWrapper2.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ListWrapper2.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyArrayExtension ()
 		{
 			var obj = new MyArrayExtension (new int [] { 5, -3, 0 });
-			Assert.AreEqual (ReadXml ("MyArrayExtension.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyArrayExtension.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyArrayExtensionA ()
 		{
 			var obj = new MyArrayExtensionA (new int [] { 5, -3, 0 });
-			Assert.AreEqual (ReadXml ("MyArrayExtensionA.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyArrayExtensionA.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyExtension ()
 		{
 			var obj = new MyExtension () { Foo = typeof(int), Bar = "v2", Baz = "v7" };
-			Assert.AreEqual (ReadXml ("MyExtension.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyExtension.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyExtension2 ()
 		{
 			var obj = new MyExtension2 () { Foo = typeof(int), Bar = "v2" };
-			Assert.AreEqual (ReadXml ("MyExtension2.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyExtension2.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyExtension3 ()
 		{
 			var obj = new MyExtension3 () { Foo = typeof(int), Bar = "v2" };
-			Assert.AreEqual (ReadXml ("MyExtension3.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyExtension3.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyExtension4 ()
 		{
 			var obj = new MyExtension4 () { Foo = typeof(int), Bar = "v2" };
-			Assert.AreEqual (ReadXml ("MyExtension4.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyExtension4.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_MyExtension6 ()
 		{
 			var obj = new MyExtension6 ("foo");
-			Assert.AreEqual (ReadXml ("MyExtension6.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("MyExtension6.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_PropertyDefinition ()
 		{
 			var obj = new PropertyDefinition () { Modifier = "protected", Name = "foo", Type = XamlLanguage.String };
-			Assert.AreEqual (ReadXml ("PropertyDefinition.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("PropertyDefinition.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_StaticExtensionWrapper ()
 		{
 			var obj = new StaticExtensionWrapper () { Param = new StaticExtension ("StaticExtensionWrapper.Foo") };
-			Assert.AreEqual (ReadXml ("StaticExtensionWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("StaticExtensionWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_TypeExtensionWrapper ()
 		{
 			var obj = new TypeExtensionWrapper () { Param = new TypeExtension ("Foo") };
-			Assert.AreEqual (ReadXml ("TypeExtensionWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("TypeExtensionWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -947,7 +949,7 @@ namespace MonoTests.System.Xaml
 			obj.References.Add (new NamedItem ("baz"));
 			obj2.References.Add (obj);
 
-			Assert.AreEqual (ReadXml ("NamedItems.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("NamedItems.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -967,21 +969,21 @@ namespace MonoTests.System.Xaml
 			obj2.References.Add (obj3);
 			obj4.References.Add (obj3);
 
-			Assert.AreEqual (ReadXml ("NamedItems2.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("NamedItems2.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_XmlSerializableWrapper ()
 		{
 			var obj = new XmlSerializableWrapper (new XmlSerializable ("<root/>"));
-			Assert.AreEqual (ReadXml ("XmlSerializableWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("XmlSerializableWrapper.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_XmlSerializable ()
 		{
 			var obj = new XmlSerializable ("<root/>");
-			Assert.AreEqual (ReadXml ("XmlSerializable.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("XmlSerializable.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -989,7 +991,7 @@ namespace MonoTests.System.Xaml
 		{
 			var obj = new List<XmlSerializable> ();
 			obj.Add (new XmlSerializable ("<root/>"));
-			Assert.AreEqual (ReadXml ("List_XmlSerializable.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("List_XmlSerializable.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -999,7 +1001,7 @@ namespace MonoTests.System.Xaml
 			Attachable.SetFoo (obj, "x");
 			Attachable.SetFoo (obj.Value, "y");
 			try {
-				Assert.AreEqual (ReadXml ("AttachedProperty.xml").Trim (), XamlServices.Save (obj), "#1");
+				ClassicAssert.AreEqual (ReadXml ("AttachedProperty.xml").Trim (), XamlServices.Save (obj), "#1");
 			} finally {
 				Attachable.SetFoo (obj, null);
 				Attachable.SetFoo (obj.Value, null);
@@ -1010,14 +1012,14 @@ namespace MonoTests.System.Xaml
 		public void Write_AbstractWrapper ()
 		{
 			var obj = new AbstractContainer () { Value2 = new DerivedObject () { Foo = "x" } };
-			Assert.AreEqual (ReadXml ("AbstractContainer.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("AbstractContainer.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_ReadOnlyPropertyContainer ()
 		{
 			var obj = new ReadOnlyPropertyContainer () { Foo = "x" };
-			Assert.AreEqual (ReadXml ("ReadOnlyPropertyContainer.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("ReadOnlyPropertyContainer.xml").Trim (), XamlServices.Save (obj), "#1");
 			
 			var sw = new StringWriter ();
 			var xw = new XamlXmlWriter (sw, new XamlSchemaContext ());
@@ -1028,7 +1030,7 @@ namespace MonoTests.System.Xaml
 			xw.WriteEndMember ();
 			xw.WriteEndObject ();
 			xw.Close ();
-			Assert.IsTrue (sw.ToString ().IndexOf ("Bar") > 0, "#2"); // it is not rejected by XamlXmlWriter. But XamlServices does not write it.
+			ClassicAssert.IsTrue (sw.ToString ().IndexOf ("Bar") > 0, "#2"); // it is not rejected by XamlXmlWriter. But XamlServices does not write it.
 		}
 
 		[Test]
@@ -1036,14 +1038,14 @@ namespace MonoTests.System.Xaml
 		{
 			var obj = new SecondTest.TypeOtherAssembly ();
 			obj.Values.AddRange (new uint? [] { 1, 2, 3 });
-			Assert.AreEqual (ReadXml ("TypeConverterOnListMember.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("TypeConverterOnListMember.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_EnumContainer ()
 		{
 			var obj = new EnumContainer () { EnumProperty = EnumValueType.Two };
-			Assert.AreEqual (ReadXml ("EnumContainer.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("EnumContainer.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -1052,7 +1054,7 @@ namespace MonoTests.System.Xaml
 			var obj = new CollectionContentProperty ();
 			for (int i = 0; i < 4; i++)
 				obj.ListOfItems.Add (new SimpleClass ());
-			Assert.AreEqual (ReadXml ("CollectionContentProperty.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("CollectionContentProperty.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -1063,7 +1065,7 @@ namespace MonoTests.System.Xaml
 			obj.ListOfItems.Add (l);
 			for (int i = 0; i < 4; i++)
 				l.Add (new SimpleClass ());
-			Assert.AreEqual (ReadXml ("CollectionContentPropertyX.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("CollectionContentPropertyX.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -1075,14 +1077,14 @@ namespace MonoTests.System.Xaml
 			var t2 = new SecondTest.TestObject ();
 			t2.TestProperty = t1;
 			obj.Add ("okay", t2);
-			Assert.AreEqual (ReadXml ("AmbientPropertyContainer.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("AmbientPropertyContainer.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
 		public void Write_NullableContainer ()
 		{
 			var obj = new NullableContainer () { TestProp = 5 };
-			Assert.AreEqual (ReadXml ("NullableContainer.xml").Trim (), XamlServices.Save (obj), "#1");
+			ClassicAssert.AreEqual (ReadXml ("NullableContainer.xml").Trim (), XamlServices.Save (obj), "#1");
 		}
 
 		[Test]
@@ -1097,7 +1099,7 @@ namespace MonoTests.System.Xaml
 				IntValue = 123456,
 				LongValue = 234567
 			};
-			Assert.AreEqual(ReadXml("NumericValues.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("NumericValues.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 #if NETCOREAPP2_1
 		[Test]
@@ -1112,7 +1114,7 @@ namespace MonoTests.System.Xaml
 				IntValue = int.MaxValue,
 				LongValue = long.MaxValue
 			};
-			Assert.AreEqual(ReadXml("NumericValues_Max.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("NumericValues_Max.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 #endif
 		[Test]
@@ -1123,7 +1125,7 @@ namespace MonoTests.System.Xaml
 				DoubleValue = double.PositiveInfinity,
 				FloatValue = float.PositiveInfinity
 			};
-			Assert.AreEqual(ReadXml("NumericValues_PositiveInfinity.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("NumericValues_PositiveInfinity.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
@@ -1134,7 +1136,7 @@ namespace MonoTests.System.Xaml
 				DoubleValue = double.NegativeInfinity,
 				FloatValue = float.NegativeInfinity
 			};
-			Assert.AreEqual(ReadXml("NumericValues_NegativeInfinity.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("NumericValues_NegativeInfinity.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
@@ -1145,7 +1147,7 @@ namespace MonoTests.System.Xaml
 				DoubleValue = double.NaN,
 				FloatValue = float.NaN
 			};
-			Assert.AreEqual(ReadXml("NumericValues_NaN.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("NumericValues_NaN.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
@@ -1158,7 +1160,7 @@ namespace MonoTests.System.Xaml
 				Bar = "TheBar",
 				Baz = "TheBaz"
 			};
-			Assert.AreEqual(ReadXml("BaseClassPropertiesInSeparateNamespace.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("BaseClassPropertiesInSeparateNamespace.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
@@ -1172,14 +1174,14 @@ namespace MonoTests.System.Xaml
 				Baz = "TheBaz",
 				Other = new TestClass5WithName { Bar = "TheBar2" }
 			};
-			Assert.AreEqual(ReadXml("BaseClassPropertiesInSeparateNamespace_WithChildren.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("BaseClassPropertiesInSeparateNamespace_WithChildren.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
 		public void Write_NamedItemWithEmptyString()
 		{
 			var obj = new NamedItem("");
-			Assert.AreEqual(ReadXml("NamedItemWithEmptyString.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("NamedItemWithEmptyString.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
@@ -1187,7 +1189,7 @@ namespace MonoTests.System.Xaml
 		{
 			var obj = new TestClass5();
 			obj.Bar = "{ Some Value That Should Be Escaped";
-			Assert.AreEqual(ReadXml("EscapedPropertyValue.xml").Trim(), XamlServices.Save(obj), "#1");
+			ClassicAssert.AreEqual(ReadXml("EscapedPropertyValue.xml").Trim(), XamlServices.Save(obj), "#1");
 		}
 
 		[Test]
@@ -1233,7 +1235,7 @@ namespace MonoTests.System.Xaml
 			xw.Close();
 			tw.Close();
 
-			Assert.AreEqual(xaml, sw.GetStringBuilder().Replace("  ", " ").ToString());
+			ClassicAssert.AreEqual(xaml, sw.GetStringBuilder().Replace("  ", " ").ToString());
 		}
 		
 		[Test]
@@ -1248,7 +1250,7 @@ namespace MonoTests.System.Xaml
 				var instance = new ShouldSerializeInvisibleTest();
 				var actual = XamlServices.Save(instance);
 
-				Assert.IsEmpty(actual);
+                ClassicAssert.IsEmpty(actual);
 			}
 		}
 		
@@ -1272,7 +1274,7 @@ namespace MonoTests.System.Xaml
 				
 				var instance = new ShouldSerializeInCollectionTest();
 				var actual = XamlServices.Save(instance);
-				Assert.AreEqual(xaml, actual);
+				ClassicAssert.AreEqual(xaml, actual);
 			}
 		}
 	}

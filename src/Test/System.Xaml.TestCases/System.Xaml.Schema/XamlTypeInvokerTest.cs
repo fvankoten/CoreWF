@@ -29,6 +29,8 @@ using System.Text;
 using System.Xml;
 using NUnit.Framework;
 using System.Windows.Markup;
+using NUnit.Framework.Legacy;
+
 #if PCL
 
 using System.Xaml;
@@ -56,8 +58,8 @@ namespace MonoTests.System.Xaml.Schema
 		public void DefaultValues ()
 		{
 			var i = new XamlTypeInvoker (new XamlType (typeof (object), sctx));
-			Assert.IsNull (i.SetMarkupExtensionHandler, "#1");
-			Assert.IsNull (i.SetTypeConverterHandler, "#2");
+			ClassicAssert.IsNull (i.SetMarkupExtensionHandler, "#1");
+			ClassicAssert.IsNull (i.SetTypeConverterHandler, "#2");
 		}
 
 		[XamlSetMarkupExtension ("HandleMarkupExtension")]
@@ -119,7 +121,7 @@ namespace MonoTests.System.Xaml.Schema
 		public void SetHandleMarkupExtension ()
 		{
 			var i = new XamlTypeInvoker (new XamlType (typeof (TestClassMarkupExtension4), sctx));
-			Assert.IsNotNull (i.SetMarkupExtensionHandler, "#1");
+			ClassicAssert.IsNotNull (i.SetMarkupExtensionHandler, "#1");
 		}
 
 		// SetTypeConverterHandler
@@ -181,7 +183,7 @@ namespace MonoTests.System.Xaml.Schema
 		public void SetHandleTypeConverter ()
 		{
 			var i = new XamlTypeInvoker (new XamlType (typeof (TestClassTypeConverter4), sctx));
-			Assert.IsNotNull (i.SetTypeConverterHandler, "#1");
+			ClassicAssert.IsNotNull (i.SetTypeConverterHandler, "#1");
 		}
 
 		// AddToCollection
@@ -261,8 +263,8 @@ namespace MonoTests.System.Xaml.Schema
 			i.AddToCollection (l, 5);
 			i.AddToCollection (l, 3);
 			i.AddToCollection (l, -12);
-			Assert.AreEqual (3, l.Count, "#1");
-			Assert.AreEqual (-12, l [2], "#2");
+			ClassicAssert.AreEqual (3, l.Count, "#1");
+			ClassicAssert.AreEqual (-12, l [2], "#2");
 		}
 		
 		[Test]
@@ -319,8 +321,8 @@ namespace MonoTests.System.Xaml.Schema
 			var arr = new List<object> ();
 			while (items.MoveNext ())
 				arr.Add (items.Current);
-			Assert.AreEqual (5, arr [0], "#1");
-			Assert.AreEqual (0, arr [2], "#2");
+			ClassicAssert.AreEqual (5, arr [0], "#1");
+			ClassicAssert.AreEqual (0, arr [2], "#2");
 		}
 
 		[Test]
@@ -336,8 +338,8 @@ namespace MonoTests.System.Xaml.Schema
 			var arr = new List<object> ();
 			while (items.MoveNext ())
 				arr.Add (items.Current);
-			Assert.AreEqual (new KeyValuePair<int,string> (5, "foo"), arr [0], "#1");
-			Assert.AreEqual (new KeyValuePair<int,string> (0, "baz"), arr [2], "#1");
+			ClassicAssert.AreEqual (new KeyValuePair<int,string> (5, "foo"), arr [0], "#1");
+			ClassicAssert.AreEqual (new KeyValuePair<int,string> (0, "baz"), arr [2], "#1");
 		}
 
 		[Test]
@@ -350,10 +352,10 @@ namespace MonoTests.System.Xaml.Schema
 		public void UnknownInvokerGetItems ()
 		{
 			var items = XamlTypeInvoker.UnknownInvoker.GetItems (new object [] {1});
-			Assert.IsNotNull (items, "#1");
-			Assert.IsTrue (items.MoveNext (), "#2");
-			Assert.AreEqual (1, items.Current, "#3");
-			Assert.IsFalse (items.MoveNext (), "#4");
+			ClassicAssert.IsNotNull (items, "#1");
+			ClassicAssert.IsTrue (items.MoveNext (), "#2");
+			ClassicAssert.AreEqual (1, items.Current, "#3");
+			ClassicAssert.IsFalse (items.MoveNext (), "#4");
 		}
 
 		[Test]
@@ -362,7 +364,7 @@ namespace MonoTests.System.Xaml.Schema
 			// this does not check Unknown-ness.
 			var c = new List<object> ();
 			XamlTypeInvoker.UnknownInvoker.AddToCollection (c, 1);
-			Assert.AreEqual (1, c.Count, "#1");
+			ClassicAssert.AreEqual (1, c.Count, "#1");
 		}
 
 		[Test]
@@ -371,14 +373,14 @@ namespace MonoTests.System.Xaml.Schema
 			var dic = new Dictionary<object,object> ();
 			// this does not check Unknown-ness.
 			XamlTypeInvoker.UnknownInvoker.AddToDictionary (dic, 1, 2);
-			Assert.AreEqual (1, dic.Count, "#1");
+			ClassicAssert.AreEqual (1, dic.Count, "#1");
 		}
 
 		[Test]
 		public void UnknownInvokerGetEnumeratorMethod ()
 		{
 			try {
-				Assert.IsNull (XamlTypeInvoker.UnknownInvoker.GetEnumeratorMethod (), "#1");
+				ClassicAssert.IsNull (XamlTypeInvoker.UnknownInvoker.GetEnumeratorMethod (), "#1");
 			} catch (Exception) {
 				// .NET is buggy, returns NRE.
 			}
@@ -387,9 +389,9 @@ namespace MonoTests.System.Xaml.Schema
 		[Test]
 		public void UnknownInvoker ()
 		{
-			Assert.IsNull (XamlTypeInvoker.UnknownInvoker.SetMarkupExtensionHandler, "#1");
-			Assert.IsNull (XamlTypeInvoker.UnknownInvoker.SetTypeConverterHandler, "#2");
-			Assert.IsNull (XamlTypeInvoker.UnknownInvoker.GetAddMethod (XamlLanguage.Object), "#3");
+			ClassicAssert.IsNull (XamlTypeInvoker.UnknownInvoker.SetMarkupExtensionHandler, "#1");
+			ClassicAssert.IsNull (XamlTypeInvoker.UnknownInvoker.SetTypeConverterHandler, "#2");
+			ClassicAssert.IsNull (XamlTypeInvoker.UnknownInvoker.GetAddMethod (XamlLanguage.Object), "#3");
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
 	<AssemblyName>System.Activities</AssemblyName>
 	<PackageId>UiPath.Workflow.Runtime</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -14,7 +14,7 @@
     <NoWarn>$(NoWarn);NU5105</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="System.Activities.Internals" />
