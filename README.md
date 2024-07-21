@@ -2,10 +2,10 @@
 
 # CoreWF
 
-A port of the Windows Workflow Foundation (WF) runtime to .NET 6. It
+A port of the Windows Workflow Foundation (WF) runtime to .NET 8. It
 is [licensed](LICENSE) under the MIT License.
 
-__This is not an official Microsoft release of WF on .NET 6. CoreWF is a derivative work of Microsoft's copyrighted
+__This is not an official Microsoft release of WF on .NET 8. CoreWF is a derivative work of Microsoft's copyrighted
 Windows Workflow Foundation.__
 
 ## WF Overview
@@ -69,8 +69,8 @@ Foundation" individual component in the Visual Studio Installer.
 
 ## Target Frameworks
 
-CoreWF targets .NET 6 and .NET 6 Windows. The .NET Windows target uses the **System.Xaml** included in the .NET Desktop
-Runtime. To use CoreWF on non-Windows runtimes, use the portable .NET 6 target. This is possible because CoreWF includes
+CoreWF targets .NET 8 and .NET 8 Windows. The .NET Windows target uses the **System.Xaml** included in the .NET Desktop
+Runtime. To use CoreWF on non-Windows runtimes, use the portable .NET 8 target. This is possible because CoreWF includes
 a copy of the **System.Xaml** code.
 
 ## Usage
