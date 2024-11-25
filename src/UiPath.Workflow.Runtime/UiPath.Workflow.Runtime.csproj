@@ -12,6 +12,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NoWarn>$(NoWarn);NU5105</NoWarn>
+    <Authors>$(AssemblyName), Florian van Koten</Authors>
+    <Company>$(Authors), LCS Computer Service GmbH</Company>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />

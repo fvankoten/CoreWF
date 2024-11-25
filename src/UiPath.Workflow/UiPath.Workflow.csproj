@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
-        <Description>Unofficial port of the Windows Workflow Foundation (WF) to .NET 6</Description>
+        <Description>Unofficial port of the Windows Workflow Foundation (WF) to .NET 8</Description>
         <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild Condition="$(Configuration)=='Release'">true</GeneratePackageOnBuild>
@@ -9,10 +9,12 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <PackageProjectUrl>https://github.com/UiPath/CoreWf</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/fvankoten/CoreWF</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <NoWarn>$(NoWarn);NU5105</NoWarn>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Authors>$(AssemblyName), Florian van Koten</Authors>
+        <Company>$(Authors), LCS Computer Service GmbH</Company>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\UiPath.Workflow.Runtime\UiPath.Workflow.Runtime.csproj" />
