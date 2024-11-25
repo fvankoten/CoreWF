@@ -24,7 +24,7 @@ namespace System.Activities
         {
             if (type is IArrayTypeSymbol arrayTypeSymbol)
             {
-                return AssemblyReference.GetAssembly(new AssemblyName(arrayTypeSymbol.ElementType.ContainingAssembly.Name));
+                return AssemblyReference.GetAssembly(new AssemblyName(GetAssemblyForType(arrayTypeSymbol.ElementType).GetName().Name));
             }
             else
             {
@@ -43,11 +43,16 @@ namespace System.Activities
             {
                 if (namedTypeSymbol.IsGenericType)
                 {
-                    return assembly.GetType($"{namedTypeSymbol.ContainingNamespace}.{namedTypeSymbol.MetadataName}").MakeGenericType(namedTypeSymbol.TypeArguments.Select(t=> GetSystemType(t, GetAssemblyForType(t))).ToArray());
+                    return assembly.GetType($"{namedTypeSymbol.ContainingNamespace.ToDisplayString()}.{namedTypeSymbol.MetadataName}").MakeGenericType(namedTypeSymbol.TypeArguments.Select(t => GetSystemType(t, GetAssemblyForType(t))).ToArray());
+                }
+
+                if (namedTypeSymbol.IsAnonymousType)
+                {
+                    return typeof(object);
                 }
             }
 
-            return assembly.GetType($"{typeSymbol.ContainingNamespace}.{typeSymbol.MetadataName}");
+            return assembly.GetType($"{typeSymbol.ContainingNamespace.ToDisplayString()}.{typeSymbol.MetadataName}");
         }
 
         protected abstract Compilation GetCompilation(IReadOnlyCollection<AssemblyReference> assemblies, IReadOnlyCollection<string> namespaces);
