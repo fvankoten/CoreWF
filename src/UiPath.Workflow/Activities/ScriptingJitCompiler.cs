@@ -101,15 +101,10 @@ public abstract class ScriptingJitCompiler : JustInTimeCompiler
         }
     }
 
-
-
     private Assembly CollectibleAlc_Resolving(AssemblyLoadContext loadContext, AssemblyName assemblyName)
     {
-        var assembly = AppDomain.CurrentDomain.GetAssemblies().LastOrDefault(a => a.FullName == assemblyName.FullName);
-        if (assembly != null)
-            return assembly;
-
-        return loadContext.LoadFromAssemblyName(assemblyName);
+        // The assembly may have been loaded in a separate AssemblyLoadContext and should be available in the current AppDomain.
+        return AppDomain.CurrentDomain.GetAssemblies().LastOrDefault(a => a.FullName == assemblyName.FullName);
     }
 
     public IEnumerable<string> GetIdentifiers(SyntaxTree syntaxTree)

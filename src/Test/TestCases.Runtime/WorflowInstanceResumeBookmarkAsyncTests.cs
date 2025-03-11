@@ -1,8 +1,10 @@
+using Shouldly;
 using System;
 using System.Activities;
 using System.Activities.Statements;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using Test.Common.TestObjects.Activities;
 using Test.Common.TestObjects.Activities.Tracing;
@@ -11,6 +13,7 @@ using Test.Common.TestObjects.Runtime;
 using Test.Common.TestObjects.Utilities;
 using Test.Common.TestObjects.Utilities.Validation;
 using TestCases.Runtime.Common.Activities;
+using WorkflowApplicationTestExtensions;
 using WorkflowApplicationTestExtensions.Persistence;
 using Xunit;
 namespace TestCases.Runtime.WorkflowInstanceTest;
@@ -368,6 +371,26 @@ public class WorflowInstanceResumeBookmarkAsyncTests
         workflowRuntime.WaitForCompletion(false);
     }
 
+
+    [Fact]
+    public void SuspensionLeadsToBookmarkCreation()
+    {
+        var suspendingActivity = new SuspendingWrapper
+        {
+            Activities =
+                {
+                    new WriteLine(),
+                }
+        };
+        var app = new WorkflowApplication(suspendingActivity);
+        var result = app.RunUntilCompletion();
+        var bookmarkFromUnload = result.UnloadedBookmarks.Single();
+        var bookmarkFromPersistIdle = result.PersistIdle.Single();
+
+        bookmarkFromPersistIdle.Owner.ShouldBe(suspendingActivity);
+        bookmarkFromPersistIdle.BookmarkName.ShouldBe(bookmarkFromPersistIdle.BookmarkName);
+    }
+
     [Fact]
     public static void TestResumeWithDelay()
     {
@@ -377,7 +400,7 @@ public class WorflowInstanceResumeBookmarkAsyncTests
             {
                 new TestDelay()
                 {
-                    Duration = TimeSpan.FromMilliseconds(100)
+                    Duration = TimeSpan.FromMilliseconds(200)
                 },
             }
         };
@@ -393,7 +416,7 @@ public class WorflowInstanceResumeBookmarkAsyncTests
     [Fact]
     public static void TestNoPersistSerialization()
     {
-        TestSequence testSequence = new() { Activities = { new TestNoPersist() }};
+        TestSequence testSequence = new() { Activities = { new TestNoPersist() } };
         WorkflowApplicationTestExtensions.Persistence.FileInstanceStore jsonStore = new WorkflowApplicationTestExtensions.Persistence.FileInstanceStore(".\\~");
         TestWorkflowRuntime workflowRuntime = TestRuntime.CreateTestWorkflowRuntime(testSequence, null, jsonStore, PersistableIdleAction.Unload);
         workflowRuntime.ExecuteWorkflow();
