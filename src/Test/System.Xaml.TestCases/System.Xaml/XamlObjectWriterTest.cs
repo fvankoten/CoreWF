@@ -2127,7 +2127,8 @@ namespace MonoTests.System.Xaml
 				CollectionAssert.AreEquivalent(expected, res.ImmutableHashSet.Select(r => r.Foo), "#5-2");
 
 				ClassicAssert.IsFalse(res.ImmutableStack.IsEmpty, "#6-1");
-                CollectionAssert.AreEqual(expected.Reverse(), res.ImmutableStack.Select(r => r.Foo), "#6-2");
+				expected.Reverse();
+                CollectionAssert.AreEqual(expected, res.ImmutableStack.Select(r => r.Foo), "#6-2");
 
 				ClassicAssert.IsFalse(res.ImmutableSortedSet.IsEmpty, "#7-1");
                 CollectionAssert.AreEqual(expected, res.ImmutableSortedSet.Select(r => r.Foo), "#7-2");

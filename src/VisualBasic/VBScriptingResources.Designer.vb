@@ -14,7 +14,7 @@ Option Explicit On
 Imports System
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting
-    
+
     'Diese Klasse wurde von der StronglyTypedResourceBuilder automatisch generiert
     '-Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     'Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
@@ -22,25 +22,24 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting
     '''<summary>
     '''  Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),  _
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+     Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>
     Friend Class VBScriptingResources
-        
+
         Private Shared resourceMan As Global.System.Resources.ResourceManager
-        
+
         Private Shared resourceCulture As Global.System.Globalization.CultureInfo
-        
-        <Global.System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")>  _
+
+        <Global.System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")>
         Friend Sub New()
             MyBase.New
         End Sub
-        
+
         '''<summary>
         '''  Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         '''</summary>
-        <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
+        <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>
         Friend Shared ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
             Get
                 If Object.ReferenceEquals(resourceMan, Nothing) Then
@@ -50,21 +49,21 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting
                 Return resourceMan
             End Get
         End Property
-        
+
         '''<summary>
         '''  Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
         '''  Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         '''</summary>
-        <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
+        <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>
         Friend Shared Property Culture() As Global.System.Globalization.CultureInfo
             Get
                 Return resourceCulture
             End Get
             Set
-                resourceCulture = value
+                resourceCulture = Value
             End Set
         End Property
-        
+
         '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Cannot escape non-printable characters in Visual Basic notation unless quotes are used. ähnelt.
         '''</summary>
@@ -73,7 +72,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting
                 Return ResourceManager.GetString("ExceptionEscapeWithoutQuote", resourceCulture)
             End Get
         End Property
-        
+
         '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Usage: vbi [options] [script-file.vbx] [-- script-arguments]
         '''
@@ -90,7 +89,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting
                 Return ResourceManager.GetString("InteractiveHelp", resourceCulture)
             End Get
         End Property
-        
+
         '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Microsoft (R) Visual Basic Interactive Compiler version {0} ähnelt.
         '''</summary>
@@ -99,7 +98,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting
                 Return ResourceManager.GetString("LogoLine1", resourceCulture)
             End Get
         End Property
-        
+
         '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Copyright (C) Microsoft Corporation. All rights reserved. ähnelt.
         '''</summary>

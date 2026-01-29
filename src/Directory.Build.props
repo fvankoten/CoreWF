@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <Version>8.0.0.1</Version>
-        <RoslynPackageVersion>4.10.0</RoslynPackageVersion>
+        <RoslynPackageVersion>4.11.0</RoslynPackageVersion>
         <WarningsAsErrors>true</WarningsAsErrors>
         <UseWPF Condition="$(TargetFramework) == 'net8.0-windows'">true</UseWPF>
     </PropertyGroup>

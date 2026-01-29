@@ -21,8 +21,8 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
         <PackageReference Include="ReflectionMagic" Version="5.0.1" />
         <ProjectReference Include="..\VisualBasic\Microsoft.CodeAnalysis.VisualBasic.Scripting.vbproj" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.10.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.10.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="$(RoslynPackageVersion)" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="$(RoslynPackageVersion)" />
         <PackageReference Include="System.CodeDom" Version="8.0.0" />
         <PackageReference Include="Nito.AsyncEx.Tasks" Version="5.1.2" />
         <None Include="..\..\README.md" Pack="true" PackagePath="" />
