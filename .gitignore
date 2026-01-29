@@ -256,3 +256,7 @@ paket-files/
 
 # VS Code files 
 .vscode/
+
+# Agents
+.claude/settings.local.json
+CLAUDE.local.md

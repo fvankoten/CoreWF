@@ -596,15 +596,16 @@ internal static class ActivityUtilities
             };
 
             int nextEnvironmentId = 0;
+            bool shouldProcessChildren = !options.SkipPrivateChildren || (activity is DynamicActivity);
 
             ProcessChildren(activity, activity.Children, ActivityCollectionType.Public, true, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
             ProcessChildren(activity, activity.ImportedChildren, ActivityCollectionType.Imports, true, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
-            ProcessChildren(activity, activity.ImplementationChildren, ActivityCollectionType.Implementation, !options.SkipPrivateChildren, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
+            ProcessChildren(activity, activity.ImplementationChildren, ActivityCollectionType.Implementation, shouldProcessChildren, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
 
             ProcessArguments(activity, activity.RuntimeArguments, true, ref newImplementationEnvironment, ref nextEnvironmentId, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
 
             ProcessVariables(activity, activity.RuntimeVariables, ActivityCollectionType.Public, true, ref newPublicEnvironment, ref nextEnvironmentId, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
-            ProcessVariables(activity, activity.ImplementationVariables, ActivityCollectionType.Implementation, !options.SkipPrivateChildren, ref newImplementationEnvironment, ref nextEnvironmentId, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
+            ProcessVariables(activity, activity.ImplementationVariables, ActivityCollectionType.Implementation, true, ref newImplementationEnvironment, ref nextEnvironmentId, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
 
             if (activity.HandlerOf != null)
             {
@@ -653,14 +654,14 @@ internal static class ActivityUtilities
             // ProcessDelegates uses activity.Environment
             ProcessDelegates(activity, activity.Delegates, ActivityCollectionType.Public, true, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
             ProcessDelegates(activity, activity.ImportedDelegates, ActivityCollectionType.Imports, true, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
-            ProcessDelegates(activity, activity.ImplementationDelegates, ActivityCollectionType.Implementation, !options.SkipPrivateChildren, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
+            ProcessDelegates(activity, activity.ImplementationDelegates, ActivityCollectionType.Implementation, true, ref nextActivity, ref activitiesRemaining, ref tempValidationErrors);
 
             callback?.Invoke(childActivity, parentChain);
 
-            // copy validation errors in ValidationErrors list
+            // Copy validation errors in ValidationErrors list
             if (tempValidationErrors != null)
             {
-                validationErrors ??= new List<ValidationError>();
+                validationErrors ??= new List<ValidationError>(tempValidationErrors.Count);
                 string prefix = ActivityValidationServices.GenerateValidationErrorPrefix(childActivity.Activity, parentChain, options, out Activity source);
 
                 for (int i = 0; i < tempValidationErrors.Count; i++)

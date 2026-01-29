@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Activities.Runtime;
+using System.Reflection;
 using System.Threading;
 
 namespace System.Activities.Validation;
@@ -81,4 +82,22 @@ public class ValidationSettings
     /// Defaulting to true until validation path is proven.
     /// </remarks>
     public bool ForceExpressionCache { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value that indicates whether skipping validation/metadata caching for implementation children.
+    /// Implementation children are usually encapsulated, and are considered an implementation detail of an activity, so
+    /// in particular situation (such as design-time validation), validating them is not necessary.
+    /// </summary>
+    public bool SkipImplementationChildren { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value that indicates whether lambda expressions should prefer interpretation over compilation.
+    /// When true, lambda expressions will be interpreted at runtime rather than compiled to IL.
+    /// </summary>
+    public bool PreferExpressionInterpretation { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a function that resolves missing assemblies during compilation for validation.
+    /// </summary>
+    public Func<AssemblyName, Assembly> MissingAssemblyResolver { get; set; }
 }

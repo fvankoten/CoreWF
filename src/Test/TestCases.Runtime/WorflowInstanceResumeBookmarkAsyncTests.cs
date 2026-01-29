@@ -394,24 +394,38 @@ public class WorflowInstanceResumeBookmarkAsyncTests
     [Fact]
     public static void TestResumeWithDelay()
     {
-        var testSequence = new TestSequence()
+        var testSequence = new Sequence()
         {
             Activities =
             {
-                new TestDelay()
+                new Delay()
                 {
-                    Duration = TimeSpan.FromMilliseconds(200)
+                    Duration = TimeSpan.FromMilliseconds(100)
                 },
             }
         };
-        WorkflowApplicationTestExtensions.Persistence.FileInstanceStore jsonStore = new WorkflowApplicationTestExtensions.Persistence.FileInstanceStore(".\\~");
-        TestWorkflowRuntime workflowRuntime = TestRuntime.CreateTestWorkflowRuntime(testSequence, null, jsonStore, PersistableIdleAction.Unload);
-        workflowRuntime.ExecuteWorkflow();
-        workflowRuntime.PersistWorkflow();
-        workflowRuntime.WaitForUnloaded();
-        workflowRuntime.LoadWorkflow();
-        workflowRuntime.ResumeWorkflow();
-        workflowRuntime.WaitForCompletion(false);
+        
+        using var unloaded = new ManualResetEvent(false);
+        using var completed = new ManualResetEvent(false);
+        var instanceStore = new MemoryInstanceStore();
+        
+        WorkflowApplication workflowApplication = new WorkflowApplication(testSequence);
+        workflowApplication.InstanceStore = instanceStore;
+        workflowApplication.PersistableIdle = (_) => PersistableIdleAction.Unload;
+        workflowApplication.Unloaded = (_) => unloaded.Set();
+        
+        workflowApplication.Run();
+        var workflowInstanceId = workflowApplication.Id;
+        unloaded.WaitOne(); // Wait for workflow to unload after persistable idle
+        
+        // Create a new WorkflowApplication instance to load and resume the workflow
+        WorkflowApplication resumedApplication = new WorkflowApplication(testSequence);
+        resumedApplication.InstanceStore = instanceStore;
+        resumedApplication.Completed = (_) => completed.Set();
+        
+        resumedApplication.Load(workflowInstanceId);
+        resumedApplication.Run(); // Resume the workflow
+        completed.WaitOne(); // Wait for workflow to complete
     }
     [Fact]
     public static void TestNoPersistSerialization()

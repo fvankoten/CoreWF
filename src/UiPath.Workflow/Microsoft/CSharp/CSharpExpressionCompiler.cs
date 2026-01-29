@@ -49,9 +49,29 @@ internal sealed class CSharpExpressionCompiler : ExpressionCompiler
                 .Where(var => var.Type != null)
                 .ToArray();
 
-        var names = string.Join(CompilerHelper.Comma, resolvedIdentifiers.Select(var => var.Name));
-        var types = string.Join(CompilerHelper.Comma, resolvedIdentifiers.Select(var => var.Type).Concat(new[] { returnType }).Select(_compilerHelper.GetTypeName));
-        var lambdaFuncCode = _compilerHelper.CreateExpressionCode(types, names, expression);
-        return CSharpSyntaxTree.ParseText(lambdaFuncCode, _compilerHelper.ScriptParseOptions);
+        var names = resolvedIdentifiers.Select(var => var.Name).ToArray();
+        var types = resolvedIdentifiers.Select(var => var.Type).Select(_compilerHelper.GetTypeName).ToArray();
+        string expressionCode;
+
+        bool hasReturnType = returnType != null;
+        if (!hasReturnType)
+        {
+            returnType = typeof(object);
+        }
+
+        // Use expression code if there is no return type, or if this is not a location (i.e., not an l-value reference).
+        bool shouldUseExpressionCode = !hasReturnType || !isLocation;
+        if (shouldUseExpressionCode)
+        {
+            types = types.Concat(new[] { _compilerHelper.GetTypeName(returnType) }).ToArray();
+            var lambdaFuncCode = _compilerHelper.CreateExpressionCode(types, names, expression);
+            return CSharpSyntaxTree.ParseText(lambdaFuncCode, _compilerHelper.ScriptParseOptions);
+        }
+
+        expressionCode = _compilerHelper.CreateReferenceCode(types: types,
+            returnType: _compilerHelper.GetTypeName(returnType),
+            names: names,
+            code: expression);
+        return CSharpSyntaxTree.ParseText(expressionCode, _compilerHelper.ScriptParseOptions);
     }
 }

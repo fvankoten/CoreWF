@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Activities.Runtime;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -14,28 +14,21 @@ namespace System.Activities.Expressions;
 [TypeConverter(TypeConverters.AssemblyReferenceConverter)]
 public class AssemblyReference
 {
-    private const int AssemblyToAssemblyNameCacheInitSize = 100;
-    private const int AssemblyCacheInitialSize = 100;
+    private const int AssemblyToAssemblyNameCacheInitSize = 128;
+    private const int AssemblyCacheInitialSize = 128;
 
-    // cache for Assembly ==> AssemblyName
-    // Assembly.GetName() is very very expensive
-    private static readonly object assemblyToAssemblyNameCacheLock = new();
-
-    // Double-checked locking pattern requires volatile for read/write synchronization
-    private static volatile Hashtable assemblyToAssemblyNameCache;
-
-    // cache for AssemblyName ==> Assembly
-    // For back-compat with VB (which in turn was roughly emulating XamlSchemaContext)
-    // we want to cache a given AssemblyName once it's resolved, so it doesn't get re-resolved
-    // even if a new matching assembly is loaded later.
-
-    // Double-checked locking pattern requires volatile for read/write synchronization
-    private static volatile Hashtable assemblyCache;
-    private static readonly object assemblyCacheLock = new();
+    private static readonly ConcurrentDictionary<Assembly, AssemblyName> assemblyToAssemblyNameCache = new(Environment.ProcessorCount, AssemblyToAssemblyNameCacheInitSize);
+    private static readonly ConcurrentDictionary<AssemblyName, Assembly> assemblyCache = new(Environment.ProcessorCount, AssemblyCacheInitialSize, new AssemblyNameEqualityComparer());
+    private static readonly Lazy<ConcurrentDictionary<AssemblyName, bool>> notFoundAssemblyCache = new(() => new(Environment.ProcessorCount, AssemblyCacheInitialSize, new AssemblyNameEqualityComparer()));
 
     private Assembly _assembly;
     private AssemblyName _assemblyName;
     private readonly bool _isImmutable;
+
+    static AssemblyReference()
+    {
+        AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
+    }
 
     public AssemblyReference() { }
 
@@ -73,12 +66,8 @@ public class AssemblyReference
         }
     }
 
-    //[SuppressMessage(FxCop.Category.Usage, FxCop.Rule.OperatorOverloadsHaveNamedAlternates,
-    //    Justification = "A named method provides no advantage over the property setter.")]
     public static implicit operator AssemblyReference(Assembly assembly) => new() { Assembly = assembly };
 
-    //[SuppressMessage(FxCop.Category.Usage, FxCop.Rule.OperatorOverloadsHaveNamedAlternates,
-    //    Justification = "A named method provides no advantage over the property setter.")]
     public static implicit operator AssemblyReference(AssemblyName assemblyName) => new() { AssemblyName = assemblyName };
 
     public void LoadAssembly()
@@ -89,7 +78,6 @@ public class AssemblyReference
         }
     }
 
-    // this code is borrowed from XamlSchemaContext
     internal static bool AssemblySatisfiesReference(AssemblyName assemblyName, AssemblyName reference)
     {
         if (reference.Name != assemblyName.Name)
@@ -122,25 +110,18 @@ public class AssemblyReference
 
     internal static Assembly GetAssembly(AssemblyName assemblyName)
     {
-        // the following assembly resolution logic
-        // emulates the Xaml's assembly resolution logic as closely as possible.
-        // Should Xaml's assembly resolution logic ever change, this code needs update as well.
-        // please see XamlSchemaContext.ResolveAssembly() 
-        if (assemblyCache == null)
-        {
-            lock (assemblyCacheLock)
-            {
-                if (assemblyCache == null)
-                {
-                    assemblyCache = new Hashtable(AssemblyCacheInitialSize, new AssemblyNameEqualityComparer());
-                }
-            }
-        }
+        // The following assembly resolution logic emulates the Xaml's assembly resolution logic
+        // as closely as possible. Should Xaml's assembly resolution logic ever change, this code
+        // needs update as well please see XamlSchemaContext.ResolveAssembly() 
 
-        Assembly assembly = assemblyCache[assemblyName] as Assembly;
-        if (assembly != null)
+        if (assemblyCache.TryGetValue(assemblyName, out Assembly assembly))
         {
             return assembly;
+        }
+
+        if (notFoundAssemblyCache.IsValueCreated && notFoundAssemblyCache.Value.TryGetValue(assemblyName, out var _))
+        {
+            return null;
         }
 
         // search current AppDomain first
@@ -149,11 +130,15 @@ public class AssemblyReference
         // as Xaml would do.  that is to find the first match
         // found starting from the end of the array of Assemblies
         // returned by AppDomain.GetAssemblies()
-        Assembly[] currentAssemblies = AssemblyLoadContext.All.SelectMany(c=>c.Assemblies).ToArray();
+        Assembly[] currentAssemblies = AssemblyLoadContext.All.SelectMany(c => c.Assemblies).ToArray();
 
         // For collectible assemblies, we need to ensure that they
         // are not cached, but are usable in expressions.
         var collectibleAssemblies = new Dictionary<string, Assembly>();
+        Version reqVersion = assemblyName.Version;
+        CultureInfo reqCulture = assemblyName.CultureInfo;
+        byte[] reqKeyToken = assemblyName.GetPublicKeyToken();
+
         for (int i = currentAssemblies.Length - 1; i >= 0; i--)
         {
             Assembly curAsm = currentAssemblies[i];
@@ -176,20 +161,13 @@ public class AssemblyReference
             CultureInfo curCulture = curAsmName.CultureInfo;
             byte[] curKeyToken = curAsmName.GetPublicKeyToken();
 
-            Version reqVersion = assemblyName.Version;
-            CultureInfo reqCulture = assemblyName.CultureInfo;
-            byte[] reqKeyToken = assemblyName.GetPublicKeyToken();
-
             if ((string.Compare(curAsmName.Name, assemblyName.Name, StringComparison.OrdinalIgnoreCase) == 0) &&
                         (reqVersion == null || reqVersion.Equals(curVersion)) &&
                         (reqCulture == null || reqCulture.Equals(curCulture)) &&
                         (reqKeyToken == null || AssemblyNameEqualityComparer.IsSameKeyToken(reqKeyToken, curKeyToken)))
             {
-                lock (assemblyCacheLock)
-                {
-                    assemblyCache[assemblyName] = curAsm;
-                    return curAsm;
-                }
+                assemblyCache.TryAdd(assemblyName, curAsm);
+                return curAsm;
             }
         }
 
@@ -203,10 +181,11 @@ public class AssemblyReference
         assembly = LoadAssembly(assemblyName);
         if (assembly != null)
         {
-            lock (assemblyCacheLock)
-            {
-                assemblyCache[assemblyName] = assembly;
-            }
+            assemblyCache.TryAdd(assemblyName, assembly);
+        }
+        else
+        {
+            notFoundAssemblyCache.Value.TryAdd(assemblyName, false);
         }
 
         return assembly;
@@ -222,29 +201,7 @@ public class AssemblyReference
             return new AssemblyName(assembly.FullName);
         }
 
-        if (assemblyToAssemblyNameCache == null)
-        {
-            lock (assemblyToAssemblyNameCacheLock)
-            {
-                if (assemblyToAssemblyNameCache == null)
-                {
-                    assemblyToAssemblyNameCache = new Hashtable(AssemblyToAssemblyNameCacheInitSize);
-                }
-            }
-        }
-
-        if (assemblyToAssemblyNameCache[assembly] is AssemblyName assemblyName)
-        {
-            return assemblyName;
-        }
-
-        assemblyName = new AssemblyName(assembly.FullName);
-        lock (assemblyToAssemblyNameCacheLock)
-        {
-            assemblyToAssemblyNameCache[assembly] = assemblyName;
-        }
-
-        return assemblyName;
+        return assemblyToAssemblyNameCache.GetOrAdd(assembly, asm => new AssemblyName(asm.FullName));
     }
 
 #pragma warning disable 618
@@ -255,26 +212,16 @@ public class AssemblyReference
         Assembly loaded;
         if (assemblyName.Version != null || assemblyName.CultureInfo != null || publicKeyToken != null)
         {
-            // Assembly.Load(string)
             try
             {
                 loaded = Assembly.Load(assemblyName.FullName);
             }
-            catch (Exception ex)
+            catch (Exception ex) 
+                when (ex is FileNotFoundException or FileLoadException
+                || ex is TargetInvocationException exception && exception.InnerException is FileNotFoundException or FileLoadException)
             {
-                if (ex is FileNotFoundException ||
-                    ex is FileLoadException ||
-                    (ex is TargetInvocationException exception &&
-                    (exception.InnerException is FileNotFoundException ||
-                    exception.InnerException is FileNotFoundException)))
-                {
-                    loaded = null;
-                    ExceptionTrace.AsWarning(ex);
-                }
-                else
-                {
-                    throw;
-                }
+                loaded = null;
+                ExceptionTrace.AsWarning(ex);
             }
         }
         else
@@ -293,5 +240,15 @@ public class AssemblyReference
         {
             throw FxTrace.Exception.AsError(new NotSupportedException(SR.AssemblyReferenceIsImmutable));
         }
+    }
+
+    private static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+    {
+        if (!notFoundAssemblyCache.IsValueCreated)
+        {
+            return;
+        }
+
+        notFoundAssemblyCache.Value.Clear();
     }
 }

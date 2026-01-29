@@ -4,14 +4,11 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using ReflectionMagic;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 
 namespace System.Activities
 {
     public sealed class CSharpCompilerHelper : CompilerHelper
     {
-        private static int crt = 0;
         private static readonly dynamic s_typeNameFormatter = GetTypeNameFormatter();
         private static readonly dynamic s_typeOptions = GetTypeOptions();
 
@@ -28,31 +25,29 @@ namespace System.Activities
         public override string GetTypeName(Type type) =>
             (string)s_typeNameFormatter.FormatTypeName(type, s_typeOptions);
 
-        public override string CreateExpressionCode(string types, string names, string code)
+        public override string CreateExpressionCode(string[] types, string[] names, string code)
         {
-            var arrayType = types.Split(Comma);
-            if (arrayType.Length <= 16) // .net defines Func<TResult>...Funct<T1,...T16,TResult)
-                return $"public static Expression<Func<{types}>> CreateExpression() => ({names}) => {code};";
+            var typesStr = string.Join(CompilerHelper.Comma, types);
+            var namesStr = string.Join(CompilerHelper.Comma, names);
+            if (types.Length <= 16) // .net defines Func<TResult>...Funct<T1,...T16,TResult)
+                return $"public static Expression<Func<{typesStr}>> CreateExpression() => ({namesStr}) => {code};";
 
             var (myDelegate, name) = DefineDelegate(types);
-            return $"{myDelegate} \n public static Expression<{name}<{types}>> CreateExpression() => ({names}) => {code};";
+            return $"{myDelegate} \n public static Expression<{name}<{typesStr}>> CreateExpression() => ({namesStr}) => {code};";
         }
+
+        internal string CreateReferenceCode(string[] types, string returnType, string[] names, string code)
+        {
+            var strTypes = string.Join(Comma, types);
+            var strNames = string.Join(Comma, names);
+            return CSharpValidatorCommon.CreateReferenceCode(strTypes, returnType, strNames, code, string.Empty, 0);
+        }
+
+        internal string CreateValueCode(string[] types, string[] names, string code)
+            => CSharpValidatorCommon.CreateValueCode(types, string.Join(Comma, names), code, string.Empty, 0);
 
         protected override (string, string) DefineDelegateCommon(int argumentsCount)
-        {
-            var crtValue = Interlocked.Add(ref crt, 1);
-
-            var part1 = new StringBuilder();
-            var part2 = new StringBuilder();
-            for (var i = 0; i < argumentsCount; i++)
-            {
-                part1.Append($"in T{i}, ");
-                part2.Append($" T{i} arg{i},");
-            }
-            part2.Remove(part2.Length - 1, 1);
-            var name = $"Func{crtValue}";
-            return ($"public delegate TResult {name}<{part1} out TResult>({part2});", name);
-        }
+            => CSharpValidatorCommon.DefineDelegateCommon(argumentsCount);
 
         private static object GetTypeNameFormatter()
         {

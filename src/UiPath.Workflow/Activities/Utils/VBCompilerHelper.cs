@@ -24,14 +24,15 @@ namespace System.Activities
 
         public override string GetTypeName(Type type) => VisualBasicObjectFormatter.FormatTypeName(type);
 
-        public override string CreateExpressionCode(string types, string names, string code)
+        public override string CreateExpressionCode(string[] types, string[] names, string code)
         {
-            var arrayType = types.Split(Comma);
-            if (arrayType.Length <= 16) // .net defines Func<TResult>...Funct<T1,...T16,TResult)
-                return $"Public Shared Function CreateExpression() As Expression(Of Func(Of {types}))\nReturn Function({names}) ({code})\nEnd Function";
+            var typesStr = string.Join(CompilerHelper.Comma, types);
+            var namesStr = string.Join(CompilerHelper.Comma, names);
+            if (types.Length <= 16) // .net defines Func<TResult>...Funct<T1,...T16,TResult)
+                return $"Public Shared Function CreateExpression() As Expression(Of Func(Of {typesStr}))\nReturn Function({namesStr}) ({code})\nEnd Function";
 
             var (myDelegate, name) = DefineDelegate(types);
-            return $"{myDelegate} \n Public Shared Function CreateExpression() As Expression(Of {name}(Of {types}))\nReturn Function({names}) ({code})\nEnd Function";
+            return $"{myDelegate} \n Public Shared Function CreateExpression() As Expression(Of {name}(Of {typesStr}))\nReturn Function({namesStr}) ({code})\nEnd Function";
         }
 
         protected override (string, string) DefineDelegateCommon(int argumentsCount)

@@ -225,6 +225,39 @@ namespace TestCases.Workflows
             Assert.Equal(typeof(IEnumerable<object>), compilationResult.ReturnType);
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData(typeof(List<string>))]
+        public async Task CSharp_CompileReferenceType(Type targetType)
+        {
+            SetupCompilation(out var location, out var namespaces, out var assemblyReferences);
+
+            var result = await CSharpDesignerHelper.CreatePrecompiledReferenceAsync(targetType, "myEnumerable", namespaces, assemblyReferences, location);
+            Assert.Equal(typeof(IEnumerable<string>), result.ReturnType);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(typeof(string))]
+        public async Task CSharp_CompileReferenceType_AssignToProperty(Type targetType)
+        {
+            SetupCompilation(out var location, out var namespaces, out var assemblyReferences);
+
+            var result = await CSharpDesignerHelper.CreatePrecompiledReferenceAsync(targetType, "in_CountryName", namespaces, assemblyReferences, location);
+            Assert.Equal(typeof(string), result.ReturnType);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(typeof(string))]
+        public async Task CSharp_CompileValueType_AssignValueProperty(Type targetType)
+        {
+            SetupCompilation(out var location, out var namespaces, out var assemblyReferences);
+
+            var result = await CSharpDesignerHelper.CreatePrecompiledValueAsync(targetType, "new string('A', 11000000) ;", namespaces, assemblyReferences, location);
+            Assert.Equal(typeof(string), result.ReturnType);
+        }
+
         private static void SetupCompilation(out ActivityLocationReferenceEnvironment location, out string[] namespaces, out AssemblyReference[] assemblyReferences)
         {
             var seq = new Sequence();
@@ -233,16 +266,18 @@ namespace TestCases.Workflows
             WorkflowInspectionServices.CacheMetadata(seq, location);
             location.Declare(new Variable<string>("in_CountryName"), seq, ref errors);
             location.Declare(new Variable<DataTable>("in_dt_OrderExport"), seq, ref errors);
-            namespaces = ["System", "System.Linq", "System.Data"];
-            assemblyReferences = 
+            location.Declare(new Variable<IEnumerable<string>>("myEnumerable"), seq, ref errors);
+            namespaces = ["System", "System.Linq", "System.Data", "System.Collections.Generic"];
+            assemblyReferences =
             [
-                new AssemblyReference() { Assembly = typeof(string).Assembly }, 
-                new AssemblyReference() { Assembly = typeof(DataTable).Assembly }, 
-                new AssemblyReference() { Assembly = typeof(Enumerable).Assembly }, 
-                new AssemblyReference() { Assembly = typeof(System.ComponentModel.TypeConverter).Assembly }, 
-                new AssemblyReference() { Assembly = typeof(IServiceProvider).Assembly }, 
+                new AssemblyReference() { Assembly = typeof(string).Assembly },
+                new AssemblyReference() { Assembly = typeof(DataTable).Assembly },
+                new AssemblyReference() { Assembly = typeof(Enumerable).Assembly },
+                new AssemblyReference() { Assembly = typeof(System.ComponentModel.TypeConverter).Assembly },
+                new AssemblyReference() { Assembly = typeof(IServiceProvider).Assembly },
                 new AssemblyReference() { Assembly = Assembly.Load("System.Xml.ReaderWriter") },
-                new AssemblyReference() { Assembly = Assembly.Load("System.Private.Xml") }
+                new AssemblyReference() { Assembly = Assembly.Load("System.Private.Xml") },
+                new AssemblyReference() { Assembly = typeof(IEnumerable<>).Assembly }
             ];
         }
 
@@ -383,7 +418,7 @@ namespace TestCases.Workflows
             // Same applies to VB, they both go through the shared code, so no point in duplicating the test.
             var location = new ActivityLocationReferenceEnvironment();
             var loadContext = new AssemblyLoadContext("MyCollectibleALC", true);
-            loadContext.LoadFromAssemblyPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,@"TestData\JsonFileInstanceStore.dll"));
+            loadContext.LoadFromAssemblyPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\JsonFileInstanceStore.dll"));
 
             var result = await CSharpDesignerHelper.CreatePrecompiledValueAsync(typeof(object), "new List<Dictionary<string, FileInstanceStore[]>>()", new[] { "System.Collections.Generic", "JsonFileInstanceStore" }, new[] { (AssemblyReference)new AssemblyName("JsonFileInstanceStore") }, location);
             result.ReturnType.FullName.ShouldBe("System.Collections.Generic.List`1[[System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[JsonFileInstanceStore.FileInstanceStore[], JsonFileInstanceStore, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]");

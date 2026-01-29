@@ -7,6 +7,7 @@ using Microsoft.VisualBasic.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UiPath.Workflow.Validation;
 using static System.Activities.CompilerHelper;
 
 namespace System.Activities.Validation;
@@ -45,13 +46,22 @@ public class VbExpressionValidator : RoslynExpressionValidator
 
     protected override string ActivityIdentifierRegex { get; } = "('activityId):(.*)";
 
-    protected override Compilation GetCompilation(IReadOnlyCollection<Assembly> assemblies, IReadOnlyCollection<string> namespaces)
+    protected override Compilation GetCompilation(IReadOnlyCollection<Assembly> assemblies, IReadOnlyCollection<string> namespaces, ValidationSettings validationSettings = null)
     {
         var globalImports = GlobalImport.Parse(namespaces);
         var metadataReferences = GetMetadataReferencesForExpression(assemblies);
 
         var options = CompilerHelper.DefaultCompilationUnit.Options as VisualBasicCompilationOptions;
-        return CompilerHelper.DefaultCompilationUnit.WithOptions(options!.WithGlobalImports(globalImports)).WithReferences(metadataReferences);
+        options = options.WithGlobalImports(globalImports);
+
+        if (validationSettings?.MissingAssemblyResolver is Func<AssemblyName, Assembly> resolver)
+        {
+            options = options.WithMetadataReferenceResolver(new ExternalMetadataReferenceResolver(resolver));
+        }
+
+        var compilation = CompilerHelper.DefaultCompilationUnit.WithOptions(options).WithReferences(metadataReferences);
+
+        return compilation;
     }
 
     protected override SyntaxTree GetSyntaxTreeForExpression(string expressionText) =>

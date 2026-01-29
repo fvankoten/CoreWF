@@ -1,6 +1,7 @@
 // This file is part of Core WF which is licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
+using Microsoft.VisualBasic.Activities;
 using System.Activities.Expressions;
 using System.Activities.Internals;
 using System.Activities.Runtime;
@@ -15,7 +16,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.VisualBasic.Activities;
 
 namespace System.Activities.XamlIntegration;
 
@@ -65,6 +65,8 @@ public class TextExpressionCompiler
     private bool? _isVb;
     private int _nextContextId;
 
+    private readonly Lazy<CodeDomProvider> _lazyProvider;
+
     public TextExpressionCompiler(TextExpressionCompilerSettings settings)
     {
         if (settings == null)
@@ -99,6 +101,8 @@ public class TextExpressionCompiler
 
         _lineNumbersForNSes = new Dictionary<string, int>();
         _lineNumbersForNSesForImpl = new Dictionary<string, int>();
+
+        _lazyProvider = new Lazy<CodeDomProvider>(() => CodeDomProvider.CreateProvider(_settings.Language));
     }
 
     private bool IsCs
@@ -1458,7 +1462,7 @@ public class TextExpressionCompiler
 
         if (isValue || isReference)
         {
-            var expressionGetMethod = GenerateGetMethod(activity, resultType, expressionText, nextExpressionId);
+            var expressionGetMethod = GenerateGetMethod(activity, resultType, expressionText, nextExpressionId, isReference);
             typeDeclaration.Members.Add(expressionGetMethod);
 
             var expressionGetValueTypeAccessorMethod = GenerateGetMethodWrapper(expressionGetMethod);
@@ -1525,7 +1529,14 @@ public class TextExpressionCompiler
         }
         else if (IsCs)
         {
-            expressionText = string.Concat(CSharpLambdaString, coreExpressionText);
+            if (!isValue)
+            {
+                expressionText = string.Concat(CSharpLambdaString, FormatWithTypeCast(coreExpressionText, expressionDescriptor.ResultType));
+            }
+            else
+            {
+                expressionText = string.Concat(CSharpLambdaString, coreExpressionText);
+            }
         }
 
         if (expressionText != null)
@@ -1558,7 +1569,7 @@ public class TextExpressionCompiler
     }
 
     private CodeMemberMethod GenerateGetMethod(Activity activity, Type resultType, string expressionText,
-        int nextExpressionId)
+        int nextExpressionId, bool isReference)
     {
         var expressionMethod = new CodeMemberMethod
         {
@@ -1570,7 +1581,12 @@ public class TextExpressionCompiler
             new CodeAttributeDeclaration(new CodeTypeReference(typeof(DebuggerHiddenAttribute))));
 
         AlignText(activity, ref expressionText, out var pragma);
+        if (IsCs && isReference)
+        {
+            expressionText = FormatWithTypeCast(expressionText, resultType);
+        }
         CodeStatement statement = new CodeMethodReturnStatement(new CodeSnippetExpression(expressionText));
+
         statement.LinePragma = pragma;
         expressionMethod.Statements.Add(statement);
 
@@ -1608,6 +1624,12 @@ public class TextExpressionCompiler
         if (string.Compare(expressionText, paramName, true, CultureInfo.CurrentCulture) == 0)
         {
             paramName += "1";
+        }
+
+        if (_settings.EnableFunctionParameterRename)
+        {
+            // Use a prefix and GUID to avoid conflicts with variables in the expression
+            paramName = "param_" + Guid.NewGuid().ToString("N"); 
         }
 
         var expressionMethod = new CodeMemberMethod
@@ -2504,6 +2526,31 @@ public class TextExpressionCompiler
         }
 
         return activityFullName;
+    }
+
+    private string FormatWithTypeCast(string coreExpressionText, Type resultType)
+    {
+        if (resultType == null || string.IsNullOrEmpty(coreExpressionText))
+        {
+            return coreExpressionText;
+        }
+        return ExplicitCastText(coreExpressionText, resultType);
+    }
+
+    private string ExplicitCastText(string expressionText, Type targetType)
+    {
+        string typeName = GetFriendlyTypeName(targetType);
+        if (typeName == null)
+        {
+            return expressionText;
+        }
+
+        return $"(({typeName}){expressionText})";
+    }
+
+    private string GetFriendlyTypeName(Type type)
+    {
+        return type is null ? null : _lazyProvider.Value.GetTypeOutput(new CodeTypeReference(type));
     }
 
     private class ExpressionCompilerActivityVisitor : CompiledExpressionActivityVisitor
