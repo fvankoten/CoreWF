@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx.Interop;
 
 namespace System.Activities;
 
@@ -47,20 +46,20 @@ public abstract class TaskCodeActivity<TResult> : AsyncCodeActivity<TResult>
 
         var task = ExecuteAsyncCore(context, cts.Token);
 
-        return ApmAsyncFactory.ToBegin(task, callback, state);
+        return TaskToAsyncResult.Begin(task, callback, state);
     }
 
     protected sealed override TResult EndExecute(AsyncCodeActivityContext context, IAsyncResult result)
     {
-        using ((CancellationTokenSource) context.UserState)
+        using ((CancellationTokenSource)context.UserState)
         {
-            return ((Task<TResult>) result).Result;
+            return TaskToAsyncResult.End<TResult>(result);
         }
     }
 
     protected sealed override void Cancel(AsyncCodeActivityContext context)
     {
-        ((CancellationTokenSource) context.UserState).Cancel();
+        ((CancellationTokenSource)context.UserState).Cancel();
     }
 
     private protected abstract Task<TResult> ExecuteAsyncCore(AsyncCodeActivityContext context,
