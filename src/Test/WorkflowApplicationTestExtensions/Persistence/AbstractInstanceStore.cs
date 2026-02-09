@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Activities.DurableInstancing;
+using System.Activities.Runtime.DurableInstancing;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Activities.Runtime.DurableInstancing;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Xml.Linq;
 using System.Linq;
-using Nito.AsyncEx.Interop;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace WorkflowApplicationTestExtensions.Persistence;
 
@@ -53,7 +52,7 @@ public abstract class AbstractInstanceStore(IWorkflowSerializer instanceSerializ
 
     protected sealed override IAsyncResult BeginTryCommand(InstancePersistenceContext context, InstancePersistenceCommand command, TimeSpan timeout, AsyncCallback callback, object state)
     {
-        return ApmAsyncFactory.ToBegin(TryCommandAndYield(), callback, state);
+        return TaskToAsyncResult.Begin(TryCommandAndYield(), callback, state);
         async Task<bool> TryCommandAndYield()
         {
             try
@@ -72,7 +71,7 @@ public abstract class AbstractInstanceStore(IWorkflowSerializer instanceSerializ
     }
 
     protected sealed override bool EndTryCommand(IAsyncResult result)
-    => ApmAsyncFactory.ToEnd<bool>(result);
+    => TaskToAsyncResult.End<bool>(result);
 
     private async Task<bool> TryCommandAsync(InstancePersistenceContext context, InstancePersistenceCommand command)
     {
