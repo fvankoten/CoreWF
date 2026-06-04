@@ -10,4 +10,8 @@
     <ProjectReference Include="..\TestCases.Runtime\TestCases.Runtime.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Shouldly" Version="4.3.0" />
+  </ItemGroup>
+
 </Project>

@@ -18,12 +18,12 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\UiPath.Workflow.Runtime\UiPath.Workflow.Runtime.csproj" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.300" PrivateAssets="All" />
         <PackageReference Include="ReflectionMagic" Version="5.0.1" />
         <ProjectReference Include="..\VisualBasic\Microsoft.CodeAnalysis.VisualBasic.Scripting.vbproj" PrivateAssets="All" />
         <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="$(RoslynPackageVersion)" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="$(RoslynPackageVersion)" />
-        <PackageReference Include="System.CodeDom" Version="8.0.0" />
+        <PackageReference Include="System.CodeDom" Version="10.0.8" />
         <None Include="..\..\README.md" Pack="true" PackagePath="" />
     </ItemGroup>
     <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
