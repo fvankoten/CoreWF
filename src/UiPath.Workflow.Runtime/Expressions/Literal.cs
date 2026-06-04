@@ -52,7 +52,7 @@ public sealed class Literal<T> : CodeActivity<T>, ILiteral, IExpressionContainer
 
         if (Value == null)
         {
-            return true;
+            return false;
         }
 
         typeArgument = typeof(T);
@@ -126,6 +126,9 @@ public sealed class Literal<T> : CodeActivity<T>, ILiteral, IExpressionContainer
         Type valueType;
         TypeConverter converter;
 
+        // Normally unreachable: CanConvertToString returns false when Value is null,
+        // so the XAML serializer won't call this method. Kept as a defensive guard
+        // since this is a public interface and callers may skip CanConvertToString.
         if (Value == null)
         {
             return "[Nothing]";
