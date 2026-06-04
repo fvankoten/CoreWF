@@ -3,10 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.IO
-Imports System.Reflection
-Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Scripting.Hosting
-Imports Microsoft.CodeAnalysis.VisualBasic
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting.Hosting
 
@@ -18,7 +15,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Scripting.Hosting
         End Sub
 
         Friend Overrides Function GetCommandLineMetadataReferenceResolver(loggerOpt As TouchedFileLogger) As MetadataReferenceResolver
-            Return CommandLineRunner.GetMetadataReferenceResolver(Arguments, loggerOpt)
+            Return CommandLineRunner.GetMetadataReferenceResolver(Arguments, loggerOpt, AddressOf MetadataReference.CreateFromFile)
         End Function
 
         Friend Overrides ReadOnly Property Type As Type

@@ -3,4 +3,7 @@
     <ProjectReference Include="../TestObjects/TestObjects.csproj" />
     <ProjectReference Include="..\..\UiPath.Workflow\UiPath.Workflow.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Shouldly" Version="4.3.0" />
+  </ItemGroup>
 </Project>
